@@ -113,6 +113,31 @@
 
 								$cursor = $collection->find();
 
+								function TotalMatchesComplex($iDVerification){ 
+									$m = new MongoClient();
+									$db = $m->TheOrangeAllianceTest;
+									$functionSubCollection = "Y201701211";
+									$acollection = $db->$functionSubCollection;
+
+									$functionCursor = $acollection->find(['MetaData.MetaData' => "ScheduleInput", 'MetaData.InputID' => $iDVerification ]);
+
+									$matchesComplex = array();
+									$matchNumberInc = 0;
+									foreach($functionCursor as $document){
+										foreach($document['Match'] as $matchNumberComplex){
+											$matchNumberInc++;
+											$matchesComplex['Match' . $matchNumberInc] = array(
+												'Red1' => $matchNumberComplex['Red1'],
+												'Red2' => $matchNumberComplex['Red2'],
+												'Blue1' => $matchNumberComplex['Blue1'],
+												'Blue2' => $matchNumberComplex['Blue2']
+											);
+										}
+									}
+
+									return $MatchesComplex;
+								}
+
 								function TeamNumberName($teamNumber){
 									$m = new MongoClient();
 									$db = $m->TheOrangeAllianceTest;
