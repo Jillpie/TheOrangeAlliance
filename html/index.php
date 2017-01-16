@@ -148,9 +148,9 @@
 									$db = $m->TheOrangeAllianceTest;
 									$functionSubCollection = "Y201701211";
 									$acollection = $db->$functionSubCollection;
-									$functionCursor = $acollection->find(["MetaData.MetaData" => 'ResultsInput', 'MatchNumber' => $matchNumber]);
+									$functionCursor = $acollection->find(["MetaData.MetaData" => 'ResultsInput' , 'MatchNumber' => $matchNumber]);
 									$matchResults = array();
-									foreach($cursor as $document){
+									foreach($functionCursor as $document){
 									//	$scoreFinalRed = $document['Score']['Final']['Red'];
 									//	$scoreFinalBlue = $document['Score']['Final']['Blue'];
 										$matchResults = array(
@@ -161,24 +161,44 @@
 									return $matchResults;
 									}
 								}
+								//$tenative = array('ScoreFinalRed' => 'RED' , 'ScoreFinalBlue' => 'Blue' , 'Winner' => 'Blue');
 								function MatchResultsFormat($matchResults){
 									$matchResultsFormated = '';
 									switch ($matchResults['Winner']) {
 										case 'Blue':
-											$matchResultsFormated .= "<td style='color:white' class='blue'>";
+											$matchResultsFormated .= "<td class='blue'>";
 										break;
 										case 'Red':
-											$matchResultsFormated .= "<td style='color:white' class='red'>";
+											$matchResultsFormated .= "<td class='red'>";
 										break;
 										case 'Tie':
-											$matchResultsFormated .= "<td style='color:white' class='green'>";
+											$matchResultsFormated .= "<td class='green'>";
 										break;
 										default:
-											$matchResultsFormated .= "<td style='color:black' class='pink'>";
+											$matchResultsFormated .= "<td class='pink'>";
 										break;
 									}
+
 									$matchResultsFormated .= $matchResults['ScoreFinalRed'] . '-' . $matchResults['ScoreFinalBlue'] . "</td>";
+									if(is_null($matchResults['ScoreFinalRed']) or is_null($matchResults['ScoreFinalBlue'])){
+										$matchResultsFormated = "<td class='pink'>" . 'NOT POSTED' . "</td>";
+									}
 									return $matchResultsFormated;
+								}
+								function AllianceColorationAlt($alliance){
+									$allianceColor = '';
+									switch ($alliance) {
+										case 'Red':
+											$allianceColor = "<td class='red'>";
+											break;
+										case 'Blue':
+											$allianceColor = "<td class='blue'>";
+											break;
+										default:
+											$allianceColor = "<td class='pink'>";
+											break;
+									}
+									return $allianceColor;
 								}
 
 								//Makes sure to not add extra rows with no value
@@ -268,7 +288,7 @@
 										$calcRP = $AUTORP + $DRIVERRP + $ENDRP;
 										//To input the values into the cells
 											echo "<td>" . $document["MatchInformation"]["MatchNumber"] . "</td>";
-											echo "<td>" . $document["MatchInformation"]["RobotAlliance"] . "</td>";
+											echo AllianceColorationAlt($document["MatchInformation"]["RobotAlliance"]) . $document["MatchInformation"]["RobotAlliance"] . "</td>";
 											echo "<td>" . $document["MatchInformation"]["TeamNumber"] . "</td>";
 											echo "<td>" . TeamNumberName($document["MatchInformation"]["TeamNumber"]) . "</td>";
 											echo MatchResultsFormat(MatchResults($document["MatchInformation"]["MatchNumber"]));
