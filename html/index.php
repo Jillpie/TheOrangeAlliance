@@ -156,6 +156,8 @@
 								
 								$calcRP = 123;
 								$AUTORP = 123;
+								$DRIVERRP = 123;
+								$ENDRP = 123;
 								foreach($documentIDList as $documentID){
 									echo "<tr>";
 									$cursor = $collection->find(['_id' => $documentID]);
@@ -163,6 +165,7 @@
 										//To calculate RP via their gameplay
 											//AUTO
 											$AUTORP = 0;
+												//RobotParking
 												switch($document["GameInformation"]["AUTO"]["RobotParking"]){
 													case "Did Not Park":
 														$AUTORP += 0;
@@ -182,14 +185,32 @@
 													default:
 														$AUTORP += 9000;
 												}
+												//Particles In Center
+												$AUTORP += 15 * $document["GameInformation"]["AUTO"]["ParticlesCenter"];
+												//Particles In Corner
+												$AUTORP += 5 * $document["GameInformation"]["AUTO"]["ParticlesCorner"];
+												//CapBall
+												switch($document["GameInformation"]["AUTO"]["CapBall"]){
+													case "No":
+														$AUTORP += 0;
+													break;
+													case "Yes":
+														$AUTORP += 5;
+													break;
+													default:
+														$AUTORP += 9000;
+												}
+												//Beacons
+												$AUTORP += 30 * $document["GameInformation"]["AUTO"]["ClaimedBeacons"];
 
+										$calcRP = $AUTORP + $DRIVERRP + $ENDRP;
 										//To input the values into the cells
 											echo "<td>" . $document["MatchInformation"]["MatchNumber"] . "</td>";
 											echo "<td>" . $document["MatchInformation"]["RobotAlliance"] . "</td>";
 											echo "<td>" . $document["MatchInformation"]["TeamNumber"] . "</td>";
 											echo "<td>" . TeamNumberName($document["MatchInformation"]["TeamNumber"]) . "</td>";
 											echo "<td>" . $document["_id"] . "</td>";
-											echo "<td>" . $AUTORP . "</td>";
+											echo "<td>" . $calcRP . "</td>";
 											echo "<td>" . $document["GameInformation"]["AUTO"]["RobotParking"] . "</td>";
 											echo "<td>" . $document["GameInformation"]["AUTO"]["ParticlesCenter"] . "</td>";
 											echo "<td>" . $document["GameInformation"]["AUTO"]["ParticlesCorner"] . "</td>";
