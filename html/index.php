@@ -164,7 +164,7 @@
 									foreach($cursor as $document){
 										//To calculate RP via their gameplay
 											//AUTO
-											$AUTORP = 0;
+												$AUTORP = 0;
 												//RobotParking
 												switch($document["GameInformation"]["AUTO"]["RobotParking"]){
 													case "Did Not Park":
@@ -202,7 +202,32 @@
 												}
 												//Beacons
 												$AUTORP += 30 * $document["GameInformation"]["AUTO"]["ClaimedBeacons"];
-
+											//DRIVER
+												$DRIVERRP = 0;
+												//Particles In Center
+												$DRIVERRP += 5 * $document["GameInformation"]["DRIVER"]["ParticlesCenter"];
+												//Particles In Corner
+												$DRIVERRP += 1 * $document["GameInformation"]["DRIVER"]["ParticlesCorner"];
+											//END
+												$ENDRP = 0;
+												//Allaince Calimed Beacons
+												$ENDRP += 10 * $document["GameInformation"]["END"]["AllianceClaimedBeacons"];
+												switch($document["GameInformation"]["END"]["CapBall"]){
+													case "On The Ground":
+														$ENDRP += 0;
+													break;
+													case "Rasied Off The Floor":
+														$ENDRP += 10;
+													break;
+													case "Rasied Above Vortex":
+														$ENDRP += 20;
+													break;
+													case "Scored In Cener Vortex":
+														$ENDRP += 40;
+													break;
+													default:
+														$AUTORP += 9000;
+												}
 										$calcRP = $AUTORP + $DRIVERRP + $ENDRP;
 										//To input the values into the cells
 											echo "<td>" . $document["MatchInformation"]["MatchNumber"] . "</td>";
