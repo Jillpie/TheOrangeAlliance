@@ -154,25 +154,36 @@
 								$documentIDList = array();
 								$documentIDList = DocumentIDListGenerator('MatchInput');
 								
+								$calcRP = 123;
 								foreach($documentIDList as $documentID){
 									echo "<tr>";
 									$cursor = $collection->find(['_id' => $documentID]);
 									foreach($cursor as $document){
-										echo "<td>" . $document["MatchInformation"]["MatchNumber"] . "</td>";
-										echo "<td>" . $document["MatchInformation"]["RobotAlliance"] . "</td>";
-										echo "<td>" . $document["MatchInformation"]["TeamNumber"] . "</td>";
-										echo "<td>" . TeamNumberName($document["MatchInformation"]["TeamNumber"]) . "</td>";
-										echo "<td>" . $document["_id"] . "</td>";
-										echo "<td>" . ": 3" . "</td>";
-										echo "<td>" . $document["GameInformation"]["AUTO"]["RobotParking"] . "</td>";
-										echo "<td>" . $document["GameInformation"]["AUTO"]["ParticlesCenter"] . "</td>";
-										echo "<td>" . $document["GameInformation"]["AUTO"]["ParticlesCorner"] . "</td>";
-										echo "<td>" . $document["GameInformation"]["AUTO"]["CapBall"] . "</td>";
-										echo "<td>" . $document["GameInformation"]["AUTO"]["ClaimedBeacons"] . "</td>";
-										echo "<td>" . $document["GameInformation"]["DRIVER"]["ParticlesCenter"] . "</td>";
-										echo "<td>" . $document["GameInformation"]["DRIVER"]["ParticlesCorner"] . "</td>";
-										echo "<td>" . $document["GameInformation"]["END"]["AllianceClaimedBeacons"] . "</td>";
-										echo "<td>" . $document["GameInformation"]["END"]["CapBall"] . "</td>";
+										//To calculate RP via their gameplay
+											switch("tes"){
+												case "tes":
+
+												break;
+												default:
+											}
+
+
+										//To input the values into the cells
+											echo "<td>" . $document["MatchInformation"]["MatchNumber"] . "</td>";
+											echo "<td>" . $document["MatchInformation"]["RobotAlliance"] . "</td>";
+											echo "<td>" . $document["MatchInformation"]["TeamNumber"] . "</td>";
+											echo "<td>" . TeamNumberName($document["MatchInformation"]["TeamNumber"]) . "</td>";
+											echo "<td>" . $document["_id"] . "</td>";
+											echo "<td>" . ": 3" . "</td>";
+											echo "<td>" . $document["GameInformation"]["AUTO"]["RobotParking"] . "</td>";
+											echo "<td>" . $document["GameInformation"]["AUTO"]["ParticlesCenter"] . "</td>";
+											echo "<td>" . $document["GameInformation"]["AUTO"]["ParticlesCorner"] . "</td>";
+											echo "<td>" . $document["GameInformation"]["AUTO"]["CapBall"] . "</td>";
+											echo "<td>" . $document["GameInformation"]["AUTO"]["ClaimedBeacons"] . "</td>";
+											echo "<td>" . $document["GameInformation"]["DRIVER"]["ParticlesCenter"] . "</td>";
+											echo "<td>" . $document["GameInformation"]["DRIVER"]["ParticlesCorner"] . "</td>";
+											echo "<td>" . $document["GameInformation"]["END"]["AllianceClaimedBeacons"] . "</td>";
+											echo "<td>" . $document["GameInformation"]["END"]["CapBall"] . "</td>";
 									}
 									echo "</tr>";
 								}
