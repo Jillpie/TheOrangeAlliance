@@ -93,7 +93,7 @@
 									<th class="homepage-size">Alliance</th>
 									<th class="homepage-size">Team Number</th>
 									<th class="homepage-size">Team Name</th>
-									<th class="homepage-size">Result</th>
+									<th class="homepage-size">Result Red-Blue</th>
 									<th class="homepage-size">RP</th>
 									<th class="red homepage-size">Robot Parking</th>
 									<th class="red homepage-size">Particles in Center</th>
@@ -142,6 +142,14 @@
 										$documentIDListCreatorIndex++;
 									}
 									return  $documentIDList;
+								}
+								function MatchResults($matchNumber){
+									$m = new MongoClient();
+									$db = $m->TheOrangeAllianceTest;
+									$functionSubCollection = "Y201701211";
+									$acollection = $db->$functionSubCollection;
+									$functionCursor = $acollection->find(["MetaData.MetaData" => 'ResultsInput', 'MatchNumber' => $matchNumber]);
+									$matchResults = array()
 								}
 
 								//Makes sure to not add extra rows with no value
@@ -234,9 +242,9 @@
 											echo "<td>" . $document["MatchInformation"]["RobotAlliance"] . "</td>";
 											echo "<td>" . $document["MatchInformation"]["TeamNumber"] . "</td>";
 											echo "<td>" . TeamNumberName($document["MatchInformation"]["TeamNumber"]) . "</td>";
-											echo "<td>" . $document["_id"] . "</td>";
-											echo "<td>" . $calcRP . "</td>";
-											echo "<td>" . $document["GameInformation"]["AUTO"]["RobotParking"] . "</td>";
+											echo "<td style='color:white' class='red' >" . $document["_id"] . "</td>";
+											echo "<td style='color:white' class='blue'>"  . $calcRP . "</td>";
+											echo "<td style='color:white' class='green'>" . $document["GameInformation"]["AUTO"]["RobotParking"] . "</td>";
 											echo "<td>" . $document["GameInformation"]["AUTO"]["ParticlesCenter"] . "</td>";
 											echo "<td>" . $document["GameInformation"]["AUTO"]["ParticlesCorner"] . "</td>";
 											echo "<td>" . $document["GameInformation"]["AUTO"]["CapBall"] . "</td>";
@@ -273,8 +281,8 @@
 									echo "</tr>";
 								}
 								*/
-								echo "<tr><td>Debug <br /> </td></td>";
-								echo "<tr><td>" . $documentIDList . " <br /> </td></td>";
+								//echo "<tr><td>Debug <br /> </td></td>";
+								//echo "<tr><td>" . $documentIDList . " <br /> </td></td>";
 
 								//echo $documentIDList;
 							?>
