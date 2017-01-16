@@ -149,14 +149,43 @@
 									$functionSubCollection = "Y201701211";
 									$acollection = $db->$functionSubCollection;
 									$functionCursor = $acollection->find(["MetaData.MetaData" => 'ResultsInput', 'MatchNumber' => $matchNumber]);
-									$matchResults = array()
+									$matchResults = array();
+									foreach($cursor as $document){
+									//	$scoreFinalRed = $document['Score']['Final']['Red'];
+									//	$scoreFinalBlue = $document['Score']['Final']['Blue'];
+										$matchResults = array(
+											'ScoreFinalRed' => $document['Score']['Final']['Red'],
+											'ScoreFinalBlue' => $document['Score']['Final']['Blue'],
+											'Winner' => $document['Winner']
+										);
+									return $matchResults;
+									}
+								}
+								function MatchResultsFormat($matchResults){
+									$matchResultsFormated = '';
+									switch ($matchResults['Winner']) {
+										case 'Blue':
+											$matchResultsFormated .= "<td style='color:white' class='blue'>";
+										break;
+										case 'Red':
+											$matchResultsFormated .= "<td style='color:white' class='red'>";
+										break;
+										case 'Tie':
+											$matchResultsFormated .= "<td style='color:white' class='green'>";
+										break;
+										default:
+											$matchResultsFormated .= "<td style='color:black' class='pink'>";
+										break;
+									}
+									$matchResultsFormated .= $matchResults['ScoreFinalRed'] . '-' . $matchResults['ScoreFinalBlue'] . "</td>";
+									return $matchResultsFormated;
 								}
 
 								//Makes sure to not add extra rows with no value
 								$numberOfDocuments = 0;
 								foreach($cursor as $document){
 									$numberOfDocuments++ ;
-								};
+								}
 								
 								//Generates list of ids
 								$documentIDList = array();
@@ -242,9 +271,10 @@
 											echo "<td>" . $document["MatchInformation"]["RobotAlliance"] . "</td>";
 											echo "<td>" . $document["MatchInformation"]["TeamNumber"] . "</td>";
 											echo "<td>" . TeamNumberName($document["MatchInformation"]["TeamNumber"]) . "</td>";
-											echo "<td style='color:white' class='red' >" . $document["_id"] . "</td>";
-											echo "<td style='color:white' class='blue'>"  . $calcRP . "</td>";
-											echo "<td style='color:white' class='green'>" . $document["GameInformation"]["AUTO"]["RobotParking"] . "</td>";
+											echo MatchResultsFormat(MatchResults($document["MatchInformation"]["MatchNumber"]));
+											//echo "<td style='color:white' class='red' >" . $document["_id"] . "</td>";
+											echo "<td>" . $calcRP . "</td>";
+											echo "<td>" . $document["GameInformation"]["AUTO"]["RobotParking"] . "</td>";
 											echo "<td>" . $document["GameInformation"]["AUTO"]["ParticlesCenter"] . "</td>";
 											echo "<td>" . $document["GameInformation"]["AUTO"]["ParticlesCorner"] . "</td>";
 											echo "<td>" . $document["GameInformation"]["AUTO"]["CapBall"] . "</td>";
