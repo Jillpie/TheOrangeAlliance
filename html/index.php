@@ -155,18 +155,33 @@
 								$documentIDList = DocumentIDListGenerator('MatchInput');
 								
 								$calcRP = 123;
+								$AUTORP = 123;
 								foreach($documentIDList as $documentID){
 									echo "<tr>";
 									$cursor = $collection->find(['_id' => $documentID]);
 									foreach($cursor as $document){
 										//To calculate RP via their gameplay
-											switch("tes"){
-												case "tes":
-
-												break;
-												default:
-											}
-
+											//AUTO
+											$AUTORP = 0;
+												switch($document["GameInformation"]["AUTO"]["RobotParking"]){
+													case "Did Not Park":
+														$AUTORP += 0;
+													break;
+													case "Partially On Center Vortex":
+														$AUTORP += 5;
+													break;
+													case "Partially On Corner Vortex":
+														$AUTORP += 5;
+													break;
+													case "Fully On Center Vortex":
+														$AUTORP += 10;
+													break;
+													case "Fully On Corner Vortex":
+														$AUTORP += 10;
+													break;
+													default:
+														$AUTORP += 9000;
+												}
 
 										//To input the values into the cells
 											echo "<td>" . $document["MatchInformation"]["MatchNumber"] . "</td>";
@@ -174,7 +189,7 @@
 											echo "<td>" . $document["MatchInformation"]["TeamNumber"] . "</td>";
 											echo "<td>" . TeamNumberName($document["MatchInformation"]["TeamNumber"]) . "</td>";
 											echo "<td>" . $document["_id"] . "</td>";
-											echo "<td>" . ": 3" . "</td>";
+											echo "<td>" . $AUTORP . "</td>";
 											echo "<td>" . $document["GameInformation"]["AUTO"]["RobotParking"] . "</td>";
 											echo "<td>" . $document["GameInformation"]["AUTO"]["ParticlesCenter"] . "</td>";
 											echo "<td>" . $document["GameInformation"]["AUTO"]["ParticlesCorner"] . "</td>";
