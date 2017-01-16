@@ -1,0 +1,8 @@
+.navbar-default{
+	font-family: 'Open Sans', sans-serif;
+	font-size: 30px;
+	background-color: black;
+	color: white;
+	padding: 5px;
+	border-color: black;
+}
