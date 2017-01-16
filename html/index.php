@@ -357,6 +357,40 @@
 								</tr>
 							</thead>
 							<tbody>
+							<?php
+								$collectionName = "Y201701211";
+								$collection = $db->$collectionName;
+								$cursor = $collection->find();
+
+								function UniqueTeamList(){
+									
+								}
+
+								//Makes sure to not add extra rows with no value
+								$numberOfDocuments = 0;
+								foreach($cursor as $document){
+									$numberOfDocuments++ ;
+								}
+
+								foreach($documentIDList as $documentID){
+									echo "<tr>";
+									$cursor = $collection->find(['_id' => $documentID]);
+									foreach($cursor as $document){
+											echo "<td>" . $document["MatchInformation"]["MatchNumber"] . "</td>";
+											echo AllianceColorationAlt($document["MatchInformation"]["RobotAlliance"]) . $document["MatchInformation"]["RobotAlliance"] . "</td>";
+											echo "<td>" . $document["MatchInformation"]["TeamNumber"] . "</td>";
+											echo "<td>" . TeamNumberName($document["MatchInformation"]["TeamNumber"]) . "</td>";
+											echo "<td>" . $calcRP . "</td>";
+											echo "<td>" . $document["GameInformation"]["AUTO"]["RobotParking"] . "</td>";
+											echo "<td>" . $document["GameInformation"]["AUTO"]["ParticlesCenter"] . "</td>";
+											echo "<td>" . $document["GameInformation"]["AUTO"]["ParticlesCorner"] . "</td>";
+											echo "<td>" . $document["GameInformation"]["AUTO"]["CapBall"] . "</td>";
+											echo "<td>" . $document["GameInformation"]["AUTO"]["ClaimedBeacons"] . "</td>";
+											echo "<td>" . $document["GameInformation"]["DRIVER"]["ParticlesCenter"] . "</td>";
+									}
+									echo "</tr>";
+								}
+							?>
 							</tbody>
 						</table>
 					</div>
