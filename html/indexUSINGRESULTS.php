@@ -134,21 +134,10 @@
 											);
 										}
 									}
-									return $matchesComplex;
+
+									return $MatchesComplex;
 								}
-								function MakeMatchArray($matchesComplex){
-									$matchArray = array();
-									$thisMatchNumber = 0;
-									foreach($matchesComplex as $matchNumberInterval){
-										$thisMatchNumber++;
-										$matchArray[(4 * ($thisMatchNumber - 1)) + 1] = $matchNumberInterval['Red1'];
-										$matchArray[(4 * ($thisMatchNumber - 1)) + 2] = $matchNumberInterval['Red2'];
-										$matchArray[(4 * ($thisMatchNumber - 1)) + 3] = $matchNumberInterval['Blue1'];
-										$matchArray[(4 * ($thisMatchNumber - 1)) + 4] = $matchNumberInterval['Blue2'];
-									}
-									
-									return $matchArray;
-								}
+
 								function TeamNumberName($teamNumber){
 									$m = new MongoClient();
 									$db = $m->TheOrangeAllianceTest;
@@ -197,6 +186,7 @@
 									return $matchResults;
 									}
 								}
+								//$tenative = array('ScoreFinalRed' => 'RED' , 'ScoreFinalBlue' => 'Blue' , 'Winner' => 'Blue');
 								function MatchResultsFormat($matchResults){
 									$matchResultsFormated = '';
 									switch ($matchResults['Winner']) {
@@ -235,27 +225,6 @@
 									}
 									return $allianceColor;
 								}
-								function InterpertColoration($quarter){
-									$alliance = '';
-									switch ($quarter) {
-										case 1 % 4:
-										$alliance = 'Red';
-											break;
-										case 2 % 4:
-										$alliance = 'Red';
-											break;
-										case 3 % 4:
-										$alliance = 'Blue';
-											break;
-										case 4 % 4:
-										$alliance = 'Blue';
-											break;
-										default:
-										$alliance = 'Pink';
-											break;
-									}
-									return $alliance;
-								}
 
 								//Makes sure to not add extra rows with no value
 								$numberOfDocuments = 0;
@@ -266,28 +235,15 @@
 								//Generates list of ids
 								$documentIDList = array();
 								$documentIDList = DocumentIDListGenerator('MatchInput');
-								$documentIDAmount = count($documentIDList);
 								
 								$calcRP = 123;
 								$AUTORP = 123;
 								$DRIVERRP = 123;
 								$ENDRP = 123;
-								$realMatchNumber = 0;
-								for($currentMatch = 1; $currentMatch <= count(MakeMatchArray(TotalMatchesComplex('I AM YOU!'))); $currentMatch++ ){
-									if(($currentMatch % 4) == (1 % 4)){
-										$realMatchNumber++;
-									}
-									$documentExist = false;
+								foreach($documentIDList as $documentID){
 									echo "<tr>";
-									echo "<td>" . $realMatchNumber . "</td>";
-									echo AllianceColorationAlt(InterpertColoration($currentMatch % 4)) . InterpertColoration($currentMatch % 4) . "</td>";
-									echo "<td>" . MakeMatchArray(TotalMatchesComplex('I AM YOU!'))[$currentMatch] . "</td>";
-									echo "<td>" . TeamNumberName(MakeMatchArray(TotalMatchesComplex('I AM YOU!'))[$currentMatch]) . "</td>";
-
-									$cursor = $collection->find(['MetaData.MetaData' => 'MatchInput', 'MatchInformation.MatchNumber' => $currentMatch]);
-									
+									$cursor = $collection->find(['_id' => $documentID]);
 									foreach($cursor as $document){
-										$documentExist = true;
 										//To calculate RP via their gameplay
 											//AUTO
 												$AUTORP = 0;
@@ -356,9 +312,10 @@
 												}
 										$calcRP = $AUTORP + $DRIVERRP + $ENDRP;
 										//To input the values into the cells
-											//echo AllianceColorationAlt($document["MatchInformation"]["RobotAlliance"]) . $document["MatchInformation"]["RobotAlliance"] . "</td>";
-											//echo "<td>" . $document["MatchInformation"]["TeamNumber"] . "</td>";
-											//echo "<td>" . TeamNumberName($document["MatchInformation"]["TeamNumber"]) . "</td>";
+											echo "<td>" . $document["MatchInformation"]["MatchNumber"] . "</td>";
+											echo AllianceColorationAlt($document["MatchInformation"]["RobotAlliance"]) . $document["MatchInformation"]["RobotAlliance"] . "</td>";
+											echo "<td>" . $document["MatchInformation"]["TeamNumber"] . "</td>";
+											echo "<td>" . TeamNumberName($document["MatchInformation"]["TeamNumber"]) . "</td>";
 											echo MatchResultsFormat(MatchResults($document["MatchInformation"]["MatchNumber"]));
 											//echo "<td style='color:white' class='red' >" . $document["_id"] . "</td>";
 											echo "<td>" . $calcRP . "</td>";
@@ -371,11 +328,6 @@
 											echo "<td>" . $document["GameInformation"]["DRIVER"]["ParticlesCorner"] . "</td>";
 											echo "<td>" . $document["GameInformation"]["END"]["AllianceClaimedBeacons"] . "</td>";
 											echo "<td>" . $document["GameInformation"]["END"]["CapBall"] . "</td>";
-									}
-									if($documentExist == false){
-										for($i = 0; $i <= 10; $i++){
-											echo "<td/>";
-										}
 									}
 									echo "</tr>";
 								}
