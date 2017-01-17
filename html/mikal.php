@@ -14,13 +14,11 @@
 		}
 	}
 	
+	
 	$m = new MongoClient();
 	$db = $m->TheOrangeAllianceTest;
 	$collectionName = "Y201701211";
-	$collection = $db->$collectionName;
-
-	$cursor = $collection->find();
-	
+	$collection = $db->$collectionName;	
 
 	function TotalMatchesComplex($iDVerification){ 
 		$m = new MongoClient();

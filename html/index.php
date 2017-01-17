@@ -25,6 +25,35 @@
 			} );
 		</script>
 	</head>
+	<style>
+		body {
+			background-image: url("Beacon.png");
+		}
+		
+	</style>
+	<script>
+var countDownDate = new Date("Jan 21, 2017 00:00:00").getTime();
+
+var x = setInterval(function() {
+
+  var now = new Date().getTime();
+
+  var distance = countDownDate - now;
+
+  var days = Math.floor(distance / (1000 * 60 * 60 * 24));
+  var hours = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+  var minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
+  var seconds = Math.floor((distance % (1000 * 60)) / 1000);
+
+  document.getElementById("timmer").innerHTML = days + "d " + hours + "h "
+  + minutes + "m " + seconds + "s ";
+
+  if (distance < 0) {
+    clearInterval(x);
+    document.getElementById("timmer").innerHTML = "EXPIRED";
+  }
+}, 1000);
+</script>
 	<body>
 		<header>
 			<div class="navbar navbar-default navbar-fixed-top">
@@ -33,8 +62,8 @@
 						<a class="nav-brand" href="http://theorangealliance.tk:8080/"> 
 							<img style="max-width:50px" src="logo.png">
 							<?php 
-							//require 'mikal.php'; 
-							//TheOrangeAllianceLogos(1);
+							require 'mikal.php'; 
+							TheOrangeAllianceLogos(1);
 							?>
 						</a>
 						<a class="nav-brand" href="http://theorangealliance.tk:8080/"></a>
@@ -62,7 +91,7 @@
 		
 		<div class="content">
 			<div class="container">
-				<h1>Week 3: Boys and Girls Club Meet    <?php echo date('Ymd'); ?>    </h1>
+				<h1>Week 3: Boys and Girls Club Meet    <? // echo date('Ymd'); ?>    </h1><h1 id='timmer'></h1>
 				<hr></hr>
 			
 				<ul class="nav nav-tabs">
@@ -263,7 +292,7 @@
 									return $alliance;
 								}
 								*/
-								require 'mikal.php';
+								//require 'mikal.php';
 								
 								
 								//Makes sure to not add extra rows with no value
