@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
 	<head>
-		<title>The Orange Alliance <?php time(); ?></title>
+		<title>The Orange Alliance</title>
 		<link href="https://fonts.googleapis.com/css?family=Open+Sans" rel="stylesheet">
 		<meta name = "viewport" content="width=device-width, initial-scale=1.0">
 		<link href = "css/bootstrap.min.css" rel = "stylesheet" type="text/css">
@@ -58,7 +58,7 @@
 		
 		<div class="content">
 			<div class="container">
-				<h1>Week 3: Boys and Girls Club Meet</h1>
+				<h1>Week 3: Boys and Girls Club Meet    <?php echo date('Ymd'); ?>    </h1>
 				<hr></hr>
 			
 				<ul class="nav nav-tabs">

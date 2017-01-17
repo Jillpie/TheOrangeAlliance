@@ -1,27 +1,20 @@
 .navbar-default{
 	font-family: 'Open Sans', sans-serif;
 	font-size: 30px;
-	background-color: rgb(249, 105, 14);
+	background-color: #f9690e;
 	color: white;
-	border-color: rgb(249, 105, 14);
-	padding: 5px;
+	border: none;
+	box-shadow: 0 2px 4px 0 rgba(0,0,0,0.16),0 2px 10px 0 rgba(0,0,0,0.12)!important;
 }
 
 .navbar-default .navbar-nav>.active>a{
-	color: #C54C01;
-	background-color: #F9690E;
+	background-color: #FF8A42;
+	color: white;
 }
 .navbar-default .navbar-nav>.active>a:hover{
-	color: #FFA065;
-	background-color: #F9690E;
+	background-color: #FF8A42;
 	text-decoration: none;
-}
- 
-.nav-tabs>li>a,
-.nav-tabs>li>a:hover,
-.nav-tabs>li.active>a,
-.nav-tabs>li.active>a:hover{
-	color: #F9690E;	
+	color:white;
 }
 
 .nav-brand{
@@ -31,18 +24,22 @@
 .nav-brand:hover,
 .nav-brand:active,
 .nav-brand:visted{
-	color: #FFA065;
+	color: white;
 	text-decoration: none;
 }
 
 .navbar .nav > li > a{
 	color: #ffffff;
 	font-size: 25px;
+		  transition-property: background;
+  transition-duration: 0.5s;
+  transition-timing-function: linear;
 }
 
 .navbar .nav > li > a:hover{
-	color: #FFA065;
-	background-color: #F9690E;
+	color: white;
+	background-color: #9B3B00;
+
 }
 
 .content{
@@ -112,6 +109,18 @@ td{
   border-radius: 4px;
   padding: 10px 16px;
 }
+
+.nav-tabs>li.active>a, .nav-tabs>li.active>a:focus, .nav-tabs>li.active>a:hover{
+	color:#F9690E;
+}
+
+a, a.active, a:hover{
+	color:#F9690E;
+}
+
+.nav-tabs>li.active>a{
+	color:#F9690E;
+}
   
 .btn-lg {
   font-size: 18px;
@@ -150,6 +159,11 @@ td{
 	border: 0 none;
 	font-weight: 700;
 	letter-spacing: 1px;
+	transition: all .1s linear;
+}
+
+.btn:active{
+	transform: translateY(1px);
 }
 .btn:focus, .btn:active:focus, .btn.active:focus {
 	outline: 0 none;
@@ -179,10 +193,6 @@ td{
 
 .green{
 	background-color: #66b127;
-	color: white;
-}
-.pink{
-	background-color: #FFB6C1;
 	color: white;
 }
 
