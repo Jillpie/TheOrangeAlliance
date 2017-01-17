@@ -273,7 +273,8 @@
 								$DRIVERRP = 123;
 								$ENDRP = 123;
 								$realMatchNumber = 0;
-								for($currentMatch = 1; $currentMatch <= count(MakeMatchArray(TotalMatchesComplex('I AM YOU!'))); $currentMatch++ ){
+								$dataValidation = 'rainbow';
+								for($currentMatch = 1; $currentMatch <= count(MakeMatchArray(TotalMatchesComplex($dataValidation))); $currentMatch++ ){
 									if(($currentMatch % 4) == (1 % 4)){
 										$realMatchNumber++;
 									}
@@ -281,8 +282,8 @@
 									echo "<tr>";
 									echo "<td>" . $realMatchNumber . "</td>";
 									echo AllianceColorationAlt(InterpertColoration($currentMatch % 4)) . InterpertColoration($currentMatch % 4) . "</td>";
-									echo "<td>" . MakeMatchArray(TotalMatchesComplex('I AM YOU!'))[$currentMatch] . "</td>";
-									echo "<td>" . TeamNumberName(MakeMatchArray(TotalMatchesComplex('I AM YOU!'))[$currentMatch]) . "</td>";
+									echo "<td>" . MakeMatchArray(TotalMatchesComplex($dataValidation))[$currentMatch] . "</td>";
+									echo "<td>" . TeamNumberName(MakeMatchArray(TotalMatchesComplex($dataValidation))[$currentMatch]) . "</td>";
 
 									$cursor = $collection->find(['MetaData.MetaData' => 'MatchInput', 'MatchInformation.MatchNumber' => $currentMatch]);
 									
