@@ -11,6 +11,9 @@
 	</head>
 	<body>
 		<header>
+		<div class="container">
+				The Orange Alliance
+			</div>
 		<div class="navbar navbar-default navbar-fixed-top">
 			<div class="container">
 				<div class="navbar-header">
@@ -43,20 +46,25 @@
 			<hr></hr>
 			<table class="table table-striped table-bordered">
 			<tr>
-				<th>Match Date</th>
-				<th>Match Location</th>
+				<th colspan="2">Event Information</th>
 			</tr>
-					
-				<td class="green"><select class="form-control" id="inputID" name="matchDate">
+			<tr>
+				<td>Event Date</td>
+				<td><select class="form-control" id="inputID" name="matchDate">
 					<option>20170121</option>
 					</select>
 					</td>
-					<td class="green"><select class="form-control" id="inputID" name="matchLocation">
+				
+			</tr>
+				<td>Event Location</td>
+					<td><select class="form-control" id="inputID" name="matchLocation">
 					<option>Boys and Girls: Club 2230 E Jewett St, San Diego, CA 92111</option>
 					</select>
 					</td>
-			<tr>
-			</tr>
+				<tr>
+					<td>Validation Code</td>
+					<td ><input type="text" class="form-control" id="inputID" name="dataValidation"></td>
+				</tr>
 			</table>
 			
 			<table id="inputTable" class="table table-striped table-bordered">
@@ -234,7 +242,7 @@
 				function addInput(){
 					
 					var table = document.getElementById("inputTable");
-					var row = table.insertRow(match-1);
+					var row = table.insertRow(match);
 					var cell1 = row.insertCell(0);
 					var cell2 = row.insertCell(1);
 					var cell3 = row.insertCell(2);
@@ -257,7 +265,7 @@
 				function removeInput(){
 					var table = document.getElementById("inputTable");
 					match--;
-					table.deleteRow(match-1)
+					table.deleteRow(match)
 				}
 				</script>
 	
@@ -321,7 +329,7 @@
 				"MetaData" => array(
 					"MetaData" => "ScheduleInput",
 					"TimeStamp" => "MEOW!!!!",
-					"InputID" => "I AM YOU!"
+					"InputID" => $_POST['dataValidation']
 				),
 				"Match" => $matchArray
 			);

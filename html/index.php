@@ -68,7 +68,7 @@
 				</ul>
 			
 				<div class="tab-content">
-					<div style="padding-top: 10px;" id="rankings" class="tab-pane fade in active">
+					<div style="padding-top: 10px;" id="rankings" class="tab-pane fade in active table-responsive">
 						<table class="table table-striped table-bordered tablesorter" id="inputTable1">
 							<thead>
 								<tr>
@@ -85,25 +85,25 @@
 						</table>
 					</div>
 					
-					<div style="padding-top: 10px;" id="match-history" class="tab-pane fade">
+					<div style="padding-top: 10px;" id="match-history" class="tab-pane fade table-responsive">
 						<table class="table table-striped table-bordered" id="inputTable2">
 							<thead>
 								<tr>
-									<th class="homepage-size">Match</th>
-									<th class="homepage-size">Alliance</th>
-									<th class="homepage-size">Team Number</th>
-									<th class="homepage-size">Team Name</th>
-									<th class="homepage-size">Result Red-Blue</th>
-									<th class="homepage-size">RP</th>
-									<th class="red homepage-size">Robot Parking</th>
-									<th class="red homepage-size">Particles in Center</th>
-									<th class="red homepage-size">Particles in Corner</th>
-									<th class="red homepage-size">Cap Ball</th>
-									<th class="red homepage-size">Beacons</th>
-									<th class="blue homepage-size">Particles in Center</th>
-									<th class="blue homepage-size">Particles in Corner</th>
-									<th class="green homepage-size"> Beacons</th>
-									<th class="green homepage-size">Cap Ball</th>
+									<th>Match Number</th>
+									<th>Alliance</th>
+									<th>Team Number</th>
+									<th>Team Name</th>
+									<th>Result Red-Blue</th>
+									<th>RP</th>
+									<th class="red">Robot Parking</th>
+									<th class="red">Particles in Center</th>
+									<th class="red">Particles in Corner</th>
+									<th class="red">Cap Ball</th>
+									<th class="red">Beacons</th>
+									<th class="blue">Particles in Center</th>
+									<th class="blue">Particles in Corner</th>
+									<th class="green">Beacons</th>
+									<th class="green">Cap Ball</th>
 								</tr>
 							</thead>
 							<tbody>
@@ -113,6 +113,42 @@
 
 								$cursor = $collection->find();
 
+								function TotalMatchesComplex($iDVerification){ 
+									$m = new MongoClient();
+									$db = $m->TheOrangeAllianceTest;
+									$functionSubCollection = "Y201701211";
+									$acollection = $db->$functionSubCollection;
+
+									$functionCursor = $acollection->find(['MetaData.MetaData' => "ScheduleInput", 'MetaData.InputID' => $iDVerification ]);
+
+									$matchesComplex = array();
+									$matchNumberInc = 0;
+									foreach($functionCursor as $document){
+										foreach($document['Match'] as $matchNumberComplex){
+											$matchNumberInc++;
+											$matchesComplex['Match' . $matchNumberInc] = array(
+												'Red1' => $matchNumberComplex['Red1'],
+												'Red2' => $matchNumberComplex['Red2'],
+												'Blue1' => $matchNumberComplex['Blue1'],
+												'Blue2' => $matchNumberComplex['Blue2']
+											);
+										}
+									}
+									return $matchesComplex;
+								}
+								function MakeMatchArray($matchesComplex){
+									$matchArray = array();
+									$thisMatchNumber = 0;
+									foreach($matchesComplex as $matchNumberInterval){
+										$thisMatchNumber++;
+										$matchArray[(4 * ($thisMatchNumber - 1)) + 1] = $matchNumberInterval['Red1'];
+										$matchArray[(4 * ($thisMatchNumber - 1)) + 2] = $matchNumberInterval['Red2'];
+										$matchArray[(4 * ($thisMatchNumber - 1)) + 3] = $matchNumberInterval['Blue1'];
+										$matchArray[(4 * ($thisMatchNumber - 1)) + 4] = $matchNumberInterval['Blue2'];
+									}
+									
+									return $matchArray;
+								}
 								function TeamNumberName($teamNumber){
 									$m = new MongoClient();
 									$db = $m->TheOrangeAllianceTest;
@@ -161,7 +197,6 @@
 									return $matchResults;
 									}
 								}
-								//$tenative = array('ScoreFinalRed' => 'RED' , 'ScoreFinalBlue' => 'Blue' , 'Winner' => 'Blue');
 								function MatchResultsFormat($matchResults){
 									$matchResultsFormated = '';
 									switch ($matchResults['Winner']) {
@@ -200,6 +235,27 @@
 									}
 									return $allianceColor;
 								}
+								function InterpertColoration($quarter){
+									$alliance = '';
+									switch ($quarter) {
+										case 1 % 4:
+										$alliance = 'Red';
+											break;
+										case 2 % 4:
+										$alliance = 'Red';
+											break;
+										case 3 % 4:
+										$alliance = 'Blue';
+											break;
+										case 4 % 4:
+										$alliance = 'Blue';
+											break;
+										default:
+										$alliance = 'Pink';
+											break;
+									}
+									return $alliance;
+								}
 
 								//Makes sure to not add extra rows with no value
 								$numberOfDocuments = 0;
@@ -210,15 +266,29 @@
 								//Generates list of ids
 								$documentIDList = array();
 								$documentIDList = DocumentIDListGenerator('MatchInput');
+								$documentIDAmount = count($documentIDList);
 								
 								$calcRP = 123;
 								$AUTORP = 123;
 								$DRIVERRP = 123;
 								$ENDRP = 123;
-								foreach($documentIDList as $documentID){
+								$realMatchNumber = 0;
+								$dataValidation = 'rainbow';
+								for($currentMatch = 1; $currentMatch <= count(MakeMatchArray(TotalMatchesComplex($dataValidation))); $currentMatch++ ){
+									if(($currentMatch % 4) == (1 % 4)){
+										$realMatchNumber++;
+									}
+									$documentExist = false;
 									echo "<tr>";
-									$cursor = $collection->find(['_id' => $documentID]);
+									echo "<td>" . $realMatchNumber . "</td>";
+									echo AllianceColorationAlt(InterpertColoration($currentMatch % 4)) . InterpertColoration($currentMatch % 4) . "</td>";
+									echo "<td>" . MakeMatchArray(TotalMatchesComplex($dataValidation))[$currentMatch] . "</td>";
+									echo "<td>" . TeamNumberName(MakeMatchArray(TotalMatchesComplex($dataValidation))[$currentMatch]) . "</td>";
+
+									$cursor = $collection->find(['MetaData.MetaData' => 'MatchInput', 'MatchInformation.MatchNumber' => $currentMatch]);
+									
 									foreach($cursor as $document){
+										$documentExist = true;
 										//To calculate RP via their gameplay
 											//AUTO
 												$AUTORP = 0;
@@ -287,10 +357,9 @@
 												}
 										$calcRP = $AUTORP + $DRIVERRP + $ENDRP;
 										//To input the values into the cells
-											echo "<td>" . $document["MatchInformation"]["MatchNumber"] . "</td>";
-											echo AllianceColorationAlt($document["MatchInformation"]["RobotAlliance"]) . $document["MatchInformation"]["RobotAlliance"] . "</td>";
-											echo "<td>" . $document["MatchInformation"]["TeamNumber"] . "</td>";
-											echo "<td>" . TeamNumberName($document["MatchInformation"]["TeamNumber"]) . "</td>";
+											//echo AllianceColorationAlt($document["MatchInformation"]["RobotAlliance"]) . $document["MatchInformation"]["RobotAlliance"] . "</td>";
+											//echo "<td>" . $document["MatchInformation"]["TeamNumber"] . "</td>";
+											//echo "<td>" . TeamNumberName($document["MatchInformation"]["TeamNumber"]) . "</td>";
 											echo MatchResultsFormat(MatchResults($document["MatchInformation"]["MatchNumber"]));
 											//echo "<td style='color:white' class='red' >" . $document["_id"] . "</td>";
 											echo "<td>" . $calcRP . "</td>";
@@ -303,6 +372,11 @@
 											echo "<td>" . $document["GameInformation"]["DRIVER"]["ParticlesCorner"] . "</td>";
 											echo "<td>" . $document["GameInformation"]["END"]["AllianceClaimedBeacons"] . "</td>";
 											echo "<td>" . $document["GameInformation"]["END"]["CapBall"] . "</td>";
+									}
+									if($documentExist == false){
+										for($i = 0; $i <= 10; $i++){
+											echo "<td/>";
+										}
 									}
 									echo "</tr>";
 								}
@@ -339,21 +413,27 @@
 							</tbody>
 						</table>
 					</div>
-					<div id="average-scores" style="padding-top: 10px;" class="tab-pane fade">
+					<div style="padding-top: 10px;" id="average-scores"  class="tab-pane fade table-responsive">
 						<table class="table table-striped table-bordered" id="inputTable3">
 							<thead>
 								<tr>
 									<th>Team Number</th>
 									<th>Team Name</th>
-									<th class="red">Robot Parking</th>
+									<th class="red">Partially on Center</th>
+									<th class="red">Partially on Corner</th>
+									<th class="red">Fully on Center</th>
+									<th class="red">Fully on Corner</th>
 									<th class="red">Particles in Center Vortex</th>
 									<th class="red">Particles in Corner Vortex</th>
-									<th class="red">Cap Ball in Contact With the Floor</th>
+									<th class="red">Cap Balla</th>
 									<th class="red">Claimed Beacons</th>
 									<th class="blue">Particles in Center Vortex</th>
 									<th class="blue">Particles in Corner Vortex</th>
 									<th class="green">Claimed Beacons</th>
-									<th class="green">Cap Ball</th>
+									<th class="green">Cap Ball on Ground</th>
+									<th class="green">Cap Ball Raised</th>
+									<th class="green">Cap Ball Above Center</th>
+									<th class="green">Cap Ball in Center</th>
 								</tr>
 							</thead>
 							<tbody>
@@ -393,6 +473,7 @@
 							?>
 							</tbody>
 						</table>
+						
 					</div>
 				</div>
 			</div>
