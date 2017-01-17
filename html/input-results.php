@@ -43,32 +43,41 @@
 			<h1>Input Results</h1>
 			<hr></hr>
 			<table class="table table-striped table-bordered">
+			<tr>
+				<th colspan="2">Match Information</th>
+			</tr>
 				<tr>
-					<th>Match Date</th>
-					<th>Match Location</th>
-				</tr>
-				<tr>
-					<td class="green"><select class="form-control" id="inputID" name="matchDate">
+					<td>Match Date</td>
+					<td><select class="form-control" id="inputID" name="matchDate">
 					<option>20170121</option>
 					</select>
 					</td>
-					<td class="green"><select class="form-control" id="inputID" name="matchLocation">
+					
+				</tr>
+				<tr>
+					<td>Match Location</td>
+					<td><select class="form-control" id="inputID" name="matchLocation">
 					<option>Boys and Girls: Club 2230 E Jewett St, San Diego, CA 92111</option>
 					</select>
 					</td>
 				</tr>
 				<tr>
-					<th>Match Number</th>
-					<th>Winner</th>
+					<td>Match Number</td>
+					<td><input type="number" class="form-control" id="inputID" name="matchNumber"></td>
+					
 				</tr>
 				<tr>
-					<td class="green"><input type="number" class="form-control" id="inputID" name="matchNumber"></td>
-					<td class="green"><select class="form-control" id="inputID" name="winner">
+					<td>Winning Alliance</td>
+					<td ><select class="form-control" id="inputID" name="winner">
 						<option>Blue</option>
 						<option>Red</option>
 						<option>Tie</option>
 					</select>
 					</td>	
+					</tr>
+					<tr>
+						<td>Validation Code</td>
+						<td ><input type="text" class="form-control" id="inputID" name="dataValidation"></td>
 					</tr>
 					</table>
 					<table class="table table-striped table-bordered">
@@ -110,7 +119,7 @@
 				"MetaData" => array(
 					"MetaData" => "ResultsInput",
 					"TimeStamp" => "MUAHHAHAHHA",
-					"InputID" => "I AM GRUUUUU"
+					"InputID" => $_POST['dataValidation']
 				),
 				"MatchNumber" => intval($_POST['matchNumber']),
 				"Winner" => $_POST['winner'],

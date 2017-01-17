@@ -11,9 +11,6 @@
 	</head>
 	<body>
 		<header>
-		<div class="container">
-				The Orange Alliance
-			</div>
 		<div class="navbar navbar-default navbar-fixed-top">
 			<div class="container">
 				<div class="navbar-header">

@@ -76,6 +76,10 @@
 				<td>Team Number</td>
 				<td><input type="number" class="form-control" id="inputID" name="teamNumber"></td>
 			</tr>
+			<tr>
+			<td>Validation Code</td>
+				<td ><input type="text" class="form-control" id="inputID" name="dataValidation"></td>
+			</tr>
 			</table>
 			
 			<table class="table table-striped table-bordered">
@@ -190,7 +194,7 @@
 				"MetaData" => array(
 					"MetaData" => "MatchInput",
 					"TimeStamp" => "MEOW",
-					"InputID" => "I AM CHRIS"
+					"InputID" => $_POST['dataValidation']
 				),
 				
 				"MatchInformation" => array(
