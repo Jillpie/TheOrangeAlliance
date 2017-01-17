@@ -32,6 +32,10 @@
 					<div class="navbar-header">
 						<a class="nav-brand" href="http://theorangealliance.tk:8080/"> 
 							<img style="max-width:50px" src="logo.png">
+							<?php 
+							//require 'mikal.php'; 
+							//TheOrangeAllianceLogos(1);
+							?>
 						</a>
 						<a class="nav-brand" href="http://theorangealliance.tk:8080/"></a>
 						<button class = "navbar-toggle" data-toggle = "collapse" data-target = ".navHeaderCollapse">
@@ -113,6 +117,7 @@
 
 								$cursor = $collection->find();
 
+								/*
 								function TotalMatchesComplex($iDVerification){ 
 									$m = new MongoClient();
 									$db = $m->TheOrangeAllianceTest;
@@ -135,7 +140,7 @@
 										}
 									}
 									return $matchesComplex;
-								}
+								}	
 								function MakeMatchArray($matchesComplex){
 									$matchArray = array();
 									$thisMatchNumber = 0;
@@ -235,6 +240,7 @@
 									}
 									return $allianceColor;
 								}
+								
 								function InterpertColoration($quarter){
 									$alliance = '';
 									switch ($quarter) {
@@ -256,7 +262,10 @@
 									}
 									return $alliance;
 								}
-
+								*/
+								require 'mikal.php';
+								
+								
 								//Makes sure to not add extra rows with no value
 								$numberOfDocuments = 0;
 								foreach($cursor as $document){
@@ -409,6 +418,7 @@
 								//echo "<tr><td>" . $documentIDList . " <br /> </td></td>";
 
 								//echo $documentIDList;
+							
 							?>
 							</tbody>
 						</table>

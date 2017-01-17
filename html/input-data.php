@@ -162,34 +162,14 @@
 		</div>
 		</div>
 		<?php
+			require 'mikal.php';
+			function AllOfIt(){
 			//Loading and setting up the mongodb PHP
 			$m = new MongoClient();
 			$db = $m->TheOrangeAllianceTest;
 			$collectionName = "Y" . $_POST['matchDate'] . 1;
 			$collection = $db->$collectionName;
 
-			//The stuff to do and send
-			/*
-			$document = array(
-				"MetaData" => "MatchInput",
-				"TimeStamp" => "MEOW",
-				"InputID" => "I AM CHRIS",
-				"MatchNumber" => $_POST['matchNumber'],
-
-				"RobotAlliance" => $_POST['robotAlliance'],
-				"TeamNumber" => $_POST['teamNumber'],
-
-				"AUTORobotParking" => $_POST['autoRobotParking'],
-				"AUTOParticlesCenter" => $_POST['autoParticlesCenter'],
-				"AUTOParticlesConer" => $_POST['autoParticlesConer'],
-				"AUTOCapBall" => $_POST['autoCapBall'],
-				"AUTOClaimedBeaons" => $_POST['autoClaimedBeaons'],
-				"DRIVERParticlesCenter" => $_POST['driverParticlesCenter'],
-				"DRIVERParticlesCorner" => $_POST['driverParticlesCorner'],
-				"ENDAllianceClaimedBeacons" => $_POST['endAllianceClaimedBeacons'],
-				"ENDCapBall" => $_POST['endCapBall']
-			);
-			*/
 			$document = array(
 				"MetaData" => array(
 					"MetaData" => "MatchInput",
@@ -222,6 +202,8 @@
 				)
 			);
 			$collection->insert($document);
+			}
+			AllOfIt();
 		?>
 		<script src = "http://ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js"></script>
 		<script src = "js/bootstrap.js"></script>
