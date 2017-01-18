@@ -1,18 +1,21 @@
 <?php
 	//Instances	
 	$m = new MongoClient();
+	$c = $m->selectDB('TheOrangeAllianceTest')->selectCollection('Y201701211');
 
-	$db = $m->TheOrangeAllianceTest;
-	$collectionName = "Y201701211";
-	$collection = $db->$collectionName;	
+
+	function MatchHistoryMatchAllianceTeam(){
+		$m = new MongoClient();
+		$c = $m->selectDB('TheOrangeAllianceTest')->selectCollection('Teams');
+
+		echo "<td>"
+		echo "</td>"
+	}
+
 
 	function MatchHistoryTable(){
 
 	}
-	
-
-
-	//$c = $m->selectDB('DatabaseTesting')->selectCollection('DatabaseTesting');
 
 	/* Leagacy: 
 		function TheOrangeAllianceLogos($logoSelect){
