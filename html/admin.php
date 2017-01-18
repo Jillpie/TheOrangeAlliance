@@ -27,9 +27,9 @@
 				<div class="container">
 					<div class="navbar-header">
 						<a class="nav-brand" href="http://theorangealliance.tk:8080/"> 
-							<img style="max-width:50px" src="/images/logo.png"> 
-							<span class="logo hidden-xs">The Orange Alliance</span>
+							<img style="max-width:50px" src="/images/logo.png"> The Orange Alliance
 						</a>
+						<a class="nav-brand" href="http://theorangealliance.tk:8080/"></a>
 						<button class = "navbar-toggle" data-toggle = "collapse" data-target = ".navHeaderCollapse">
 							<span class = "icon-bar"></span>
 							<span class = "icon-bar"></span>
@@ -48,9 +48,11 @@
 			</div>
 		
 		<div class="content">
+			<form action="admin.php" method="post" >
 			<div class="container">
-				<h1>Week 3: Boys and Girls Club Meet </h1><h1></h1>
-				<hr></hr>
+				<h1>ADMIN PAGE!!!!!!!!!</h1><h1> <input type="number" class="form-control" id="inputID" name="removeValue"> </h1>
+				<hr> <input class="btn btn-primary raised" type="submit"> </hr>
+				
 			
 				<ul class="nav nav-tabs">
 					<li role="presentation" class="active"><a data-toggle="tab" href="#rankings">Rankings</a></li>
@@ -95,14 +97,15 @@
 									<th class="blue">Particles in Corner</th>
 									<th class="green">Beacons</th>
 									<th class="green">Cap Ball</th>
+									<th>Admin</th>
 								</tr>
 							</thead>
 							<tbody>
+							</form>
 							<?php
-								require 'mikal.php';
-
-								MatchHistoryTable();
-							?>
+							require 'mikal.php';
+								MatchHistoryTableAdmin($_POST['removeValue']);
+								?>
 							</tbody>
 						</table>
 					</div>
@@ -130,9 +133,7 @@
 								</tr>
 							</thead>
 							<tbody>
-							<?php
-								RankingsTable();
-							?>
+							
 							</tbody>
 						</table>
 						
@@ -140,26 +141,13 @@
 				</div>
 			</div>
 			</div>
-			<?php
-				Debug(true);
-			?>
 		<div class="footer">
 			<div class="container">
-				<div class="col-md-4" style="padding-bottom: 10px;">
-				<center>
-				Designed by 
-				<hr1></hr1>
-				Team 8097 Botcats<br>
-				Team 9261 Level Up<br>
-				Team 10809 Crow Force 5
-				</center>
+				<div class="col-md-6">
+				Designed by Team 8097 Botcats, Team 9261 Level Up, Team 10809 Crow Force 5
 				</div>
-				<div class="col-md-4">
-				</div>
-				<div style="padding-top: 35px;" class="col-md-4" >
-				<center>
-					<span style="margin-top: 80px; font-size: 20px;">© TheOrangeAlliance 2017</span>
-					</cetner>
+				<div class="col-md-6" style="text-align: right;">
+					© TheOrangeAlliance 2017
 				</div>
 			</div>
 		</div>

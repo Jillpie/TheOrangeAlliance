@@ -233,7 +233,20 @@
 			}
 		}
 	}
-
+	// Removes a Match Hostyr Match Input fullfilling criteria
+	function RemoveMatchHistoryMatchInput($dataValidation,$matchNumberInFour){
+		$r = new MongoClient();
+		$t = $r->selectDB('TheOrangeAllianceTest')->selectCollection('Y201701211');
+		$cursort = $t->find(['MetaData.MetaData' => 'ScheduleInput' ,'MetaData.InputID' => $dataValidation]);
+		$currentTeamForRP = 0;
+			foreach($cursort as $document){
+				$currentTeamForRP = $document['Match']['Match' . TrueMatchNumberTransformer($matchNumberInFour + 3) ][MatchNumberInFourToInterpertAsAllianceNumber($matchNumberInFour)];
+			}
+		$m = new MongoClient();
+		$c = $m->selectDB('TheOrangeAllianceTest')->selectCollection('Y201701211');
+		$c->remove(['MetaData.MetaData' => 'MatchInput', 'MatchInformation.MatchNumber' => TrueMatchNumberTransformer($matchNumberInFour + 3) , 'MatchInformation.TeamNumber' => $currentTeamForRP]);
+	}
+	//Puts Together all the Functions to make up all of Match History
 	function MatchHistoryTable(){
 		$DATAVALIDATION = 'rainbow';
 		for($currentMatchNumberInFour = 1; $currentMatchNumberInFour <= CountMatchesScheduleInputTimesFour($DATAVALIDATION); $currentMatchNumberInFour++){
@@ -244,8 +257,29 @@
 			echo "</tr>";
 		}
 	}
+	//Puts Together all the Functions to make up all of Match History ALTERNATE FOR ADMIN
+	function MatchHistoryTableAdmin($removeValue){
+		$DATAVALIDATION = 'rainbow';
+		for($currentMatchNumberInFour = 1; $currentMatchNumberInFour <= CountMatchesScheduleInputTimesFour($DATAVALIDATION); $currentMatchNumberInFour++){
+			echo "<tr>";
+			MatchHistoryMatchAllianceTeam($DATAVALIDATION,$currentMatchNumberInFour);
+			MatchHistoryResults($currentMatchNumberInFour);
+			MatchHistoryGameScore($DATAVALIDATION,$currentMatchNumberInFour);
+			PutItInATD('<input class="btn btn-primary raised" type="submit" value=": 3">');
+			echo "</tr>";
+		}
+		RemoveMatchHistoryMatchInput($DATAVALIDATION,$removeValue);
+	}
+	//
+	function ScheduleTeamUniqueness($dataValidation){
+		$m = new MongoClient();
+		$c = $m->selectDB('TheOrangeAllianceTest')->selectCollection('Y201701211');
+		$cursor = $c->find(['MetaData.MetaData' => 'ScheduleInput', 'MetaData.InputID' => $dataValidation]);
+	}
+	//The Table Ranking For all of Rankings
+	function RankingsTable(){
 
-
+	}
 	function Debug($show){
 		/*
 		$debugEchoArray = array(
@@ -261,7 +295,5 @@
 		echo "<br/>";
 		var_dump($projection);
 		*/
-
 	}
-	
 ?>
