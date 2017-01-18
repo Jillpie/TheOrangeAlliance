@@ -73,6 +73,13 @@
 									<th>OPR</th>
 								</tr>
 							</thead>
+							<tbody>
+							<?php
+								require 'mikal.php';
+
+								RankingsTable();
+							?>
+							</tbody>
 						</table>
 					</div>
 					
@@ -99,8 +106,6 @@
 							</thead>
 							<tbody>
 							<?php
-								require 'mikal.php';
-
 								MatchHistoryTable();
 							?>
 							</tbody>

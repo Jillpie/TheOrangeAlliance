@@ -168,12 +168,12 @@
 		$m = new MongoClient();
 		$c = $m->selectDB('TheOrangeAllianceTest')->selectCollection('Y201701211');
 		$cursor = $c->find(['MetaData.MetaData' => 'ScheduleInput' ,'MetaData.InputID' => $dataValidation]);
-			foreach($cursor as $document){
-				PutItInATD(TrueMatchNumberTransformer($matchNumberInFour + 3));
-				AllianceColorNumberInterperterToColor(MatchNumberInFourToInterpertAsAllianceNumber($matchNumberInFour));
-				PutItInATD($document['Match']['Match' . TrueMatchNumberTransformer($matchNumberInFour + 3) ][MatchNumberInFourToInterpertAsAllianceNumber($matchNumberInFour)]);
-				PutItInATD(TeamNumberName($document['Match']['Match' . TrueMatchNumberTransformer($matchNumberInFour + 3)][MatchNumberInFourToInterpertAsAllianceNumber($matchNumberInFour)]));
-			}
+		foreach($cursor as $document){
+			PutItInATD(TrueMatchNumberTransformer($matchNumberInFour + 3));
+			AllianceColorNumberInterperterToColor(MatchNumberInFourToInterpertAsAllianceNumber($matchNumberInFour));
+			PutItInATD($document['Match']['Match' . TrueMatchNumberTransformer($matchNumberInFour + 3) ][MatchNumberInFourToInterpertAsAllianceNumber($matchNumberInFour)]);
+			PutItInATD(TeamNumberName($document['Match']['Match' . TrueMatchNumberTransformer($matchNumberInFour + 3)][MatchNumberInFourToInterpertAsAllianceNumber($matchNumberInFour)]));
+		}
 	}
 	// Does All the Results into format HAS ITS DOWN TD and ECHO
 	function MatchHistoryResults($matchNumberInFour){
@@ -270,15 +270,47 @@
 		}
 		RemoveMatchHistoryMatchInput($DATAVALIDATION,$removeValue);
 	}
-	//
-	function ScheduleTeamUniqueness($dataValidation){
+	// Generates a Unique List from a un unique list 
+	function GenerateUniqueList($ununiqueList){
+		$uniqueList = array();
+		foreach($ununiqueList as $ununique){
+			$checkIfUnique = false;
+			foreach($uniqueList as $unique){ 
+				if($unique == $ununique){
+					$checkIfUnique = true;
+				}
+			}
+			if($checkIfUnique == false){
+				$uniqueList[count($uniqueList)] = $ununique;
+			}			
+		}
+		return $uniqueList;
+	}
+	function UniqueTeamList($dataValidation){
 		$m = new MongoClient();
 		$c = $m->selectDB('TheOrangeAllianceTest')->selectCollection('Y201701211');
-		$cursor = $c->find(['MetaData.MetaData' => 'ScheduleInput', 'MetaData.InputID' => $dataValidation]);
+		$cursor = $c->find(['MetaData.MetaData' => 'ScheduleInput' ,'MetaData.InputID' => $dataValidation]);
+		$ununiqueTeamList = array();
+		for($currentMatchNumberInFour = 1; $currentMatchNumberInFour <= CountMatchesScheduleInputTimesFour($DATAVALIDATION); $currentMatchNumberInFour++){
+			foreach($cursor as $document){
+				$ununiqueTeamList[count($ununiqueTeamList)] = array('8097','9261','2558');
+				//$document['Match']['Match' . TrueMatchNumberTransformer($currentMatchNumberInFour + 3) ][MatchNumberInFourToInterpertAsAllianceNumber($currentMatchNumberInFour)];
+			}
+		}
+		return GenerateUniqueList($ununiqueTeamList);
+		//return GenerateUniqueList(array('8097','9261','2558','8097'));
+		//return array('8097','9261','2558');
 	}
 	//The Table Ranking For all of Rankings
 	function RankingsTable(){
-
+		$DATAVALIDATION = 'rainbow';
+		$uniqueTeamListInstance = UniqueTeamList($DATAVALIDATION);
+		for ($i=0; $i <= count($uniqueTeamListInstance); $i++) { 
+			echo "<tr>";
+			PutItInATD($uniqueTeamListInstance[$i]);
+			PutItInATD('testing');
+			echo "</tr>";
+		}
 	}
 	function Debug($show){
 		/*
