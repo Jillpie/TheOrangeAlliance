@@ -7,7 +7,16 @@
 		<link href = "css/bootstrap.min.css" rel = "stylesheet" type="text/css">
 		<link href = "css/styles.css" rel = "stylesheet" type="text/css">
 		<link href = "css/jquery.dataTables.min.css" rel = "stylesheet" type="text/css">
-		<link href="data:image/x-icon;base64,AAABAAEAEBAQAAEABAAoAQAAFgAAACgAAAAQAAAAIAAAAAEABAAAAAAAgAAAAAAAAAAAAAAAEAAAAAAAAAAAAAAAAH3yAACM/wDb7P8AAC4DAABo3gAAWd4ADGsAABfEAAAAO7MAYq71AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAABVWVQAAAAAhEVaVlQAAAiIhFWZVUAACIiIRVZWQACIiIiERVlUAIiIiIiFWlQCiMiIiIhVlACIiIiIiIVUAojIyIiIhFQAqIiIiIiISAAKiMjIiIiAAACoqIiIiAAAAAAB3dAAAAAAAAAeHQAAAAAAABHhwAAAAAAAAB3cAD4HwAA4AcAAMADAADAAwAAgAEAAIABAACAAQAAgAEAAIABAACAAQAAwAMAAOAHAAD+HwAA/w8AAP8PAAD/xwAA" rel="icon" type="image/x-icon" />
+		<link rel="apple-touch-icon" sizes="152x152" href="https://sites.google.com/site/filehostdummysite1234/files/theorangealliance/apple-touch-icon.png?v=vMrqOno5qk">
+		<link rel="icon" type="image/png" href="https://sites.google.com/site/filehostdummysite1234/files/theorangealliance/favicon-32x32.png?v=vMrqOno5qk" sizes="32x32">
+		<link rel="icon" type="image/png" href="https://sites.google.com/site/filehostdummysite1234/files/theorangealliance/favicon-16x16.png?v=vMrqOno5qk" sizes="16x16">
+		<link rel="manifest" href="https://sites.google.com/site/filehostdummysite1234/files/theorangealliance/manifest.json?v=vMrqOno5qk">
+		<link rel="mask-icon" href="https://sites.google.com/site/filehostdummysite1234/files/theorangealliance/safari-pinned-tab.svg?v=vMrqOno5qk" color="#ff9500">
+		<link rel="shortcut icon" href="https://sites.google.com/site/filehostdummysite1234/files/theorangealliance/favicon.ico?v=vMrqOno5qk">
+		<meta name="apple-mobile-web-app-title" content="The Orange Alliance">
+		<meta name="application-name" content="The Orange Alliance">
+		<meta name="msapplication-config" content="https://sites.google.com/site/filehostdummysite1234/files/theorangealliance/browserconfig.xml?v=vMrqOno5qk">
+		<meta name="theme-color" content="#ff9500">
 		<meta http-equiv="Content-Type" content="text/html;charset=utf-8" />
 		<script src = "http://ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js"></script>
 		<script src="js/jquery.dataTables.min.js"></script> 
@@ -26,12 +35,11 @@
 		</script>
 	</head>	
 	<body>
-		<header>
 			<div class="navbar navbar-default navbar-fixed-top">
 				<div class="container">
 					<div class="navbar-header">
 						<a class="nav-brand" href="http://theorangealliance.tk:8080/"> 
-							<img style="max-width:50px" src="logo.png">
+							<img style="max-width:50px" src="/images/logo.png">
 						</a>
 						<a class="nav-brand" href="http://theorangealliance.tk:8080/"></a>
 						<button class = "navbar-toggle" data-toggle = "collapse" data-target = ".navHeaderCollapse">
@@ -50,7 +58,6 @@
 					</div>
 				</div>
 			</div>
-		</header>
 		
 		<div class="content">
 			<div class="container">

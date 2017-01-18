@@ -1,22 +1,114 @@
 <?php
-	//Instances	
-	$m = new MongoClient();
-	$c = $m->selectDB('TheOrangeAllianceTest')->selectCollection('Y201701211');
-
-
-	function MatchHistoryMatchAllianceTeam(){
+	
+	//SOLID Puts Stuff In A <Td> <Td>
+	function PutItInATD($stuffToPutIn){
+		echo "<td>" . $stuffToPutIn . "</td>";
+	}
+	//Transforms a liniar model into its division of 4 peridodicaly ex: 4 = 1, 5 = 1... 8 = 2
+	function TrueMatchNumberTransformer($trueMatchNumber){
+		return intval($trueMatchNumber / 4);
+	}
+	//SOLID Serches though TheOrangeAlliance.Teams to convert a team number into a team name
+	function TeamNumberName($teamNumber){
 		$m = new MongoClient();
 		$c = $m->selectDB('TheOrangeAllianceTest')->selectCollection('Teams');
-
-		echo "<td>"
-		echo "</td>"
+		$cursor = $c->find(['MetaData.MetaData' => 'TeamList']);
+		$teamName = "TeamNamePlaceHolder";
+		foreach($cursor as $document){
+			$teamName = $document["TeamInformation"][strval($teamNumber)];
+		}
+		if($teamName == ""){
+			$teamName = "NO NAME";
+		}
+		return  $teamName;
 	}
+	//SOLID Countes the amount of matches in schedule then times it by four
+	function CountMatchesScheduleInputTimesFour($dataValidation){
+		$m = new MongoClient();
+		$c = $m->selectDB('TheOrangeAllianceTest')->selectCollection('Y201701211');
+		$cursor = $c->find(['MetaData.MetaData' => 'ScheduleInput' ,'MetaData.InputID' => $dataValidation]);
+		foreach ($cursor as $document) {
+			$amountOfMatchesTimesFour = count($document['Match']);
+		}
+		$amountOfMatchesTimesFour *= 4; 
+		return $amountOfMatchesTimesFour;
+	}
+	//SOLID Takes in Number 1-4... Peridocically giving it 'Red1', 'Red2', 'Blue1', 'Blue2'
+	function MatchNumberInFourToInterpertAsAllianceNumber($matchNumberInFour){
+			switch ($matchNumberInFour % 4) {
+				case 1 % 4:
+					$interpertedMatchNumberInFour = 'Red1';
+					break;
+				case 2 % 4:
+					$interpertedMatchNumberInFour = 'Red2';
+					break;
+				case 3 % 4:
+					$interpertedMatchNumberInFour = 'Blue1';
+					break;
+				case 4 % 4:
+					$interpertedMatchNumberInFour = 'Blue2';
+					break;
+				default:
+					$interpertedMatchNumberInFour = 'Pink';
+					break;
+			}
+		return $interpertedMatchNumberInFour;
+	}
+	//SOLID Changes Red1 ... Blue2 into Red ... Blue and adds class='red' HAS ITS OWN TD AND ECHO 
+	function AllianceColorNumberInterperterToColor($allianceColorNumber){
+		switch ($allianceColorNumber) {
+			case 'Red1':
+				$interpertedAllianceColor = '<td class="red">Red</td>';
+				break;
+			case 'Red2':
+				$interpertedAllianceColor = '<td class="red">Red</td>';
+				break;
+			case 'Blue1':
+				$interpertedAllianceColor = '<td class="blue">Blue</td>';
+				break;
+			case 'Blue2':
+				$interpertedAllianceColor = '<td class="blue">Blue</td>';
+				break;
+			default:
+				$interpertedAllianceColor = '<td class="pink">Pink</td>';
+				break;
+		}
+		echo $interpertedAllianceColor;
+	}
+	// Does all the Match Number Aliance Team Number Team Name For Match History
+	function MatchHistoryMatchAllianceTeam($dataValidation , $matchNumberInFour){
+		$m = new MongoClient();
+		$c = $m->selectDB('TheOrangeAllianceTest')->selectCollection('Y201701211');
+		$cursor = $c->find(['MetaData.MetaData' => 'ScheduleInput' ,'MetaData.InputID' => $dataValidation]);
+			foreach($cursor as $document){
+				PutItInATD(TrueMatchNumberTransformer($matchNumberInFour + 3));
+				AllianceColorNumberInterperterToColor(MatchNumberInFourToInterpertAsAllianceNumber($matchNumberInFour));
+				PutItInATD($document['Match']['Match1'][MatchNumberInFourToInterpertAsAllianceNumber($matchNumberInFour)]);
+				PutItInATD(TeamNumberName($document['Match']['Match1'][MatchNumberInFourToInterpertAsAllianceNumber($matchNumberInFour)]));
+			}
+	}
+	// Does All the Results and RP for Match History
+	function MatchHistoryResultsAndRP($matchNumberInFour){
+		$m = new MongoClient();
+		$c = $m->selectDB('TheOrangeAllianceTest')->selectCollection('Y201701211');
+		$cursor = $c->find(['MetaData.MetaData' => 'ResultsInput']);
+			foreach($cursor as $document){
 
-
+			}
+	}
 	function MatchHistoryTable(){
+		$DATAVALIDATION = 'rainbow';
+		for($currentMatchNumberInFour = 1; $currentMatchNumberInFour <= CountMatchesScheduleInputTimesFour($DATAVALIDATION); $currentMatchNumberInFour++){
+			echo "<tr>";
 
+			MatchHistoryMatchAllianceTeam($DATAVALIDATION,$currentMatchNumberInFour);
+			MatchHistoryResultsAndRP();
+
+			echo "<tr>";
+		}
 	}
 
+	
 	/* Leagacy: 
 		function TheOrangeAllianceLogos($logoSelect){
 			switch ($logoSelect) {
@@ -66,21 +158,6 @@
 			}
 			
 			return $matchArray;
-		}
-		function TeamNumberName($teamNumber){
-			$m = new MongoClient();
-			$db = $m->TheOrangeAllianceTest;
-			$functionSubCollection = "Teams";
-			$acollection = $db->$functionSubCollection;
-			$functionCursor = $acollection->find();
-			$teamName = "TeamNamePlaceHolder";
-			foreach($functionCursor as $document){
-				$teamName = $document["TeamInformation"][strval($teamNumber)];
-			}
-			if($teamName == ""){
-				$teamName = "NO NAME";
-			}
-			return  $teamName;
 		}
 		function DocumentIDListGenerator($metaData){
 			$m = new MongoClient();
@@ -175,138 +252,71 @@
 			return $alliance;
 		}
 
-										$m = new MongoClient();
-										$db = $m->TheOrangeAllianceTest;
-										$collectionName = "Y201701211";
-										$collection = $db->$collectionName;
-										
-										//Makes sure to not add extra rows with no value
-										$numberOfDocuments = 0;
-										foreach($cursor as $document){
-											$numberOfDocuments++ ;
-										}
-										
-										//Generates list of ids
-										$documentIDList = array();
-										$documentIDList = DocumentIDListGenerator('MatchInput');
-										$documentIDAmount = count($documentIDList);
-										
-										$calcRP = 123;
-										$AUTORP = 123;
-										$DRIVERRP = 123;
-										$ENDRP = 123;
-										$realMatchNumber = 0;
-										$dataValidation = 'rainbow';
+			$m = new MongoClient();
+			$db = $m->TheOrangeAllianceTest;
+			$collectionName = "Y201701211";
+			$collection = $db->$collectionName;
+			
+			//Makes sure to not add extra rows with no value
+			$numberOfDocuments = 0;
+			foreach($cursor as $document){
+				$numberOfDocuments++ ;
+			}
+			
+			//Generates list of ids
+			$documentIDList = array();
+			$documentIDList = DocumentIDListGenerator('MatchInput');
+			$documentIDAmount = count($documentIDList);
+			
+			$calcRP = 123;
+			$AUTORP = 123;
+			$DRIVERRP = 123;
+			$ENDRP = 123;
+			$realMatchNumber = 0;
+			$dataValidation = 'rainbow';
 
-										function MatchHistoryTable(){
-											for($currentMatch = 1; $currentMatch <= count(MakeMatchArray(TotalMatchesComplex($dataValidation))); $currentMatch++ ){
-												if(($currentMatch % 4) == (1 % 4)){
-													$realMatchNumber++;
-												}
-												$documentExist = false;
-												echo "<tr>";
-												echo "<td>" . $realMatchNumber . "</td>";
-												echo AllianceColorationAlt(InterpertColoration($currentMatch % 4)) . InterpertColoration($currentMatch % 4) . "</td>";
-												echo "<td>" . MakeMatchArray(TotalMatchesComplex($dataValidation))[$currentMatch] . "</td>";
-												echo "<td>" . TeamNumberName(MakeMatchArray(TotalMatchesComplex($dataValidation))[$currentMatch]) . "</td>";
+			function MatchHistoryTable(){
+				for($currentMatch = 1; $currentMatch <= count(MakeMatchArray(TotalMatchesComplex($dataValidation))); $currentMatch++ ){
+					if(($currentMatch % 4) == (1 % 4)){
+						$realMatchNumber++;
+					}
+					$documentExist = false;
+					echo "<tr>";
+					echo "<td>" . $realMatchNumber . "</td>";
+					echo AllianceColorationAlt(InterpertColoration($currentMatch % 4)) . InterpertColoration($currentMatch % 4) . "</td>";
+					echo "<td>" . MakeMatchArray(TotalMatchesComplex($dataValidation))[$currentMatch] . "</td>";
+					echo "<td>" . TeamNumberName(MakeMatchArray(TotalMatchesComplex($dataValidation))[$currentMatch]) . "</td>";
 
-												$cursor = $collection->find(['MetaData.MetaData' => 'MatchInput', 'MatchInformation.MatchNumber' => $currentMatch]);
-												
-												foreach($cursor as $document){
-													$documentExist = true;
-													//To calculate RP via their gameplay
-														//AUTO
-															$AUTORP = 0;
-															//RobotParking
-															switch($document["GameInformation"]["AUTO"]["RobotParking"]){
-																case "Did Not Park":
-																	$AUTORP += 0;
-																break;
-																case "Partially On Center Vortex":
-																	$AUTORP += 5;
-																break;
-																case "Partially On Corner Vortex":
-																	$AUTORP += 5;
-																break;
-																case "Fully On Center Vortex":
-																	$AUTORP += 10;
-																break;
-																case "Fully On Corner Vortex":
-																	$AUTORP += 10;
-																break;
-																default:
-																	$AUTORP += 9000;
-															}
-															//Particles In Center
-															$AUTORP += 15 * $document["GameInformation"]["AUTO"]["ParticlesCenter"];
-															//Particles In Corner
-															$AUTORP += 5 * $document["GameInformation"]["AUTO"]["ParticlesCorner"];
-															//CapBall
-															switch($document["GameInformation"]["AUTO"]["CapBall"]){
-																case "No":
-																	$AUTORP += 0;
-																break;
-																case "Yes":
-																	$AUTORP += 5;
-																break;
-																default:
-																	$AUTORP += 9000;
-															}
-															//Beacons
-															$AUTORP += 30 * $document["GameInformation"]["AUTO"]["ClaimedBeacons"];
-														//DRIVER
-															$DRIVERRP = 0;
-															//Particles In Center
-															$DRIVERRP += 5 * $document["GameInformation"]["DRIVER"]["ParticlesCenter"];
-															//Particles In Corner
-															$DRIVERRP += 1 * $document["GameInformation"]["DRIVER"]["ParticlesCorner"];
-														//END
-															$ENDRP = 0;
-															//Allaince Calimed Beacons
-															$ENDRP += 10 * $document["GameInformation"]["END"]["AllianceClaimedBeacons"];
-															switch($document["GameInformation"]["END"]["CapBall"]){
-																case "On The Ground":
-																	$ENDRP += 0;
-																break;
-																case "Rasied Off The Floor":
-																	$ENDRP += 10;
-																break;
-																case "Rasied Above Vortex":
-																	$ENDRP += 20;
-																break;
-																case "Scored In Cener Vortex":
-																	$ENDRP += 40;
-																break;
-																default:
-																	$AUTORP += 9000;
-															}
-													$calcRP = $AUTORP + $DRIVERRP + $ENDRP;
-													//To input the values into the cells
-														//echo AllianceColorationAlt($document["MatchInformation"]["RobotAlliance"]) . $document["MatchInformation"]["RobotAlliance"] . "</td>";
-														//echo "<td>" . $document["MatchInformation"]["TeamNumber"] . "</td>";
-														//echo "<td>" . TeamNumberName($document["MatchInformation"]["TeamNumber"]) . "</td>";
-														echo MatchResultsFormat(MatchResults($document["MatchInformation"]["MatchNumber"]));
-														//echo "<td style='color:white' class='red' >" . $document["_id"] . "</td>";
-														echo "<td>" . $calcRP . "</td>";
-														echo "<td>" . $document["GameInformation"]["AUTO"]["RobotParking"] . "</td>";
-														echo "<td>" . $document["GameInformation"]["AUTO"]["ParticlesCenter"] . "</td>";
-														echo "<td>" . $document["GameInformation"]["AUTO"]["ParticlesCorner"] . "</td>";
-														echo "<td>" . $document["GameInformation"]["AUTO"]["CapBall"] . "</td>";
-														echo "<td>" . $document["GameInformation"]["AUTO"]["ClaimedBeacons"] . "</td>";
-														echo "<td>" . $document["GameInformation"]["DRIVER"]["ParticlesCenter"] . "</td>";
-														echo "<td>" . $document["GameInformation"]["DRIVER"]["ParticlesCorner"] . "</td>";
-														echo "<td>" . $document["GameInformation"]["END"]["AllianceClaimedBeacons"] . "</td>";
-														echo "<td>" . $document["GameInformation"]["END"]["CapBall"] . "</td>";
-												}
-												if($documentExist == false){
-													for($i = 0; $i <= 10; $i++){
-														echo "<td/>";
-													}
-												}
-												echo "</tr>";
-											}	
-										}
-										MatchHistoryTable();
+					$cursor = $collection->find(['MetaData.MetaData' => 'MatchInput', 'MatchInformation.MatchNumber' => $currentMatch]);
+					
+					foreach($cursor as $document){
+						$documentExist = true;
+						//To input the values into the cells
+							//echo AllianceColorationAlt($document["MatchInformation"]["RobotAlliance"]) . $document["MatchInformation"]["RobotAlliance"] . "</td>";
+							//echo "<td>" . $document["MatchInformation"]["TeamNumber"] . "</td>";
+							//echo "<td>" . TeamNumberName($document["MatchInformation"]["TeamNumber"]) . "</td>";
+							echo MatchResultsFormat(MatchResults($document["MatchInformation"]["MatchNumber"]));
+							//echo "<td style='color:white' class='red' >" . $document["_id"] . "</td>";
+							echo "<td>" . $calcRP . "</td>";
+							echo "<td>" . $document["GameInformation"]["AUTO"]["RobotParking"] . "</td>";
+							echo "<td>" . $document["GameInformation"]["AUTO"]["ParticlesCenter"] . "</td>";
+							echo "<td>" . $document["GameInformation"]["AUTO"]["ParticlesCorner"] . "</td>";
+							echo "<td>" . $document["GameInformation"]["AUTO"]["CapBall"] . "</td>";
+							echo "<td>" . $document["GameInformation"]["AUTO"]["ClaimedBeacons"] . "</td>";
+							echo "<td>" . $document["GameInformation"]["DRIVER"]["ParticlesCenter"] . "</td>";
+							echo "<td>" . $document["GameInformation"]["DRIVER"]["ParticlesCorner"] . "</td>";
+							echo "<td>" . $document["GameInformation"]["END"]["AllianceClaimedBeacons"] . "</td>";
+							echo "<td>" . $document["GameInformation"]["END"]["CapBall"] . "</td>";
+					}
+					if($documentExist == false){
+						for($i = 0; $i <= 10; $i++){
+							echo "<td/>";
+						}
+					}
+					echo "</tr>";
+				}	
+			}
+			MatchHistoryTable();
 		function AverageScoresTable(){
 			$m = new MongoClient();
 			$db = $m->TheOrangeAllianceTest;
@@ -349,5 +359,10 @@
 			echo "<br/>";
 			echo $debugEchoArray[$i];
 		}
+		$projection =  array("_id" => false, "FactoryCapacity" => true);
+		echo "<br/>";
+		var_dump($projection);
+
 	}
+	
 ?>
