@@ -291,26 +291,169 @@
 		$c = $m->selectDB('TheOrangeAllianceTest')->selectCollection('Y201701211');
 		$cursor = $c->find(['MetaData.MetaData' => 'ScheduleInput' ,'MetaData.InputID' => $dataValidation]);
 		$ununiqueTeamList = array();
-		for($currentMatchNumberInFour = 1; $currentMatchNumberInFour <= CountMatchesScheduleInputTimesFour($DATAVALIDATION); $currentMatchNumberInFour++){
+		for($currentMatchNumberInFour = 1; $currentMatchNumberInFour <= CountMatchesScheduleInputTimesFour($dataValidation); $currentMatchNumberInFour++){
 			foreach($cursor as $document){
-				$ununiqueTeamList[count($ununiqueTeamList)] = array('8097','9261','2558');
-				//$document['Match']['Match' . TrueMatchNumberTransformer($currentMatchNumberInFour + 3) ][MatchNumberInFourToInterpertAsAllianceNumber($currentMatchNumberInFour)];
+				$ununiqueTeamList[count($ununiqueTeamList)] = $document['Match']['Match' . TrueMatchNumberTransformer($currentMatchNumberInFour + 3) ][MatchNumberInFourToInterpertAsAllianceNumber($currentMatchNumberInFour)];
 			}
 		}
 		return GenerateUniqueList($ununiqueTeamList);
-		//return GenerateUniqueList(array('8097','9261','2558','8097'));
-		//return array('8097','9261','2558');
+	}
+	//Will Count and Complie whic teams ahd waht record they have
+	function CompileTeamRecords($dataValidation){
+		$m = new MongoClient();
+		$c = $m->selectDB('TheOrangeAllianceTest')->selectCollection('Y201701211');
+		//$cursor = $c->find(['MetaData.MetaData' => 'ResultsInput']);
+		/*
+		$cursor = $c->aggregateCursor(
+			[	
+				['$group' => ['_id' => '$MatchNumber', 'points' =>['$sum' => '$Score']]],
+				['$sort' => ['points' => -1]]
+			]
+		);
+		PutItInATD($cursor['_id']['points']);
+		//foreach($cursor as $thing){
+			//PutItInATD('hi');
+			//PutItInATD({$thing['_id']}:{$thing['points']}\n);
+		//}
+		*/
+$ops = array(
+    array(
+        '$project' => array(
+            "MetaData.TimeStamp" => 1,
+            '_id' => 0,
+        )
+    ),
+    /*
+    array('$unwind' => '$MetaData'),
+    array(
+        '$group' => array(
+            "_id" => array("MetaData" => '$MetaData'),
+            "authors" => array('$addToSet' => '$author'),
+        ),
+    ),
+    */
+);
+//$results = $c->aggregate($ops);
+//$c->insert($results);
+//var_dump($results);
+	}
+	function RankingsTableRecord(){
+
+	}
+	function EnsureExampleData(){
+		$DATAVALIDATION = 'rainbow';
+		$m = new MongoClient();
+		$c = $m->selectDB('TheOrangeAllianceTest')->selectCollection('Y201701211');
+		$cursor = $c->find(['MetaData.MetaData' => 'ScheduleInput' ,'MetaData.InputID' => $DATAVALIDATION]);
+		$checkForExample = false;
+		$EXMAPLEDATA = array(
+			array(
+				'MetaData' => array(
+					'MetaData' => 'ScheduleInput',
+					'TimeStamp' => 'EXAMPLEDATA!!!!',
+					'InputID' => 'rainbow'
+				),
+				'Match' => array(
+					'Match1' => array(
+						'Red1' => 6226,
+						'Red2' => 8097,
+						'Blue1' => 5229,
+						'Blue2' => 11107
+					),
+					'Match2' => array(
+						'Red1' => 11107,
+						'Red2' => 6226,
+						'Blue1' => 8097,
+						'Blue2' => 5229
+					),
+					'Match3' => array(
+						'Red1' => 5229,
+						'Red2' => 11107,
+						'Blue1' => 6226,
+						'Blue2' => 8097
+					),
+					'Match4' => array(
+						'Red1' => 8097,
+						'Red2' => 5229,
+						'Blue1' => 11107,
+						'Blue2' => 6226
+					)
+				)
+			),
+			array(
+				'MetaData' => array(
+					'MetaData' => 'ResultsInput',
+					'TimeStamp' => 'EXAMPLEDATA',
+					'InputID' => 'EXAMPLEDATA'
+				),
+				'MatchNumber' => 1,
+				'Winner' => 'Blue',
+				'Score' => array(
+					'Total' => array(
+						'Red' => 12,
+						'Blue' => 23
+						),
+					'Penalty' => array(
+						'Red' => 0,
+						'Blue' => 0
+						),
+					'Final' => array(
+						'Red' => 12,
+						'Blue' => 23
+						)
+				)
+			),
+			array(
+				'MetaData' => array(
+					'MetaData' => 'ResultsInput',
+					'TimeStamp' => 'EXAMPLEDATA',
+					'InputID' => 'EXAMPLEDATA'
+				),
+				'MatchNumber' => 4,
+				'Winner' => 'Blue',
+				'Score' => array(
+					'Total' => array(
+						'Red' => 40,
+						'Blue' => 90
+						),
+					'Penalty' => array(
+						'Red' => 0,
+						'Blue' => 0
+						),
+					'Final' => array(
+						'Red' => 40,
+						'Blue' => 90
+						)
+				)
+			)
+		);
+		foreach($cursor as $document){
+			if($document['MetaData']['InputID'] == $DATAVALIDATION){
+				$checkForExample = true;
+			}
+		}
+		if($checkForExample == false){
+			foreach($EXMAPLEDATA as $data){
+				$c->insert($data);
+			}
+		}
 	}
 	//The Table Ranking For all of Rankings
 	function RankingsTable(){
 		$DATAVALIDATION = 'rainbow';
 		$uniqueTeamListInstance = UniqueTeamList($DATAVALIDATION);
-		for ($i=0; $i <= count($uniqueTeamListInstance); $i++) { 
+		for ($i=0; $i <= count($uniqueTeamListInstance) - 1; $i++) { 
 			echo "<tr>";
 			PutItInATD($uniqueTeamListInstance[$i]);
+			PutItInATD(TeamNumberName($uniqueTeamListInstance[$i]));
+			CompileTeamRecords($DATAVALIDATION);
+			PutItInATD('testing');
+			PutItInATD('testing');
+			PutItInATD('testing');
 			PutItInATD('testing');
 			echo "</tr>";
 		}
+		EnsureExampleData();
 	}
 	function Debug($show){
 		/*

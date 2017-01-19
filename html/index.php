@@ -67,7 +67,6 @@
 									<th>Team Name</th>
 									<th>Ranking</th>
 									<th>Record</th>
-									<th>Games Played</th>
 									<th>QP</th>
 									<th>RP</th>
 									<th>OPR</th>
@@ -76,7 +75,6 @@
 							<tbody>
 							<?php
 								require 'mikal.php';
-
 								RankingsTable();
 							?>
 							</tbody>
@@ -135,9 +133,6 @@
 								</tr>
 							</thead>
 							<tbody>
-							<?php
-								RankingsTable();
-							?>
 							</tbody>
 						</table>
 						
@@ -145,9 +140,6 @@
 				</div>
 			</div>
 			</div>
-			<?php
-				Debug(true);
-			?>
 		<div class="footer">
 			<div class="container">
 				<div class="col-md-4" style="padding-bottom: 10px;">
