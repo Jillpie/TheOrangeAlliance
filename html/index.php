@@ -23,7 +23,9 @@
 		<script type="text/javascript">$(document).ready(function() { $("#inputTable1").DataTable({paging: false}); $("#inputTable2").DataTable({paging: false}); $("#inputTable3").DataTable({paging: false}); } );</script>
 	</head>	
 	<body>
-			<div class="navbar navbar-default navbar-fixed-top">
+	<script>
+	</script>
+			<div class="navbar navbar-default navbar-fixed-top" role="navigation">
 				<div class="container">
 					<div class="navbar-header">
 						<a class="nav-brand" href="http://theorangealliance.tk:8080/"> 
@@ -66,7 +68,7 @@
 									<th>Team Number</th>
 									<th>Team Name</th>
 									<th>Ranking</th>
-									<th>Record</th>
+									<th>Record W-L-T</th>
 									<th>QP</th>
 									<th>RP</th>
 									<th>OPR</th>
@@ -142,24 +144,22 @@
 			</div>
 		<div class="footer">
 			<div class="container">
-				<div class="col-md-4" style="padding-bottom: 10px;">
+				<div class="col-md-6" style="padding-bottom: 10px;">
 				<center>
-				Designed by 
-				<hr1></hr1>
-				Team 8097 Botcats<br>
-				Team 9261 Level Up<br>
+				Designed by:
+				Team 8097 Botcats,
+				Team 9261 Level Up,
 				Team 10809 Crow Force 5
 				</center>
 				</div>
-				<div class="col-md-4">
+				<div class="col-md-3">
 				</div>
-				<div style="padding-top: 35px;" class="col-md-4" >
+				<div class="col-md-3" >
 				<center>
-					<span style="margin-top: 80px; font-size: 20px;">© TheOrangeAlliance 2017</span>
+					© TheOrangeAlliance 2017
 					</cetner>
 				</div>
 			</div>
-		</div>
 		</div>
 		<script src = "js/bootstrap.js"></script>
 	</body>

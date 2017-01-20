@@ -2,7 +2,28 @@
 	
 	//SOLID Puts Stuff In A <Td> <Td>
 	function PutItInATD($stuffToPutIn){
+		$HIGHLIGHTLIST = array(
+			8097,
+			9261,
+			10809,
+			'Crow Force 5',
+			'Level Up',
+			'Botcats'
+		);
+		$isItListed = false;
+		foreach($HIGHLIGHTLIST as $highlight){
+			if($highlight == $stuffToPutIn and gettype($stuffToPutIn) == gettype($highlight)){
+				$isItListed = true;
+			}
+			if($highlight ){
+
+			}
+		}
+		if($isItListed == true){
+			echo "<td class='purple'>" . $stuffToPutIn . "</td>";
+		}else{
 		echo "<td>" . $stuffToPutIn . "</td>";
+		}
 	}
 	//Transforms a liniar model into its division of 4 peridodicaly ex: 4 = 1, 5 = 1... 8 = 2
 	function TrueMatchNumberTransformer($trueMatchNumber){
@@ -189,6 +210,9 @@
 					case 'Blue':
 						$matchHistoryResultsFormated .= 'class="blue">';
 						break;
+					case 'Tie':
+						$matchHistoryResultsFormated .= 'class="green">';
+						break;
 					default:
 						$matchHistoryResultsFormated .= 'class="pink">';
 						break;
@@ -249,13 +273,14 @@
 	//Puts Together all the Functions to make up all of Match History
 	function MatchHistoryTable(){
 		$DATAVALIDATION = 'rainbow';
+		
 		for($currentMatchNumberInFour = 1; $currentMatchNumberInFour <= CountMatchesScheduleInputTimesFour($DATAVALIDATION); $currentMatchNumberInFour++){
 			echo "<tr>";
 			MatchHistoryMatchAllianceTeam($DATAVALIDATION,$currentMatchNumberInFour);
 			MatchHistoryResults($currentMatchNumberInFour);
 			MatchHistoryGameScore($DATAVALIDATION,$currentMatchNumberInFour);
 			echo "</tr>";
-		}
+		}	
 	}
 	//Puts Together all the Functions to make up all of Match History ALTERNATE FOR ADMIN
 	function MatchHistoryTableAdmin($removeValue){
@@ -286,6 +311,7 @@
 		}
 		return $uniqueList;
 	}
+	//Generates a unique list of teams from data Validation
 	function UniqueTeamList($dataValidation){
 		$m = new MongoClient();
 		$c = $m->selectDB('TheOrangeAllianceTest')->selectCollection('Y201701211');
@@ -298,47 +324,171 @@
 		}
 		return GenerateUniqueList($ununiqueTeamList);
 	}
-	//Will Count and Complie whic teams ahd waht record they have
-	function CompileTeamRecords($dataValidation){
+	//Makes an array of the matches that team played
+	function WhichMatchesDidThatTeamPlayAndWhatAlliance($dataValidation, $teamToSearchFor){
 		$m = new MongoClient();
 		$c = $m->selectDB('TheOrangeAllianceTest')->selectCollection('Y201701211');
-		//$cursor = $c->find(['MetaData.MetaData' => 'ResultsInput']);
-		/*
-		$cursor = $c->aggregateCursor(
-			[	
-				['$group' => ['_id' => '$MatchNumber', 'points' =>['$sum' => '$Score']]],
-				['$sort' => ['points' => -1]]
-			]
+		$cursor = $c->find(['MetaData.MetaData' => 'ScheduleInput' ,'MetaData.InputID' => $dataValidation]);
+		$matchesPlayedByThatTeamAndAlliance = array();
+		$redRedCombination = array(
+			'Red1',
+			'Red2'
 		);
-		PutItInATD($cursor['_id']['points']);
-		//foreach($cursor as $thing){
-			//PutItInATD('hi');
-			//PutItInATD({$thing['_id']}:{$thing['points']}\n);
-		//}
-		*/
-$ops = array(
-    array(
-        '$project' => array(
-            "MetaData.TimeStamp" => 1,
-            '_id' => 0,
-        )
-    ),
-    /*
-    array('$unwind' => '$MetaData'),
-    array(
-        '$group' => array(
-            "_id" => array("MetaData" => '$MetaData'),
-            "authors" => array('$addToSet' => '$author'),
-        ),
-    ),
-    */
-);
-//$results = $c->aggregate($ops);
-//$c->insert($results);
-//var_dump($results);
+		$blueBlueCombination = array(
+			'Blue1',
+			'Blue2'
+		);
+		foreach($cursor as $document){
+			for($matchNumber = 1; $matchNumber <= CountMatchesScheduleInputTimesFour($dataValidation)/4; $matchNumber++){
+				foreach($redRedCombination as $currentColorRed){
+					if($document['Match']['Match' . $matchNumber][$currentColorRed] == $teamToSearchFor){
+						$matchesPlayedByThatTeamAndAlliance['Red'][count($matchesPlayedByThatTeamAndAlliance['Red'])] = $matchNumber;
+					}
+				}
+				foreach($blueBlueCombination as $currentColorBlue){
+					if($document['Match']['Match' . $matchNumber][$currentColorBlue] == $teamToSearchFor){
+						$matchesPlayedByThatTeamAndAlliance['Blue'][count($matchesPlayedByThatTeamAndAlliance['Blue'])] = $matchNumber;
+					}
+				}
+			}
+		}
+		return $matchesPlayedByThatTeamAndAlliance;
 	}
-	function RankingsTableRecord(){
+	//Will Count and Complie whic teams ahd waht record they have
+	function RankingsTableRecord($dataValidation){
+		$m = new MongoClient();
+		$c = $m->selectDB('TheOrangeAllianceTest')->selectCollection('Y201701211');
+		$cursor = $c->find(['MetaData.MetaData' => 'ResultsInput' ,'MetaData.InputID' => $dataValidation]);
 
+		$listOfTeamsToRank = UniqueTeamList($dataValidation);
+		$listOfTeamsRecords = array();
+		$allianceColors = array(
+			'Red',
+			'Blue'
+			);
+		foreach($listOfTeamsToRank as $teamToRank){
+			$teamToRankWins = 0;
+			$teamToRankLoss = 0;
+			$teamToRankTie = 0;
+			$matchesThatTeamPlayedWithAlliance = WhichMatchesDidThatTeamPlayAndWhatAlliance($dataValidation, $teamToRank);
+			foreach($allianceColors as $allianceColor){
+				foreach($matchesThatTeamPlayedWithAlliance[$allianceColor] as $matchThatTeamPlayed){
+					foreach($cursor as $document){
+						if($document['MatchNumber'] == $matchThatTeamPlayed and $document['Winner'] == $allianceColor){
+							$teamToRankWins++;
+						}
+						if($document['MatchNumber'] == $matchThatTeamPlayed and $document['Winner'] != $allianceColor and $document['Winner'] != 'Tie'){
+							$teamToRankLoss++;
+						}
+						if($document['MatchNumber'] == $matchThatTeamPlayed and $document['Winner'] == 'Tie'){
+							$teamToRankTie++;
+						}
+					}
+				}
+			}
+			$listOfTeamsRecords['TeamNumber' . $teamToRank] = array(
+				'TeamNumber' => $teamToRank,
+				'Wins' => $teamToRankWins,
+				'Loss' => $teamToRankLoss,
+				'Tie' => $teamToRankTie,
+				'GamesPlayed' => $teamToRankWins + $teamToRankLoss + $teamToRankTie,
+				'Present' => $teamToRankWins . '-' . $teamToRankLoss . '-' . $teamToRankTie,
+				'QP' => ($teamToRankWins * 2) + ($teamToRankTie)
+			);
+		}
+		return $listOfTeamsRecords;
+
+			/*
+								$gate = array(
+									array(
+										'match' => array(
+										)
+									)
+								);
+
+								$mei = $c->aggregate();
+								
+								//$cursor = $c->find(['MetaData.MetaData' => 'ResultsInput']);
+								
+								$cursor = $c->aggregateCursor(
+									[	
+										['$group' => ['_id' => '$MatchNumber', 'points' =>['$sum' => '$Score']]],
+										['$sort' => ['points' => -1]]
+									]
+								);
+								PutItInATD($cursor['_id']['points']);
+								//foreach($cursor as $thing){
+									//PutItInATD('hi');
+									//PutItInATD({$thing['_id']}:{$thing['points']}\n);
+								//}
+								
+								
+						$ops = array(
+						    array(
+
+						    	'$match' => array(
+						    		'MetaData.MetaData' => 'ResultsInput'
+						    	)
+						    ),
+						    
+						    array(
+						    	
+						        '$project' => array(
+						            "Score.Total.Red" => 1,
+						            '_id' => 0
+						        )
+						    )
+						    
+						    array('$unwind' => '$MetaData'),
+						    array(
+						        '$group' => array(
+						            "_id" => array("MetaData" => '$MetaData'),
+						            "authors" => array('$addToSet' => '$author'),
+						        ),
+						    ),
+						    
+						);
+						$results = $c->aggregate($ops);
+						$c->insert($results);
+							
+						
+						foreach($results as $pump){
+							echo $pump; 
+							echo '<br/><br/><br/><br/><br/><br/><br/>';
+							var_dump($pump);
+						}
+						
+						//var_dump($results);
+		*/
+	}
+	function MatchNumberAndRP($dataValidation){
+		$m = new MongoClient();
+		$c = $m->selectDB('TheOrangeAllianceTest')->selectCollection('Y201701211');
+		$cursor = $c->find(['MetaData.MetaData' => 'ResultsInput' ,'MetaData.InputID' => $dataValidation]);
+		$matchNumberAndRP = array();
+		foreach($cursor as $document){
+			if('Red' == $document['Winner']){
+				$matchNumberAndRP['MatchNumber' . $document['MatchNumber']] = $document['Score']['Total']['Blue'];
+			}
+			if('Blue' == $document['Winner']){
+				$matchNumberAndRP['MatchNumber' . $document['MatchNumber']] = $document['Score']['Total']['Red'];
+			}
+			if('Tie' == $document['Winner']){
+				$matchNumberAndRP['MatchNumber' . $document['MatchNumber']] = $document['Score']['Total']['Red'];
+			}
+		}
+		return $matchNumberAndRP;
+	}
+	function RankingsTableRP($dataValidation, $teamToSearchFor){
+		$matchesTeamPlayedInWithAlliance = WhichMatchesDidThatTeamPlayAndWhatAlliance($dataValidation, $teamToSearchFor);
+		$matchNumberAndRP = MatchNumberAndRP($dataValidation);
+		$teamRP = 0;
+		foreach($matchesTeamPlayedInWithAlliance as $matchTeamPlayed){
+			foreach($matchTeamPlayed as $matchTeam){
+				$teamRP += $matchNumberAndRP['MatchNumber' . $matchTeam];
+			}
+		}
+		return $teamRP;
 	}
 	function EnsureExampleData(){
 		$DATAVALIDATION = 'rainbow';
@@ -384,7 +534,7 @@ $ops = array(
 				'MetaData' => array(
 					'MetaData' => 'ResultsInput',
 					'TimeStamp' => 'EXAMPLEDATA',
-					'InputID' => 'EXAMPLEDATA'
+					'InputID' => 'rainbow'
 				),
 				'MatchNumber' => 1,
 				'Winner' => 'Blue',
@@ -407,7 +557,7 @@ $ops = array(
 				'MetaData' => array(
 					'MetaData' => 'ResultsInput',
 					'TimeStamp' => 'EXAMPLEDATA',
-					'InputID' => 'EXAMPLEDATA'
+					'InputID' => 'rainbow'
 				),
 				'MatchNumber' => 4,
 				'Winner' => 'Blue',
@@ -438,37 +588,65 @@ $ops = array(
 			}
 		}
 	}
+	function PurgeOfTheNonValidations($DATAVALIDATION){
+		$m = new MongoClient();
+		$c = $m->selectDB('TheOrangeAllianceTest')->selectCollection('Y201701211');
+		$cursor = $c->find();
+		$toAggregate = array(
+			array(
+				'project' => array(
+					'invalid' => array(
+						'$ne' => array(
+							'$MetaData.MetaData' => 'rainbow'
+						)
+					)
+				)
+			)
+		);
+		$notValid = $cursor->aggregate($toAggregate);
+		foreach($notValid as $document){
+			if($document['invalid'] = true){
+			}
+		}
+	}
+	function RankingsRank($dataValidation, $teamToRank){
+		$uniqueTeamList = UniqueTeamList($dataValidation);
+		$rankingsTableRecordInstance = RankingsTableRecord($dataValidation);
+		$teamRanksScore = array();
+		$teamRanks = array();
+		$teamRank = 0;
+		foreach($uniqueTeamList as $uniqueTeam){
+			$teamRanksScore['Team' . $uniqueTeam] = $rankingsTableRecordInstance['TeamNumber' . $uniqueTeam]['QP'] * 1000 + RankingsTableRP($dataValidation, $uniqueTeam);
+		}
+		foreach($uniqueTeamList as $uniqueTeam){
+			$teamRank = 1;
+			foreach($uniqueTeamList as $uniqueTeam1){
+				if($teamRanksScore['Team' . $uniqueTeam] < $teamRanksScore['Team' . $uniqueTeam1]){
+					$teamRank++;
+				}
+			}
+			$teamRanks['Team' . $uniqueTeam] = $teamRank;
+		}
+		return $teamRanks;
+	}
 	//The Table Ranking For all of Rankings
 	function RankingsTable(){
 		$DATAVALIDATION = 'rainbow';
 		$uniqueTeamListInstance = UniqueTeamList($DATAVALIDATION);
-		for ($i=0; $i <= count($uniqueTeamListInstance) - 1; $i++) { 
+		$rankingsTableRecordInstance = RankingsTableRecord($DATAVALIDATION);
+		$rankingsRank = RankingsRank($DATAVALIDATION, $uniqueTeam);
+
+		foreach($uniqueTeamListInstance as $uniqueTeam){		
 			echo "<tr>";
-			PutItInATD($uniqueTeamListInstance[$i]);
-			PutItInATD(TeamNumberName($uniqueTeamListInstance[$i]));
-			CompileTeamRecords($DATAVALIDATION);
-			PutItInATD('testing');
-			PutItInATD('testing');
-			PutItInATD('testing');
+			PutItInATD($rankingsRank['Team' . $uniqueTeam]);
+			PutItInATD($uniqueTeam);
+			PutItInATD(TeamNumberName($uniqueTeam));
+			PutItInATD($rankingsTableRecordInstance['TeamNumber' . $uniqueTeam]['Present']);
+			PutItInATD($rankingsTableRecordInstance['TeamNumber' . $uniqueTeam]['QP']);
+			PutItInATD(RankingsTableRP($DATAVALIDATION, $uniqueTeam));
 			PutItInATD('testing');
 			echo "</tr>";
 		}
-		EnsureExampleData();
-	}
-	function Debug($show){
-		/*
-		$debugEchoArray = array(
-			'Hi',
-			'Two',
-			'Three'
-			);
-		for ($i=0; $i <= count($debugEchoArray); $i++) { 
-			echo "<br/>";
-			echo $debugEchoArray[$i];
-		}
-		$projection =  array("_id" => false, "FactoryCapacity" => true);
-		echo "<br/>";
-		var_dump($projection);
-		*/
+		//EnsureExampleData();
 	}
 ?>
