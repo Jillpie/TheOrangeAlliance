@@ -6,16 +6,27 @@
 		<meta name = "viewport" content="width=device-width, initial-scale=1.0">
 		<link href = "css/bootstrap.min.css" rel = "stylesheet" type="text/css">
 		<link href = "css/styles.css" rel = "stylesheet" type="text/css">
-		<link href="data:image/x-icon;base64,AAABAAEAEBAQAAEABAAoAQAAFgAAACgAAAAQAAAAIAAAAAEABAAAAAAAgAAAAAAAAAAAAAAAEAAAAAAAAAAAAAAAAH3yAACM/wDb7P8AAC4DAABo3gAAWd4ADGsAABfEAAAAO7MAYq71AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAABVWVQAAAAAhEVaVlQAAAiIhFWZVUAACIiIRVZWQACIiIiERVlUAIiIiIiFWlQCiMiIiIhVlACIiIiIiIVUAojIyIiIhFQAqIiIiIiISAAKiMjIiIiAAACoqIiIiAAAAAAB3dAAAAAAAAAeHQAAAAAAABHhwAAAAAAAAB3cAD4HwAA4AcAAMADAADAAwAAgAEAAIABAACAAQAAgAEAAIABAACAAQAAwAMAAOAHAAD+HwAA/w8AAP8PAAD/xwAA" rel="icon" type="image/x-icon" />
+		<link rel="apple-touch-icon" sizes="152x152" href="https://sites.google.com/site/filehostdummysite1234/files/theorangealliance/apple-touch-icon.png?v=vMrqOno5qk">
+		<link rel="icon" type="image/png" href="https://sites.google.com/site/filehostdummysite1234/files/theorangealliance/favicon-32x32.png?v=vMrqOno5qk" sizes="32x32">
+		<link rel="icon" type="image/png" href="https://sites.google.com/site/filehostdummysite1234/files/theorangealliance/favicon-16x16.png?v=vMrqOno5qk" sizes="16x16">
+		<link rel="manifest" href="https://sites.google.com/site/filehostdummysite1234/files/theorangealliance/manifest.json?v=vMrqOno5qk">
+		<link rel="mask-icon" href="https://sites.google.com/site/filehostdummysite1234/files/theorangealliance/safari-pinned-tab.svg?v=vMrqOno5qk" color="#ff9500">
+		<link rel="shortcut icon" href="https://sites.google.com/site/filehostdummysite1234/files/theorangealliance/favicon.ico?v=vMrqOno5qk">
+		<meta name="apple-mobile-web-app-title" content="The Orange Alliance">
+		<meta name="application-name" content="The Orange Alliance">
+		<meta name="msapplication-config" content="https://sites.google.com/site/filehostdummysite1234/files/theorangealliance/browserconfig.xml?v=vMrqOno5qk">
+		<meta name="theme-color" content="#ff9500">
+		<script src = "http://ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js"></script>
+		<script src="js-webshim/minified/polyfiller.js"></script>
 		<meta http-equiv="Content-Type" content="text/html;charset=utf-8" />
 	</head>
 	<body>
-		<header>
 		<div class="navbar navbar-default navbar-fixed-top">
 			<div class="container">
 				<div class="navbar-header">
 					<a class="nav-brand" href="http://theorangealliance.tk:8080/"> 
-					<img style="max-width:50px" src="logo.png">
+					<img style="max-width:50px" src="/images/logo.png"> 
+					<span class="logo hidden-xs">The Orange Alliance</span>
 					</a>
 					<a class="nav-brand" href="http://theorangealliance.tk:8080/"></a>
 					<button class = "navbar-toggle" data-toggle = "collapse" data-target = ".navHeaderCollapse">
@@ -35,7 +46,6 @@
 				</div>
 			</div>
 		</div>
-		</header>
 		<form action="input-schedule.php" method="post">
 		<div class="content">
 		<div class="container">
@@ -60,7 +70,7 @@
 					</td>
 				<tr>
 					<td>Validation Code</td>
-					<td ><input type="text" class="form-control" id="inputID" name="dataValidation"></td>
+					<td ><input type="text" class="form-control" id="inputID" name="dataValidation" required></td>
 				</tr>
 			</table>
 			
@@ -74,157 +84,157 @@
 				</tr>
 				<tr>
 					<td>1</td>
-					<td class="red"><input type="number" class="form-control" name="1red1"></td>
-					<td class="red"><input type="number" class="form-control" name="1red2"></td>
-					<td class="blue"><input type="number" class="form-control" name="1blue1"></td>
-					<td class="blue"><input type="number" class="form-control" name ="1blue2"></td>
+					<td class="red"><input type="number" class="form-control" name="1red1" required></td>
+					<td class="red"><input type="number" class="form-control" name="1red2" required></td>
+					<td class="blue"><input type="number" class="form-control" name="1blue1" required></td>
+					<td class="blue"><input type="number" class="form-control" name ="1blue2" required></td>
 				</tr>
 				<tr>
 					<td>2</td>
-					<td class="red"><input type="number" class="form-control" name="2red1"></td>
-					<td class="red"><input type="number" class="form-control" name="2red2"></td>
-					<td class="blue"><input type="number" class="form-control" name="2blue1"></td>
-					<td class="blue"><input type="number" class="form-control" name ="2blue2"></td>
+					<td class="red"><input type="number" class="form-control" name="2red1" required></td>
+					<td class="red"><input type="number" class="form-control" name="2red2" required></td>
+					<td class="blue"><input type="number" class="form-control" name="2blue1" required></td>
+					<td class="blue"><input type="number" class="form-control" name ="2blue2" required></td>
 				</tr>
 				<tr>
 					<td>3</td>
-					<td class="red"><input type="number" class="form-control" name="3red1"></td>
-					<td class="red"><input type="number" class="form-control" name="3red2"></td>
-					<td class="blue"><input type="number" class="form-control" name="3blue1"></td>
-					<td class="blue"><input type="number" class="form-control" name ="3blue2"></td>
+					<td class="red"><input type="number" class="form-control" name="3red1" required></td>
+					<td class="red"><input type="number" class="form-control" name="3red2" required></td>
+					<td class="blue"><input type="number" class="form-control" name="3blue1" required></td>
+					<td class="blue"><input type="number" class="form-control" name ="3blue2" required></td>
 				</tr>
 				<tr>
 					<td>4</td>
-					<td class="red"><input type="number" class="form-control" name="4red1"></td>
-					<td class="red"><input type="number" class="form-control" name="4red2"></td>
-					<td class="blue"><input type="number" class="form-control" name="4blue1"></td>
-					<td class="blue"><input type="number" class="form-control" name ="4blue2"></td>
+					<td class="red"><input type="number" class="form-control" name="4red1" required></td>
+					<td class="red"><input type="number" class="form-control" name="4red2" required></td>
+					<td class="blue"><input type="number" class="form-control" name="4blue1" required></td>
+					<td class="blue"><input type="number" class="form-control" name ="4blue2" required></td>
 				</tr>
 				<tr>
 					<td>5</td>
-					<td class="red"><input type="number" class="form-control" name="5red1"></td>
-					<td class="red"><input type="number" class="form-control" name="5red2"></td>
-					<td class="blue"><input type="number" class="form-control" name="5blue1"></td>
-					<td class="blue"><input type="number" class="form-control" name ="5blue2"></td>
+					<td class="red"><input type="number" class="form-control" name="5red1" required></td>
+					<td class="red"><input type="number" class="form-control" name="5red2" required></td>
+					<td class="blue"><input type="number" class="form-control" name="5blue1" required></td>
+					<td class="blue"><input type="number" class="form-control" name ="5blue2" required></td>
 				</tr>
 				<tr>
 					<td>6</td>
-					<td class="red"><input type="number" class="form-control" name="6red1"></td>
-					<td class="red"><input type="number" class="form-control" name="6red2"></td>
-					<td class="blue"><input type="number" class="form-control" name="6blue1"></td>
-					<td class="blue"><input type="number" class="form-control" name ="6blue2"></td>
+					<td class="red"><input type="number" class="form-control" name="6red1" required></td>
+					<td class="red"><input type="number" class="form-control" name="6red2" required ></td>
+					<td class="blue"><input type="number" class="form-control" name="6blue1" required></td>
+					<td class="blue"><input type="number" class="form-control" name ="6blue2" required></td>
 				</tr>
 				<tr>
 					<td>7</td>
-					<td class="red"><input type="number" class="form-control" name="7red1"></td>
-					<td class="red"><input type="number" class="form-control" name="7red2"></td>
-					<td class="blue"><input type="number" class="form-control" name="7blue1"></td>
-					<td class="blue"><input type="number" class="form-control" name ="7blue2"></td>
+					<td class="red"><input type="number" class="form-control" name="7red1" required></td>
+					<td class="red"><input type="number" class="form-control" name="7red2" required></td>
+					<td class="blue"><input type="number" class="form-control" name="7blue1" required></td>
+					<td class="blue"><input type="number" class="form-control" name ="7blue2" required></td>
 				</tr>
 				<tr>
 					<td>8</td>
-					<td class="red"><input type="number" class="form-control" name="8red1"></td>
-					<td class="red"><input type="number" class="form-control" name="8red2"></td>
-					<td class="blue"><input type="number" class="form-control" name="8blue1"></td>
-					<td class="blue"><input type="number" class="form-control" name ="8blue2"></td>
+					<td class="red"><input type="number" class="form-control" name="8red1" required></td>
+					<td class="red"><input type="number" class="form-control" name="8red2" required></td>
+					<td class="blue"><input type="number" class="form-control" name="8blue1" required></td>
+					<td class="blue"><input type="number" class="form-control" name ="8blue2" required></td>
 				</tr>
 				<tr>
 					<td>9</td>
-					<td class="red"><input type="number" class="form-control" name="9red1"></td>
-					<td class="red"><input type="number" class="form-control" name="9red2"></td>
-					<td class="blue"><input type="number" class="form-control" name="9blue1"></td>
-					<td class="blue"><input type="number" class="form-control" name ="9blue2"></td>
+					<td class="red"><input type="number" class="form-control" name="9red1" required></td>
+					<td class="red"><input type="number" class="form-control" name="9red2" required></td>
+					<td class="blue"><input type="number" class="form-control" name="9blue1" required></td>
+					<td class="blue"><input type="number" class="form-control" name ="9blue2" required></td>
 				</tr>
 				<tr>
 					<td>10</td>
-					<td class="red"><input type="number" class="form-control" name="10red1"></td>
-					<td class="red"><input type="number" class="form-control" name="10red2"></td>
-					<td class="blue"><input type="number" class="form-control" name="10blue1"></td>
-					<td class="blue"><input type="number" class="form-control" name ="10blue2"></td>
+					<td class="red"><input type="number" class="form-control" name="10red1" required></td>
+					<td class="red"><input type="number" class="form-control" name="10red2" required></td>
+					<td class="blue"><input type="number" class="form-control" name="10blue1" required></td>
+					<td class="blue"><input type="number" class="form-control" name ="10blue2" required></td>
 				</tr>
 				<tr>
 					<td>11</td>
-					<td class="red"><input type="number" class="form-control" name="11red1"></td>
-					<td class="red"><input type="number" class="form-control" name="11red2"></td>
-					<td class="blue"><input type="number" class="form-control" name="11blue1"></td>
-					<td class="blue"><input type="number" class="form-control" name ="11blue2"></td>
+					<td class="red"><input type="number" class="form-control" name="11red1" required></td>
+					<td class="red"><input type="number" class="form-control" name="11red2" required></td>
+					<td class="blue"><input type="number" class="form-control" name="11blue1" required></td>
+					<td class="blue"><input type="number" class="form-control" name ="11blue2" required></td>
 				</tr>
 				<tr>
 					<td>12</td>
-					<td class="red"><input type="number" class="form-control" name="12red1"></td>
-					<td class="red"><input type="number" class="form-control" name="12red2"></td>
-					<td class="blue"><input type="number" class="form-control" name="12blue1"></td>
-					<td class="blue"><input type="number" class="form-control" name ="12blue2"></td>
+					<td class="red"><input type="number" class="form-control" name="12red1" required></td>
+					<td class="red"><input type="number" class="form-control" name="12red2" required></td>
+					<td class="blue"><input type="number" class="form-control" name="12blue1" required></td>
+					<td class="blue"><input type="number" class="form-control" name ="12blue2" required></td>
 				</tr>
 				<tr>
 					<td>13</td>
-					<td class="red"><input type="number" class="form-control" name="13red1"></td>
-					<td class="red"><input type="number" class="form-control" name="13red2"></td>
-					<td class="blue"><input type="number" class="form-control" name="13blue1"></td>
-					<td class="blue"><input type="number" class="form-control" name ="13blue2"></td>
+					<td class="red"><input type="number" class="form-control" name="13red1" required></td>
+					<td class="red"><input type="number" class="form-control" name="13red2" required></td>
+					<td class="blue"><input type="number" class="form-control" name="13blue1" required></td>
+					<td class="blue"><input type="number" class="form-control" name ="13blue2" required></td>
 				</tr>
 				<tr>
 					<td>14</td>
-					<td class="red"><input type="number" class="form-control" name="14red1"></td>
-					<td class="red"><input type="number" class="form-control" name="14red2"></td>
-					<td class="blue"><input type="number" class="form-control" name="14blue1"></td>
-					<td class="blue"><input type="number" class="form-control" name ="14blue2"></td>
+					<td class="red"><input type="number" class="form-control" name="14red1" required></td>
+					<td class="red"><input type="number" class="form-control" name="14red2" required></td>
+					<td class="blue"><input type="number" class="form-control" name="14blue1" required></td>
+					<td class="blue"><input type="number" class="form-control" name ="14blue2" required></td>
 				</tr>
 				<tr>
 					<td>15</td>
-					<td class="red"><input type="number" class="form-control" name="15red1"></td>
-					<td class="red"><input type="number" class="form-control" name="15red2"></td>
-					<td class="blue"><input type="number" class="form-control" name="15blue1"></td>
-					<td class="blue"><input type="number" class="form-control" name ="15blue2"></td>
+					<td class="red"><input type="number" class="form-control" name="15red1" required></td>
+					<td class="red"><input type="number" class="form-control" name="15red2" required></td>
+					<td class="blue"><input type="number" class="form-control" name="15blue1" required></td>
+					<td class="blue"><input type="number" class="form-control" name ="15blue2" required></td>
 				</tr>
 				<tr>
 					<td>16</td>
-					<td class="red"><input type="number" class="form-control" name="16red1"></td>
-					<td class="red"><input type="number" class="form-control" name="16red2"></td>
-					<td class="blue"><input type="number" class="form-control" name="16blue1"></td>
-					<td class="blue"><input type="number" class="form-control" name ="16blue2"></td>
+					<td class="red"><input type="number" class="form-control" name="16red1" required></td>
+					<td class="red"><input type="number" class="form-control" name="16red2" required></td>
+					<td class="blue"><input type="number" class="form-control" name="16blue1" required></td>
+					<td class="blue"><input type="number" class="form-control" name ="16blue2" required></td>
 				</tr>
 				<tr>
 					<td>17</td>
-					<td class="red"><input type="number" class="form-control" name="17red1"></td>
-					<td class="red"><input type="number" class="form-control" name="17red2"></td>
-					<td class="blue"><input type="number" class="form-control" name="17blue1"></td>
-					<td class="blue"><input type="number" class="form-control" name ="17blue2"></td>
+					<td class="red"><input type="number" class="form-control" name="17red1" required></td>
+					<td class="red"><input type="number" class="form-control" name="17red2" required></td>
+					<td class="blue"><input type="number" class="form-control" name="17blue1" required></td>
+					<td class="blue"><input type="number" class="form-control" name ="17blue2" required></td>
 				</tr>
 				<tr>
 					<td>18</td>
-					<td class="red"><input type="number" class="form-control" name="18red1"></td>
-					<td class="red"><input type="number" class="form-control" name="18red2"></td>
-					<td class="blue"><input type="number" class="form-control" name="18blue1"></td>
-					<td class="blue"><input type="number" class="form-control" name ="18blue2"></td>
+					<td class="red"><input type="number" class="form-control" name="18red1" required></td>
+					<td class="red"><input type="number" class="form-control" name="18red2" required></td>
+					<td class="blue"><input type="number" class="form-control" name="18blue1" required></td>
+					<td class="blue"><input type="number" class="form-control" name ="18blue2" required></td>
 				</tr>
 				<tr>
 					<td>19</td>
-					<td class="red"><input type="number" class="form-control" name="19red1"></td>
-					<td class="red"><input type="number" class="form-control" name="19red2"></td>
-					<td class="blue"><input type="number" class="form-control" name="19blue1"></td>
-					<td class="blue"><input type="number" class="form-control" name ="19blue2"></td>
+					<td class="red"><input type="number" class="form-control" name="19red1" required></td>
+					<td class="red"><input type="number" class="form-control" name="19red2" required></td>
+					<td class="blue"><input type="number" class="form-control" name="19blue1" required></td>
+					<td class="blue"><input type="number" class="form-control" name ="19blue2" required></td>
 				</tr>
 				<tr>
 					<td>20</td>
-					<td class="red"><input type="number" class="form-control" name="20red1"></td>
-					<td class="red"><input type="number" class="form-control" name="20red2"></td>
-					<td class="blue"><input type="number" class="form-control" name="20blue1"></td>
-					<td class="blue"><input type="number" class="form-control" name ="20blue2"></td>
+					<td class="red"><input type="number" class="form-control" name="20red1" required></td>
+					<td class="red"><input type="number" class="form-control" name="20red2" required></td>
+					<td class="blue"><input type="number" class="form-control" name="20blue1" required></td>
+					<td class="blue"><input type="number" class="form-control" name ="20blue2" required></td>
 				</tr>
 				<tr>
 					<td>21</td>
-					<td class="red"><input type="number" class="form-control" name="21red1"></td>
-					<td class="red"><input type="number" class="form-control" name="21red2"></td>
-					<td class="blue"><input type="number" class="form-control" name="21blue1"></td>
-					<td class="blue"><input type="number" class="form-control" name ="21blue2"></td>
+					<td class="red"><input type="number" class="form-control" name="21red1" required></td>
+					<td class="red"><input type="number" class="form-control" name="21red2" required></td>
+					<td class="blue"><input type="number" class="form-control" name="21blue1" required></td>
+					<td class="blue"><input type="number" class="form-control" name ="21blue2" required></td>
 				</tr>
 				<tr>
 					<td>22</td>
-					<td class="red"><input type="number" class="form-control" name="22red1"></td>
-					<td class="red"><input type="number" class="form-control" name="22red2"></td>
-					<td class="blue"><input type="number" class="form-control" name="22blue1"></td>
-					<td class="blue"><input type="number" class="form-control" name ="22blue2"></td>
+					<td class="red"><input type="number" class="form-control" name="22red1" required></td>
+					<td class="red"><input type="number" class="form-control" name="22red2" required></td>
+					<td class="blue"><input type="number" class="form-control" name="22blue1" required></td>
+					<td class="blue"><input type="number" class="form-control" name ="22blue2" required></td>
 				</tr>
 				<tr>
 					<td>23</td>
@@ -247,13 +257,13 @@
 					var cell5 = row.insertCell(4);
 					
 					cell1.innerHTML = match;
-					cell2.innerHTML = '<input type="number" class="form-control" name="'+match+'red1">';
+					cell2.innerHTML = '<input type="number" class="form-control" name="'+match+'red1" required>';
 					cell2.className="red";
-					cell3.innerHTML = '<input type="number" class="form-control" name="'+match+'red2">';
+					cell3.innerHTML = '<input type="number" class="form-control" name="'+match+'red2" required>';
 					cell3.className="red";
-					cell4.innerHTML = '<input type="number" class="form-control" name="'+match+'blue1">';
+					cell4.innerHTML = '<input type="number" class="form-control" name="'+match+'blue1" required>';
 					cell4.className="blue";
-					cell5.innerHTML = '<input type="number" class="form-control" name="'+match+'blue2">';
+					cell5.innerHTML = '<input type="number" class="form-control" name="'+match+'blue2" required>';
 					cell5.className="blue";
 					match++;
 					
@@ -280,6 +290,26 @@
 		</div>
 		</div>
 		</form>
+		
+				<div class="footer">
+			<div class="container">
+				<div class="col-md-6" style="padding-bottom: 10px;">
+				<center>
+				Designed by:
+				Team 8097 Botcats,
+				Team 9261 Level Up,
+				Team 10809 Crow Force 5
+				</center>
+				</div>
+				<div class="col-md-3">
+				</div>
+				<div class="col-md-3" >
+				<center>
+					© TheOrangeAlliance 2017
+					</cetner>
+				</div>
+			</div>
+		</div>
 		<?php
 			//MongoDBSetup
 				// connect to mongodb
@@ -333,7 +363,12 @@
 			$collection->insert($document);
 
 		?>
-		<script src = "http://ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js"></script>
+		
+		<script> 
+        webshim.activeLang('en');
+        webshims.polyfill('forms');
+        webshims.cfg.no$Switch = true;
+    </script>
 		<script src = "js/bootstrap.js"></script>
 	</body>
 </html>

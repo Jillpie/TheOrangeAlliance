@@ -7,6 +7,7 @@
 		<link href = "css/bootstrap.min.css" rel = "stylesheet" type="text/css">
 		<link href = "css/styles.css" rel = "stylesheet" type="text/css">
 		<link href = "css/jquery.dataTables.min.css" rel = "stylesheet" type="text/css">
+		<link href = "css/fixedHeader.bootstrap.min.css" rel = "stylesheet" type="text/css">
 		<link rel="apple-touch-icon" sizes="152x152" href="https://sites.google.com/site/filehostdummysite1234/files/theorangealliance/apple-touch-icon.png?v=vMrqOno5qk">
 		<link rel="icon" type="image/png" href="https://sites.google.com/site/filehostdummysite1234/files/theorangealliance/favicon-32x32.png?v=vMrqOno5qk" sizes="32x32">
 		<link rel="icon" type="image/png" href="https://sites.google.com/site/filehostdummysite1234/files/theorangealliance/favicon-16x16.png?v=vMrqOno5qk" sizes="16x16">
@@ -19,12 +20,25 @@
 		<meta name="theme-color" content="#ff9500">
 		<meta http-equiv="Content-Type" content="text/html;charset=utf-8" />
 		<script src = "http://ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js"></script>
-		<script src="js/jquery.dataTables.min.js"></script> 
-		<script type="text/javascript">$(document).ready(function() { $("#inputTable1").DataTable({paging: false}); $("#inputTable2").DataTable({paging: false}); $("#inputTable3").DataTable({paging: false}); } );</script>
+		<script src="js/jquery.dataTables.min.js"></script>
+		<script src="js/dataTables.bootstrap.min.js"></script>
+		<script src="js/dataTables.fixedHeader.min.js"></script> 
+		<script type="text/javascript">
+		$(document).ready(function() { 
+		$("#inputTable1").DataTable({
+			paging: false
+			}); 
+		$("#inputTable2").DataTable({
+			paging: false,
+			fixedHeader: true
+			}); 
+		$("#inputTable3").DataTable({
+			paging: false
+			}); 
+			});
+		</script>
 	</head>	
 	<body>
-	<script>
-	</script>
 			<div class="navbar navbar-default navbar-fixed-top" role="navigation">
 				<div class="container">
 					<div class="navbar-header">
@@ -65,9 +79,9 @@
 						<table class="table table-striped table-bordered" id="inputTable1">
 							<thead>
 								<tr>
+									<th>Rank</th>
 									<th>Team Number</th>
 									<th>Team Name</th>
-									<th>Ranking</th>
 									<th>Record W-L-T</th>
 									<th>QP</th>
 									<th>RP</th>

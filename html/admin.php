@@ -143,14 +143,22 @@
 			</div>
 		<div class="footer">
 			<div class="container">
-				<div class="col-md-6">
-				Designed by Team 8097 Botcats, Team 9261 Level Up, Team 10809 Crow Force 5
+				<div class="col-md-6" style="padding-bottom: 10px;">
+				<center>
+				Designed by:
+				Team 8097 Botcats,
+				Team 9261 Level Up,
+				Team 10809 Crow Force 5
+				</center>
 				</div>
-				<div class="col-md-6" style="text-align: right;">
+				<div class="col-md-3">
+				</div>
+				<div class="col-md-3" >
+				<center>
 					© TheOrangeAlliance 2017
+					</cetner>
 				</div>
 			</div>
-		</div>
 		</div>
 		<script src = "js/bootstrap.js"></script>
 	</body>
