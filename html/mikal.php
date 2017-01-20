@@ -490,6 +490,7 @@
 		}
 		return $teamRP;
 	}
+	//Enters Example data into the mongodb if no example data is detected
 	function EnsureExampleData(){
 		$DATAVALIDATION = 'rainbow';
 		$m = new MongoClient();
@@ -588,6 +589,7 @@
 			}
 		}
 	}
+	//Will remove non validated datapoints atuomatically
 	function PurgeOfTheNonValidations($DATAVALIDATION){
 		$m = new MongoClient();
 		$c = $m->selectDB('TheOrangeAllianceTest')->selectCollection('Y201701211');
@@ -609,7 +611,8 @@
 			}
 		}
 	}
-	function RankingsRank($dataValidation, $teamToRank){
+	//Determines the rank of a certain team returns as array of teams and their rank
+	function RankingsRank($dataValidation){
 		$uniqueTeamList = UniqueTeamList($dataValidation);
 		$rankingsTableRecordInstance = RankingsTableRecord($dataValidation);
 		$teamRanksScore = array();
@@ -634,7 +637,7 @@
 		$DATAVALIDATION = 'rainbow';
 		$uniqueTeamListInstance = UniqueTeamList($DATAVALIDATION);
 		$rankingsTableRecordInstance = RankingsTableRecord($DATAVALIDATION);
-		$rankingsRank = RankingsRank($DATAVALIDATION, $uniqueTeam);
+		$rankingsRank = RankingsRank($DATAVALIDATION);
 
 		foreach($uniqueTeamListInstance as $uniqueTeam){		
 			echo "<tr>";

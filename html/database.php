@@ -25,7 +25,7 @@
 			<div class="container">
 				<div class="navbar-header">
 					<a class="nav-brand" href="http://theorangealliance.tk:8080/"> 
-					<img style="max-width:50px" src="logo.png"> Juicy Data!
+					<img style="max-width:50px" src="images/logo.png"> Juicy Data!
 					<?php
 
 						function Juicy($juicyAddBool){
