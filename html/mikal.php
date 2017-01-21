@@ -844,14 +844,6 @@
 		$uniqueTeamList = UniqueTeamList($dataValidation);
 		$teamMatchups1 = TeamMatchups($dataValidation, 1);
 		$teamMatchups2 = TeamMatchups($dataValidation, 2);
-		foreach($teamMatchups1 as $team) {
-			echo ' : 1 : ' . $team .'<br />';
-
-		}
-		foreach($teamMatchups2 as $team) {
-			echo ' : 2 : ' .  $team .'<br />';
-			
-		}
 		for($columns = 0; $columns < count($uniqueTeamList) ; $columns++){
 			for($rows = 0; $rows < count($uniqueTeamList); $rows++){
 				$rankingsOPRMatchesMatrix[$rows][$columns] = 0;
@@ -881,6 +873,9 @@
 			}
 		}
 		return $rankingsOPRMatchesMatrix;
+	}
+	function MatrixTotalRp($dataValidation){
+		RankingsTableRP($dataValidation, $uniqueTeam);
 	}
 	function MatrixPrint($matrix){
 		for($rows = 0; $rows <= 20; $rows++){
@@ -920,7 +915,6 @@
 		$rankingsRank = RankingsRank($DATAVALIDATION);
 		$OPRMatrix = RankingsOPRMatchesMatrix($DATAVALIDATION);
 		MatrixPrint($OPRMatrix);
-		echo 'boo';
 		foreach($uniqueTeamListInstance as $uniqueTeam){
 			echo "<tr>";
 			//PutItInATD($rankingsRank['Team' . $uniqueTeam]);
