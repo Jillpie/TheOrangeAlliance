@@ -1,5 +1,90 @@
 <?php
-
+	//Matrix Functions
+	function invert($A, $debug = FALSE){
+		$n = count($A);
+		// get and append identity matrix
+		$I = identity_matrix($n);
+		for ($i = 0; $i < $n; ++ $i) {
+			$A[$i] = array_merge($A[$i], $I[$i]);
+		}
+		if ($debug) {
+			echo "\nStarting matrix: ";
+			print_matrix($A);
+		}
+		// forward run
+		for ($j = 0; $j < $n-1; ++ $j) {
+			// for all remaining rows (diagonally)
+			for ($i = $j+1; $i < $n; ++ $i) {
+				// if the value is not already 0
+				if ($A[$i][$j] !== 0) {
+					// adjust scale to pivot row
+					// subtract pivot row from current
+					$scalar = $A[$j][$j] / $A[$i][$j];
+					for ($jj = $j; $jj < $n*2; ++ $jj) {
+						$A[$i][$jj] *= $scalar;
+						$A[$i][$jj] -= $A[$j][$jj];
+					}
+				}
+			}
+			if ($debug) {
+				echo "\nForward iteration $j: ";
+				print_matrix($A);
+			}
+		}
+		// reverse run
+		for ($j = $n-1; $j > 0; -- $j) {
+			for ($i = $j-1; $i >= 0; -- $i) {
+				if ($A[$i][$j] !== 0) {
+					$scalar = $A[$j][$j] / $A[$i][$j];
+					for ($jj = $i; $jj < $n*2; ++ $jj) {
+						$A[$i][$jj] *= $scalar;
+						$A[$i][$jj] -= $A[$j][$jj];
+					}
+				}
+			}
+			if ($debug) {
+				echo "\nReverse iteration $j: ";
+				print_matrix($A);
+			}
+		}
+		// last run to make all diagonal 1s
+		for ($j = 0; $j < $n; ++ $j) {
+			if ($A[$j][$j] !== 1) {
+				$scalar = 1 / $A[$j][$j];
+				for ($jj = $j; $jj < $n*2; ++ $jj) {
+					$A[$j][$jj] *= $scalar;
+				}
+			}
+			if ($debug) {
+				echo "\n1-out iteration $j: ";
+				print_matrix($A);
+			}
+		}
+		// take out the matrix inverse to return
+		$Inv = array();
+		for ($i = 0; $i < $n; ++ $i) {
+			$Inv[$i] = array_slice($A[$i], $n);
+		}
+		return $Inv;
+	}
+	function print_matrix($A, $decimals = 6){
+			foreach ($A as $row) {
+				echo "\n\t[";
+				foreach ($row as $i) {
+					echo "\t" . sprintf("%01.{$decimals}f", round($i, $decimals));
+				}
+				echo "\t]";
+			}
+	}	
+	function identity_matrix($n){
+		$I = array();
+		for ($i = 0; $i < $n; ++ $i) {
+			for ($j = 0; $j < $n; ++ $j) {
+				$I[$i][$j] = ($i == $j) ? 1 : 0;
+			}
+		}
+		return $I;
+	}
 	//SOLID Puts Stuff In A <Td> <Td>
 	function PutItInATD($stuffToPutIn){
 		$HIGHLIGHTLIST = array(
@@ -224,6 +309,36 @@
 			}
 		echo $matchHistoryResultsFormated;
 	}
+	function MatchHistoryGameScoreTranslator($toTranslate){
+		$translation = $toTranslate;
+		$translationArray = array(
+			'Untranslated' => array(
+				'Partially On Corner Vortex',
+				'Partially On Center Vortex',
+				'Fully On Center Vortex',
+				'Fully on Corner Vortex',
+				'On The Ground',
+				'Raised Off The Floor',
+				'Scored In Center Vortex'
+			),
+			'Translated' => array(
+				'Partially Corner',
+				'Partially Center',
+				'Fully Center',
+				'Fully Corner',
+				'Floor',
+				'Raised',
+				'Center'
+			)
+		);
+		for($translationUnit = 0; $translationUnit <= count($translationArray['Untranslated']); $translationUnit++){
+			if($toTranslate == $translationArray['Untranslated'][$translationUnit]){
+				$translation = $translationArray['Translated'][$translationUnit];
+				break;
+			}
+		}
+		return $translation;
+	}
 	// Does The RP and all the game speificic stuff from input Data
 	function MatchHistoryGameScore($dataValidation,$matchNumberInFour){
 		$r = new MongoClient();
@@ -241,7 +356,7 @@
 		PutItInATD(CalculatesRPFromData($dataValidation, $matchNumberInFour));
 		foreach($cursor as $document){
 			$checkIfItWorked++;
-			PutItInATD($document["GameInformation"]["AUTO"]["RobotParking"]);
+			PutItInATD(MatchHistoryGameScoreTranslator($document["GameInformation"]["AUTO"]["RobotParking"]));
 			PutItInATD($document["GameInformation"]["AUTO"]["ParticlesCenter"]);
 			PutItInATD($document["GameInformation"]["AUTO"]["ParticlesCorner"]);
 			PutItInATD($document["GameInformation"]["AUTO"]["CapBall"]);
@@ -249,7 +364,7 @@
 			PutItInATD($document["GameInformation"]["DRIVER"]["ParticlesCenter"]);
 			PutItInATD($document["GameInformation"]["DRIVER"]["ParticlesCorner"]);
 			PutItInATD($document["GameInformation"]["END"]["AllianceClaimedBeacons"]);
-			PutItInATD($document["GameInformation"]["END"]["CapBall"]);
+			PutItInATD(MatchHistoryGameScoreTranslator($document["GameInformation"]["END"]["CapBall"]));
 		}
 		if($checkIfItWorked == 0 ){
 			for($i=1; $i <= 9 ; $i++) { 
@@ -632,7 +747,6 @@
 		}
 		return $teamRanks;
 	}
-
 	function OPRTestingInput(){
 
 		$THEMATRIX = array(
@@ -653,99 +767,6 @@
 
 		return $THEMATRIX;
 	}
-	function invert($A, $debug = FALSE)
-		{
-			/// @todo check rows = columns
-			$n = count($A);
-			// get and append identity matrix
-			$I = identity_matrix($n);
-			for ($i = 0; $i < $n; ++ $i) {
-				$A[$i] = array_merge($A[$i], $I[$i]);
-			}
-			if ($debug) {
-				echo "\nStarting matrix: ";
-				print_matrix($A);
-			}
-			// forward run
-			for ($j = 0; $j < $n-1; ++ $j) {
-				// for all remaining rows (diagonally)
-				for ($i = $j+1; $i < $n; ++ $i) {
-					// if the value is not already 0
-					if ($A[$i][$j] !== 0) {
-						// adjust scale to pivot row
-						// subtract pivot row from current
-						$scalar = $A[$j][$j] / $A[$i][$j];
-						for ($jj = $j; $jj < $n*2; ++ $jj) {
-							$A[$i][$jj] *= $scalar;
-							$A[$i][$jj] -= $A[$j][$jj];
-						}
-					}
-				}
-				if ($debug) {
-					echo "\nForward iteration $j: ";
-					print_matrix($A);
-				}
-			}
-			// reverse run
-			for ($j = $n-1; $j > 0; -- $j) {
-				for ($i = $j-1; $i >= 0; -- $i) {
-					if ($A[$i][$j] !== 0) {
-						$scalar = $A[$j][$j] / $A[$i][$j];
-						for ($jj = $i; $jj < $n*2; ++ $jj) {
-							$A[$i][$jj] *= $scalar;
-							$A[$i][$jj] -= $A[$j][$jj];
-						}
-					}
-				}
-				if ($debug) {
-					echo "\nReverse iteration $j: ";
-					print_matrix($A);
-				}
-			}
-			// last run to make all diagonal 1s
-			/// @note this can be done in last iteration (i.e. reverse run) too!
-			for ($j = 0; $j < $n; ++ $j) {
-				if ($A[$j][$j] !== 1) {
-					$scalar = 1 / $A[$j][$j];
-					for ($jj = $j; $jj < $n*2; ++ $jj) {
-						$A[$j][$jj] *= $scalar;
-					}
-				}
-				if ($debug) {
-					echo "\n1-out iteration $j: ";
-					print_matrix($A);
-				}
-			}
-			// take out the matrix inverse to return
-			$Inv = array();
-			for ($i = 0; $i < $n; ++ $i) {
-				$Inv[$i] = array_slice($A[$i], $n);
-			}
-			return $Inv;
-		}
-		
-	function print_matrix($A, $decimals = 6)
-		{
-			foreach ($A as $row) {
-				echo "\n\t[";
-				foreach ($row as $i) {
-					echo "\t" . sprintf("%01.{$decimals}f", round($i, $decimals));
-				}
-				echo "\t]";
-			}
-		}
-		
-	function identity_matrix($n)
-		{
-			$I = array();
-			for ($i = 0; $i < $n; ++ $i) {
-				for ($j = 0; $j < $n; ++ $j) {
-					$I[$i][$j] = ($i == $j) ? 1 : 0;
-				}
-			}
-			return $I;
-		}
-
 	function OPRTestingInverse(){
 		
 		$a = Array( Array(1,2),Array(4,5));
@@ -800,7 +821,34 @@
 			PutItInATD('hi');
 		echo "</tr>";
 	}
-	
+	function TeamMatchups($dataValidation, $allianceSet){
+		$teamMatchupsList = array();
+		$m = new MongoClient();
+		$c = $m->selectDB('TheOrangeAllianceTest')->selectCollection('Y201701211');
+		$cursor = $c->find(['MetaData.MetaData' => 'ScheduleInput' ,'MetaData.InputID' => $dataValidation]);
+		$allianceColors = array(
+				'Red',
+				'Blue'
+			);
+		foreach($cursor as $document){
+			foreach($document['Match'] as $matchSet){
+				foreach($allianceColors as $allianceColor){
+					$teamMatchupsList[count($teamMatchupsList)] = $matchSet['$allianceColor' . $allianceSet];
+				}
+			}
+		}
+		return $teamMatchupsList;
+	}
+	function RankingsOPRMatchesMatrix($dataValidation){
+		$rankingsOPRMatchesMatrix = array();
+		$uniqueTeamList = UniqueTeamList($dataValidation);
+
+
+	}
+	//Dose all the OPR for rankings table
+	function RankingsOPR(){
+
+	}
 	//The Table Ranking For all of Rankings
 	function RankingsTable(){
 		$DATAVALIDATION = 'rainbow';
@@ -816,6 +864,25 @@
 			PutItInATD($rankingsTableRecordInstance['TeamNumber' . $uniqueTeam]['Present']);
 			PutItInATD($rankingsTableRecordInstance['TeamNumber' . $uniqueTeam]['QP']);
 			PutItInATD(RankingsTableRP($DATAVALIDATION, $uniqueTeam));
+			PutItInATD('testing');
+			echo "</tr>";
+		}
+		//EnsureExampleData();
+	}
+	function RankingsTable1(){
+		$DATAVALIDATION = 'rainbow';
+		$uniqueTeamListInstance = UniqueTeamList($DATAVALIDATION);
+		$rankingsTableRecordInstance = RankingsTableRecord($DATAVALIDATION);
+		$rankingsRank = RankingsRank($DATAVALIDATION);
+
+		foreach($uniqueTeamListInstance as $uniqueTeam){		
+			echo "<tr>";
+			//PutItInATD($rankingsRank['Team' . $uniqueTeam]);
+			//PutItInATD($uniqueTeam);
+			//PutItInATD(TeamNumberName($uniqueTeam));
+			//PutItInATD($rankingsTableRecordInstance['TeamNumber' . $uniqueTeam]['Present']);
+			//PutItInATD($rankingsTableRecordInstance['TeamNumber' . $uniqueTeam]['QP']);
+			//PutItInATD(RankingsTableRP($DATAVALIDATION, $uniqueTeam));
 			PutItInATD('testing');
 			echo "</tr>";
 		}

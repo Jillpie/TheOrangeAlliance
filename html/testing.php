@@ -90,7 +90,7 @@
 							<tbody>
 							<?php
 								require 'mikal.php';
-								OPRTestingInput();
+								RankingsTable1();
 							?>
 							</tbody>
 						</table>
@@ -111,7 +111,6 @@
 							</thead>
 							<tbody>
 							<?php
-								OPRTestingInverse();
 							?>
 							</tbody>
 						</table>

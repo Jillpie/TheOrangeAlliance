@@ -7,7 +7,6 @@
 		<link href = "css/bootstrap.min.css" rel = "stylesheet" type="text/css">
 		<link href = "css/styles.css" rel = "stylesheet" type="text/css">
 		<link href = "css/jquery.dataTables.min.css" rel = "stylesheet" type="text/css">
-		<link href = "css/fixedHeader.bootstrap.min.css" rel = "stylesheet" type="text/css">
 		<link rel="apple-touch-icon" sizes="152x152" href="https://sites.google.com/site/filehostdummysite1234/files/theorangealliance/apple-touch-icon.png?v=vMrqOno5qk">
 		<link rel="icon" type="image/png" href="https://sites.google.com/site/filehostdummysite1234/files/theorangealliance/favicon-32x32.png?v=vMrqOno5qk" sizes="32x32">
 		<link rel="icon" type="image/png" href="https://sites.google.com/site/filehostdummysite1234/files/theorangealliance/favicon-16x16.png?v=vMrqOno5qk" sizes="16x16">
@@ -22,15 +21,13 @@
 		<script src = "http://ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js"></script>
 		<script src="js/jquery.dataTables.min.js"></script>
 		<script src="js/dataTables.bootstrap.min.js"></script>
-		<script src="js/dataTables.fixedHeader.min.js"></script> 
 		<script type="text/javascript">
 		$(document).ready(function() { 
 		$("#inputTable1").DataTable({
 			paging: false
 			}); 
 		$("#inputTable2").DataTable({
-			paging: false,
-			fixedHeader: true
+			paging: false
 			}); 
 		$("#inputTable3").DataTable({
 			paging: false
@@ -69,9 +66,9 @@
 				<hr></hr>
 			
 				<ul class="nav nav-tabs">
-					<li role="presentation" class="active"><a data-toggle="tab" href="#rankings">Rankings</a></li>
-					<li role="presentation"><a data-toggle="tab" href="#match-history">Match History</a></li>
-					<li role="presentation"><a data-toggle="tab" href="#average-scores">Average Scores</a></li>
+					<li role="presentation" class="active small"><a data-toggle="tab" href="#rankings">Rankings</a></li>
+					<li role="presentation" class="small"><a data-toggle="tab" href="#match-history">Match History</a></li>
+					<li role="presentation" class="small"><a data-toggle="tab" href="#average-scores">Average Scores</a></li>
 				</ul>
 			
 				<div class="tab-content">
@@ -82,7 +79,7 @@
 									<th>Rank</th>
 									<th>Team Number</th>
 									<th>Team Name</th>
-									<th>Record W-L-T</th>
+									<th>W-L-T</th>
 									<th>QP</th>
 									<th>RP</th>
 									<th>OPR</th>
@@ -101,19 +98,19 @@
 						<table class="table table-striped table-bordered" id="inputTable2">
 							<thead>
 								<tr>
-									<th>Match Number</th>
+									<th>#</th>
 									<th>Alliance</th>
 									<th>Team Number</th>
 									<th>Team Name</th>
-									<th>Result Red-Blue</th>
+									<th>Result R-B</th>
 									<th>RP</th>
 									<th class="red">Robot Parking</th>
-									<th class="red">Particles in Center</th>
-									<th class="red">Particles in Corner</th>
+									<th class="red">Center Particles</th>
+									<th class="red">Corner Particles</th>
 									<th class="red">Cap Ball</th>
 									<th class="red">Beacons</th>
-									<th class="blue">Particles in Center</th>
-									<th class="blue">Particles in Corner</th>
+									<th class="blue">Center Particles</th>
+									<th class="blue">Corner Particles</th>
 									<th class="green">Beacons</th>
 									<th class="green">Cap Ball</th>
 								</tr>
