@@ -829,25 +829,69 @@
 		$allianceColors = array(
 				'Red',
 				'Blue'
-			);
+		);
 		foreach($cursor as $document){
-			foreach($document['Match'] as $matchSet){
+			foreach($document['Match'] as $match){
 				foreach($allianceColors as $allianceColor){
-					$teamMatchupsList[count($teamMatchupsList)] = $matchSet['$allianceColor' . $allianceSet];
+					$teamMatchupsList[count($teamMatchupsList)] = $match[$allianceColor . $allianceSet];
 				}
-			}
+			}	
 		}
 		return $teamMatchupsList;
 	}
 	function RankingsOPRMatchesMatrix($dataValidation){
 		$rankingsOPRMatchesMatrix = array();
 		$uniqueTeamList = UniqueTeamList($dataValidation);
+		$teamMatchups1 = TeamMatchups($dataValidation, 1);
+		$teamMatchups2 = TeamMatchups($dataValidation, 2);
+		foreach($teamMatchups1 as $team) {
+			echo ' : 1 : ' . $team .'<br />';
 
-
+		}
+		foreach($teamMatchups2 as $team) {
+			echo ' : 2 : ' .  $team .'<br />';
+			
+		}
+		for($columns = 0; $columns < count($uniqueTeamList) ; $columns++){
+			for($rows = 0; $rows < count($uniqueTeamList); $rows++){
+				$rankingsOPRMatchesMatrix[$rows][$columns] = 0;
+				if($columns == $rows){
+					foreach($teamMatchups1 as $teamMatch1){
+						if($uniqueTeamList[$rows] == $teamMatch1){
+							$rankingsOPRMatchesMatrix[$rows][$columns]++;
+						}
+					}
+					foreach($teamMatchups2 as $teamMatch2){
+						if($uniqueTeamList[$columns] == $teamMatch2){
+							$rankingsOPRMatchesMatrix[$rows][$columns]++;
+						}
+					}
+				}else{
+					for($teamIndex = 0; $teamIndex <= count($teamMatchups1) ; $teamIndex++){
+						if($uniqueTeamList[$columns] == $teamMatchups1[$teamIndex] and $teamMatchups2[$teamIndex] == $uniqueTeamList[$rows] ){
+							$rankingsOPRMatchesMatrix[$rows][$columns]++;
+						}
+					}
+					for($teamIndex = 0; $teamIndex <= count($teamMatchups1) ; $teamIndex++){
+						if($uniqueTeamList[$columns] == $teamMatchups2[$teamIndex] and $teamMatchups1[$teamIndex] == $uniqueTeamList[$rows] ){
+							$rankingsOPRMatchesMatrix[$rows][$columns]++;
+						}
+					}
+				}
+			}
+		}
+		return $rankingsOPRMatchesMatrix;
+	}
+	function MatrixPrint($matrix){
+		for($rows = 0; $rows <= 20; $rows++){
+			for($columns = 0; $columns <= 20; $columns++){
+				echo  ' ' . $matrix[$rows][$columns] . ' ';
+			}
+			echo '<br />';
+		}
 	}
 	//Dose all the OPR for rankings table
 	function RankingsOPR(){
-
 	}
 	//The Table Ranking For all of Rankings
 	function RankingsTable(){
@@ -874,8 +918,10 @@
 		$uniqueTeamListInstance = UniqueTeamList($DATAVALIDATION);
 		$rankingsTableRecordInstance = RankingsTableRecord($DATAVALIDATION);
 		$rankingsRank = RankingsRank($DATAVALIDATION);
-
-		foreach($uniqueTeamListInstance as $uniqueTeam){		
+		$OPRMatrix = RankingsOPRMatchesMatrix($DATAVALIDATION);
+		MatrixPrint($OPRMatrix);
+		echo 'boo';
+		foreach($uniqueTeamListInstance as $uniqueTeam){
 			echo "<tr>";
 			//PutItInATD($rankingsRank['Team' . $uniqueTeam]);
 			//PutItInATD($uniqueTeam);
