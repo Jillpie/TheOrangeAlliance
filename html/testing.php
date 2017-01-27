@@ -63,7 +63,7 @@
 				</div>
 			</div>
 		
-		<div class="content">
+		<div class="content"  style="font-size:6px">
 			<div class="container">
 				<h1>Testing</h1><h1></h1>
 				<hr></hr>
@@ -87,7 +87,7 @@
 									<th>lol</th>
 								</tr>
 							</thead>
-							<tbody>
+							<tbody  style="font-size:6px">
 							<?php
 								require 'mikal.php';
 								RankingsTable1();

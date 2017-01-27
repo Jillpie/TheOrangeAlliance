@@ -1,5 +1,14 @@
 <?php
 	//Matrix Functions
+	function identity_matrix($n){
+		$I = array();
+		for ($i = 0; $i < $n; ++ $i) {
+			for ($j = 0; $j < $n; ++ $j) {
+				$I[$i][$j] = ($i == $j) ? 1 : 0;
+			}
+		}
+		return $I;
+	}
 	function invert($A, $debug = FALSE){
 		$n = count($A);
 		// get and append identity matrix
@@ -67,7 +76,7 @@
 		}
 		return $Inv;
 	}
-	function print_matrix($A, $decimals = 6){
+	function print_matrix($A, $decimals = 3){
 			foreach ($A as $row) {
 				echo "\n\t[";
 				foreach ($row as $i) {
@@ -76,15 +85,6 @@
 				echo "\t]";
 			}
 	}	
-	function identity_matrix($n){
-		$I = array();
-		for ($i = 0; $i < $n; ++ $i) {
-			for ($j = 0; $j < $n; ++ $j) {
-				$I[$i][$j] = ($i == $j) ? 1 : 0;
-			}
-		}
-		return $I;
-	}
 	//SOLID Puts Stuff In A <Td> <Td>
 	function PutItInATD($stuffToPutIn){
 		$HIGHLIGHTLIST = array(
@@ -287,26 +287,26 @@
 		$c = $m->selectDB('TheOrangeAllianceTest')->selectCollection('Y201701211');
 		$cursor = $c->find(['MetaData.MetaData' => 'ResultsInput' , 'MatchNumber' => TrueMatchNumberTransformer($matchNumberInFour + 3)]);
 		$matchHistoryResultsFormated = '<td ';	
-			foreach($cursor as $document){
-				switch ($document['Winner']) {
-					case 'Red':
-						$matchHistoryResultsFormated .= 'class="red">';
-						break;
-					case 'Blue':
-						$matchHistoryResultsFormated .= 'class="blue">';
-						break;
-					case 'Tie':
-						$matchHistoryResultsFormated .= 'class="green">';
-						break;
-					default:
-						$matchHistoryResultsFormated .= 'class="pink">';
-						break;
-				}
-				$matchHistoryResultsFormated .= $document['Score']['Final']['Red'] . "-" . $document['Score']['Final']['Blue'] . '</td>';
+		foreach($cursor as $document){
+			switch ($document['Winner']) {
+				case 'Red':
+					$matchHistoryResultsFormated .= 'class="red">';
+					break;
+				case 'Blue':
+					$matchHistoryResultsFormated .= 'class="blue">';
+					break;
+				case 'Tie':
+					$matchHistoryResultsFormated .= 'class="green">';
+					break;
+				default:
+					$matchHistoryResultsFormated .= 'class="pink">';
+					break;
 			}
-			if(is_null($document['Score']['Final']['Red']) or is_null($document['Score']['Final']['Blue'])){
-				$matchHistoryResultsFormated = "<td class='pink'> NOT POSTED </td>";
-			}
+			$matchHistoryResultsFormated .= $document['Score']['Final']['Red'] . "-" . $document['Score']['Final']['Blue'] . '</td>';
+		}
+		if(is_null($document['Score']['Final']['Red']) or is_null($document['Score']['Final']['Blue'])){
+			$matchHistoryResultsFormated = "<td class='pink'> NOT POSTED </td>";
+		}
 		echo $matchHistoryResultsFormated;
 	}
 	function MatchHistoryGameScoreTranslator($toTranslate){
@@ -722,7 +722,7 @@
 		);
 		$notValid = $cursor->aggregate($toAggregate);
 		foreach($notValid as $document){
-			if($document['invalid'] = true){
+			if($document['invalid'] == true){
 			}
 		}
 	}
@@ -766,6 +766,33 @@
 		echo "</tr>";
 
 		return $THEMATRIX;
+	}
+	function MatrixMultiplication($a, $b){
+
+		echo 'A::::::: <br />';
+		MatrixPrint($a);
+		echo 'A::::::: <br />';
+		echo 'B::::::: <br />';
+		MatrixPrint($b);
+		echo 'B::::::: <br />';
+
+		$r=count($a);
+		$c=count($b[0]);
+		$p=count($b);
+		if(count($a[0]) != $p){
+		    echo "Incompatible matrices";
+		    exit(0);
+		}
+		$result=array();
+		for ($i=0; $i < $r; $i++){
+		    for($j=0; $j < $c; $j++){
+		        $result[$i][$j] = 0.0;
+		        for($k=0; $k < $p; $k++){
+		            $result[$i][$j] += $a[$i][$k] * $b[$k][$j];
+		        }
+		    }
+		}
+		return $result;
 	}
 	function OPRTestingInverse(){
 		
@@ -874,19 +901,112 @@
 		}
 		return $rankingsOPRMatchesMatrix;
 	}
-	function MatrixTotalRp($dataValidation){
-		RankingsTableRP($dataValidation, $uniqueTeam);
-	}
 	function MatrixPrint($matrix){
-		for($rows = 0; $rows <= 20; $rows++){
-			for($columns = 0; $columns <= 20; $columns++){
+		for($rows = 0; $rows <= 30; $rows++){
+			for($columns = 0; $columns <= 30; $columns++){
 				echo  ' ' . $matrix[$rows][$columns] . ' ';
 			}
 			echo '<br />';
 		}
 	}
 	//Dose all the OPR for rankings table
-	function RankingsOPR(){
+	function MatrixRankingsOPR($dataValidation){
+		$listOfUniqueTeams = UniqueTeamList($dataValidation);
+		$teamRPList = array();
+		for($uniqueTeamIndex = 0; $uniqueTeamIndex < count($listOfUniqueTeams); $uniqueTeamIndex++){
+			$teamToSearchFor = $listOfUniqueTeams[$uniqueTeamIndex];
+			$teamRPList[$uniqueTeamIndex] = RankingsTableRP($dataValidation, $teamToSearchFor);
+		}
+		return $teamRPList;
+	}
+	function matrix_inverse($m1)
+		{
+		    $rows = $this->rows($m1);
+		    $cols = $this->columns($m1);
+		    if ($rows != $cols)
+		    {
+		        die("Matrim1 is not square. Can not be inverted.");
+		    }
+
+		    $m2 = $this->eye($rows);
+
+		    for ($j = 0; $j < $cols; $j++)
+		    {
+		        $factor = $m1[$j][$j];
+		        if ($this->debug)
+		        {
+		            fms_writeln('Divide Row [' . $j . '] by ' . $m1[$j][$j] . ' (to
+		                                                  give us a "1" in the desired position):');
+		        }
+		        $m1 = $this->rref_div($m1, $j, $factor);
+		        $m2 = $this->rref_div($m2, $j, $factor);
+		        if ($this->debug)
+		        {
+		            $this->disp2($m1, $m2);
+		        }
+		        for ($i = 0; $i < $rows; $i++)
+		        {
+		            if ($i != $j)
+		            {
+		                $factor = $m1[$i][$j];
+		                if ($this->debug)
+		                {
+		                    $this->writeln('Row[' . $i . '] - ' . number_format($factor, 4) . ' ×
+		                                                Row[' . $j . '] (to give us 0 in the desired position):');
+		                }
+		                $m1 = $this->rref_sub($m1, $i, $factor, $j);
+		                $m2 = $this->rref_sub($m2, $i, $factor, $j);
+		                if ($this->debug)
+		                {
+		                    $this->disp2($m1, $m2);
+		                }
+		            }
+		        }
+		    }
+		    return $m2;
+		}
+	function RankingsMatrixOPR($dataValidation){
+		$listOfTeamsRPInOrder = MatrixRankingsOPR($dataValidation);
+		echo 'Let 1 <br />';
+		$matrixOfMatchesAndTeams = RankingsOPRMatchesMatrix($dataValidation);
+		echo 'Let 2 <br />';
+		echo 'LETUS';
+		MatrixPrint($matrixOfMatchesAndTeams);
+		$invertMatrixOfMatches = invert($matrixOfMatchesAndTeams);
+		echo 'Let 3 <br />';
+
+		MatrixPrint($invertMatrixOfMatches);
+		echo 'RPS!#!#!#!#!#!#!#!##!#: ';
+		$invertMatrixOfMatches = matrix_inverse($matrixOfMatchesAndTeams);
+		echo 'Let 3!#!#!#!#!#!# <br />';
+
+		MatrixPrint($invertMatrixOfMatches);
+		echo 'RPSR%^&^%$#$%^$: ';
+		foreach($listOfTeamsRPInOrder as $n){
+			echo  $n . ' <br />';
+		}
+		$listOfTeamsRPInOrderAsFloat = array();
+		foreach($listOfTeamsRPInOrder as $teamAndRP){
+			$listOfTeamsRPInOrderAsFloat[$teamAndRP] = $listOfTeamsRPInOrder[$teamAndRP] * 1.0;
+		}
+
+
+		$resultingMatrix = MatrixMultiplication($invertMatrixOfMatches, $listOfTeamsRPInOrder);
+		echo 'Let 4 <br />';
+		$matrixOPR = array();
+		for($matrixIndex = 0; $matrixIndex <= count($listOfTeamsRPInOrder); $matrixIndex++){
+			$team = $listOfTeamsRPInOrder[$matrixIndex];
+			$matrixOPR[$team] = $resultingMatrix[$matrixIndex];
+		}
+		echo 'RankingsMatrixOPR before return';
+		foreach($matrixOPR as $ex){
+			echo '$ex: ' . $ex . '<br />';
+			foreach($ex as $er){
+				echo '$er: ' . $er . '<br />';
+			}
+		}
+		echo $matrixOPR;
+		return $matrixOPR;
 	}
 	//The Table Ranking For all of Rankings
 	function RankingsTable(){
@@ -913,8 +1033,20 @@
 		$uniqueTeamListInstance = UniqueTeamList($DATAVALIDATION);
 		$rankingsTableRecordInstance = RankingsTableRecord($DATAVALIDATION);
 		$rankingsRank = RankingsRank($DATAVALIDATION);
-		$OPRMatrix = RankingsOPRMatchesMatrix($DATAVALIDATION);
-		MatrixPrint($OPRMatrix);
+		//$OPRMatrix = RankingsOPRMatchesMatrix($DATAVALIDATION);
+		//MatrixPrint($OPRMatrix);
+		echo 'Before Matris OPR $RankingsMatrixOPR($DATAVALIDATION) ' . '<br />';
+		$matrixOPR = RankingsMatrixOPR($DATAVALIDATION);
+		echo 'Matrix print before' . '<br />';
+		echo 'PRINTMARIS HERE '. '<br />';
+		MatrixPrint($matrixOPR);
+		echo  '<br />' . 'PRINTMARIS BEFORE HERE HERE '. '<br />';
+		echo 'Matrix total RP' . '<br />';
+		$temp = MatrixRankingsOPR($DATAVALIDATION);
+		//echo MatrixPrint($temp);
+		foreach($temp as $qwe){
+			echo $qwe . '<br />';
+		}
 		foreach($uniqueTeamListInstance as $uniqueTeam){
 			echo "<tr>";
 			//PutItInATD($rankingsRank['Team' . $uniqueTeam]);
@@ -923,7 +1055,8 @@
 			//PutItInATD($rankingsTableRecordInstance['TeamNumber' . $uniqueTeam]['Present']);
 			//PutItInATD($rankingsTableRecordInstance['TeamNumber' . $uniqueTeam]['QP']);
 			//PutItInATD(RankingsTableRP($DATAVALIDATION, $uniqueTeam));
-			PutItInATD('testing');
+			PutItInATD($uniqueTeam);
+			PutItInATD($matrixOPR[$uniqueTeam]);
 			echo "</tr>";
 		}
 		//EnsureExampleData();
