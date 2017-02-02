@@ -177,6 +177,14 @@
 			if($_POST['matchNumber'] != ''){
 				$collection->insert($document);
 			}
+			CreateDBLog(
+				TimeTime($_POST['matchDate']) . PlaceID($_POST['matchPlace'], $_POST['dataValidation']),
+				"ResultsInput",
+				date('YmdHis'),
+				$_POST['dataValidation'],
+				"Testing",
+				$_POST['dataValidation']
+			);
 		?>
 		
 		<script> 

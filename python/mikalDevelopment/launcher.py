@@ -46,7 +46,7 @@ class Launcher(Foundation):
 	def ListOfDatePlaces(self):
 		print 'Launcher.ListOfCollections'
 		#Mongo
-		cursor = self.collection.find({'MetaData.MetaData' : 'InputLog', 'MetaData.InputID' : self.dataValidation})
+		cursor = self.collection.find({'MetaData.MetaData' : 'LogInput', 'MetaData.InputID' : self.dataValidation})
 		listOfDatePlaces = []
 		for document in cursor:
 			for logKey, logValue in documnet['Log'].items():

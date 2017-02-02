@@ -25,4 +25,27 @@
 		$timeFinal = '20' . $timeYear . $timeMonth . $timeDay;
 		return $timeFinal;
 	}
+	function CreateDBLog($datePlace, $data, $timeStamp, $inputID, $inputType, $dataValidation){
+		$m = new MongoClient();
+		$c = $m->selectDB('TheOrangeAllianceTest')->selectCollection('Log');
+		$document = array(
+			"MetaData" => array(
+				"MetaData" => "LogInput",
+				"TimeStamp" => "WOOT",
+				"InputID" => "PURRRRFECT!",
+				"InputType" => "LogInput"
+			),
+			"Log" => array(
+				"DatePlace" => $datePlace,
+				"Data" => $data,
+				"TimeStamp" => $timeStamp,
+				"InputID" => $inputID,
+				"InputType" => $inputType,
+				"ArchiveFlag" => False
+			)
+		);
+		if($datePlace != '20ERROR'){
+			$c->insert($document);
+		}
+	}
 ?>
