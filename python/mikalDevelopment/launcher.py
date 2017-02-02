@@ -3,21 +3,59 @@
 print '-----IMPORTING: START-----'
 import time
 import threading
-#import Queue
-#from pymongo import MongoClient
+from pymongo import MongoClient
 from pprint import pprint
-from LauncherNode import LauncherNode
+from Foundation import Foundation 
 print '-----IMPORTING: END-----'
+print '-----INIT: START-----'
+class Launcher(Foundation):
 
-class Launcher(object):
-
-	def __init__(self):
-		print 'At Lunacher. __init__'
+	def __init__(self, dataValidation):
+		print 'Lunacher. __init__'
 		#MongoStuff
-		#client = MongoClient()
-		#db = client.TheOrangeAllianceTest
-		#collection = db.test
-		#self.cursor = collection.find({'MetaData.MetaData' : 'ScheduleInput'})
+		dataValidation = str(dataValidation)
+		self.dataValidation = dataValidation
+		client = MongoClient()
+		db = client.TheOrangeAllianceTest
+		self.collection = db.log
+
+		self.currentTimeMark = 000000000
+		self.foundation = Foundation()
+		self.allDatePlaces = ListOfDatePlaces()
+		pprint(self.allDatePlaces)
+
+	def run(self):
+		print 'Launcher.Self'
+		#Create new threads
+		LauncherNodeThread = ToThread(1, 'LauncherNodeThread', 'LauncherNode')
+		BakaThread = ToThread(2, 'BakaThread', 'Baka')
+		ExcpetionThread = ToThread(3, 'ExcpetionThread', 'COOLEO')
+
+		print '-----THREAD: STRAT-----'
+		#Start new Threads
+		try:
+			LauncherNodeThread.start()
+			BakaThread.start()
+			ExcpetionThread.start()
+		except:
+			print '-----THREAD: ERROR IN START-----'
+
+	def Archiver(self):
+		print 'Luancher.Archiver'
+
+	def ListOfDatePlaces(self):
+		print 'Launcher.ListOfCollections'
+		#Mongo
+		cursor = self.collection.find({'MetaData.MetaData' : 'InputLog', 'MetaData.InputID' : self.dataValidation})
+		listOfDatePlaces = []
+		for document in cursor:
+			for logKey, logValue in documnet['Log'].items():
+				if logKey == 'DatePlace':
+					listOfDatePlaces.append(logValue)
+		listOfDatePlacesUnique = self.foundation.GenerateUniqueList(listOfDatePlaces)
+		return listOfDatePlacesUnique
+
+
 
 #Threading Stuff
 class ToThread(threading.Thread):
@@ -26,6 +64,7 @@ class ToThread(threading.Thread):
 		self.threadID = threadID
 		self.threadName = threadName
 		self.programName = programName
+
 	def run(self):
 		print "Starting " + self.name
 		RunProgram(self.programName)
@@ -33,26 +72,17 @@ class ToThread(threading.Thread):
 
 def RunProgram(nameOfProgram):
 	if nameOfProgram == "LauncherNode":
-		instanceOfLauncherNode = LauncherNode('MY ARGGGGSSSSSS')
-		instanceOfLauncherNode.run()
+		#instanceOfLauncherNode = LauncherNode('MY ARGGGGSSSSSS')
+		#instanceOfLauncherNode.run()
+		print 'Sadmep'
 	elif nameOfProgram == "Baka":
 		print "You're one of a baka!"
 	else:
 		print 'Failure to recognize program name: ' + str(nameOfProgram)
-
+print '-----INIT: END-----'
 print '-----LAUNCHING-----'
-#Create new threads
-LauncherNodeThread = ToThread(1, 'LauncherNodeThread', 'LauncherNode')
-BakaThread = ToThread(2, 'BakaThread', 'Baka')
-ExcpetionThread = ToThread(3, 'ExcpetionThread', 'COOLEO')
 
-print '-----THREAD: STRAT-----'
-#Start new Threads
-try:
-	LauncherNodeThread.start()
-	BakaThread.start()
-	ExcpetionThread.start()
-except:
-	print '-----THREAD: ERROR IN START-----'
+instanceOfLauncher = Launcher('rainbow')
+instanceOfLauncher.run()
 
 print "-----COMPLETED LAUNCHER THREAD-----"

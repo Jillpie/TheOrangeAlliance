@@ -4,7 +4,6 @@
 from pymongo import MongoClient
 from pprint import pprint
 
-print '-----START OF FOUNDATION-----'
 class Foundation(object):
 	'I am a CLASSSSSS!'
 
@@ -66,4 +65,5 @@ class Foundation(object):
 					teamName = teamNameValue
 		return teamName
 
-print '-----END OF FOUNDATION-----'
+cameron = Foundation('rainbow','lololololololol')
+print('printing stuff again!!')
