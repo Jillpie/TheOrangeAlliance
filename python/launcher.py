@@ -1,25 +1,24 @@
 #! /usr/bin/python
 
 import time
-import shlex
-import subprocess
+from pymongo import MongoClient
+from pprint import pprint
 
-MatchOutputProcess = subprocess
-AverageScoresOutputProcess = subprocess
+class Launcher(object):
+
+	def __init__(self):
+		#MongoStuff
+		client = MongoClient()
+		db = client.TheOrangeAllianceTest
+		collection = db.test
+		self.cursor = collection.find({'MetaData.MetaData' : 'ScheduleInput'})
+
+
+		
 
 while True:
 
-	MatchOutput = MatchOutputProcess.Popen((['python MatchOutput.py']), shell=True)
-	AverageScoresOutput = AverageScoresOutputProcess.Popen((['python AverageScoresOutput.py']), shell=True)
-
-	MatchOutput.pid()
-	AverageScoresOutput.pid()
-	print 'part one'
-	MatchOutput.kill()
-	AverageScoresOutput.kill()
-	print 'part two'
-	MatchOutput.pid()
-	AverageScoresOutput.pid()
+	
 
 	time.sleep(10)
 
