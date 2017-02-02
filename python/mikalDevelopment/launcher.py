@@ -6,6 +6,7 @@ import threading
 from pymongo import MongoClient
 from pprint import pprint
 from Foundation import Foundation 
+from Foundation import HelpfulMethods 
 print '-----IMPORTING: END-----'
 print '-----INIT: START-----'
 class Launcher(Foundation):
@@ -17,11 +18,12 @@ class Launcher(Foundation):
 		self.dataValidation = dataValidation
 		client = MongoClient()
 		db = client.TheOrangeAllianceTest
-		self.collection = db.log
+		self.collection = db.Log
 
 		self.currentTimeMark = 000000000
-		self.foundation = Foundation()
-		self.allDatePlaces = ListOfDatePlaces()
+		#self.foundation = Foundation()
+		self.helpfulMethods = HelpfulMethods()
+		self.allDatePlaces = self.ListOfDatePlaces()
 		pprint(self.allDatePlaces)
 
 	def run(self):
@@ -49,13 +51,11 @@ class Launcher(Foundation):
 		cursor = self.collection.find({'MetaData.MetaData' : 'LogInput', 'MetaData.InputID' : self.dataValidation})
 		listOfDatePlaces = []
 		for document in cursor:
-			for logKey, logValue in documnet['Log'].items():
-				if logKey == 'DatePlace':
+			for logKey, logValue in document['Log'].items():
+				if logKey == 'DatePlace' and logValue.isnumeric() == True:
 					listOfDatePlaces.append(logValue)
-		listOfDatePlacesUnique = self.foundation.GenerateUniqueList(listOfDatePlaces)
+		listOfDatePlacesUnique = self.helpfulMethods.GenerateUniqueList(listOfDatePlaces)
 		return listOfDatePlacesUnique
-
-
 
 #Threading Stuff
 class ToThread(threading.Thread):
@@ -84,5 +84,7 @@ print '-----LAUNCHING-----'
 
 instanceOfLauncher = Launcher('rainbow')
 instanceOfLauncher.run()
+
+print '-----TELEMENTRY-----'
 
 print "-----COMPLETED LAUNCHER THREAD-----"

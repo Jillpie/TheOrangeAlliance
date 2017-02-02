@@ -32,7 +32,7 @@
 			"MetaData" => array(
 				"MetaData" => "LogInput",
 				"TimeStamp" => "WOOT",
-				"InputID" => "PURRRRFECT!",
+				"InputID" => "rainbow",
 				"InputType" => "LogInput"
 			),
 			"Log" => array(

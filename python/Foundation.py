@@ -5,6 +5,20 @@ from pymongo import MongoClient
 from pprint import pprint
 
 print '-----START OF FOUNDATION-----'
+class HelpfulMethods(object):
+	'Some Functions that I just like to use'
+
+	def __init__(self):
+		print 'In the init!'
+
+	def GenerateUniqueList(self, ununiqueList):
+		"Generates a unique list based off the not unique list"
+		uniqueList = []
+		for indexUnuniqueList in range(len(ununiqueList)):
+			if not ununiqueList[indexUnuniqueList] in uniqueList:
+				uniqueList.append(ununiqueList[indexUnuniqueList])
+		return uniqueList
+
 class Foundation(object):
 	'I am a CLASSSSSS!'
 
