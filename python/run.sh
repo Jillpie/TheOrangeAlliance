@@ -1,2 +1,2 @@
 #!/bin/sh
-python test.py
+python /developer/TheOrangeAlliance/python/launcher.py

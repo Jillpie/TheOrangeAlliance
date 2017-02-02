@@ -37,11 +37,12 @@
 				</div>
 				<div class = "collapse navbar-collapse navHeaderCollapse">
 					<ul class = "nav navbar-nav navbar-right">
-						<li ><a href = "http://theorangealliance.tk:8080/">Home</a></li>
+						<li><a href = "http://theorangealliance.tk:8080/">Home</a></li>
+						<li><a href = "http://theorangealliance.tk:8080/euclid.php">Euclid</a></li>
+						<li><a href = "http://theorangealliance.tk:8080/turing.php">Turing</a></li>
 						<li><a href = "http://theorangealliance.tk:8080/input-data.php">Input Data</a></li>
 						<li class = "active"><a href = "http://theorangealliance.tk:8080/input-results.php">Input Results</a></li>
-						<li ><a href = "http://theorangealliance.tk:8080/input-schedule.php">Input Schedule</a></li>
-						
+						<li><a href = "http://theorangealliance.tk:8080/input-schedule.php">Input Schedule</a></li>
 					</ul>
 				</div>
 			</div>
@@ -58,16 +59,20 @@
 			</tr>
 				<tr>
 					<td>Match Date</td>
-					<td><select class="form-control" id="inputID" name="matchDate">
-					<option>20170121</option>
+					<td><select class="form-control" id="inputID" name="matchDate" required>
+						<option></option>
+						<option>02/04/17</option>
+						<option>02/05/17</option>
 					</select>
 					</td>
 					
 				</tr>
 				<tr>
 					<td>Match Location</td>
-					<td><select class="form-control" id="inputID" name="matchLocation">
-					<option>Boys and Girls: Club 2230 E Jewett St, San Diego, CA 92111</option>
+					<td><select class="form-control" id="inputID" name="matchPlace" required>
+						<option></option>
+						<option>2230 E Jewett St, San Diego, CA 92111</option>
+						<option>1615 Mater Dei Dr, Chula Vista, CA 91913</option>
 					</select>
 					</td>
 				</tr>
@@ -138,12 +143,13 @@
 			</div>
 		</div>
 		<?php
+			require 'input.php';
 			//MongoDBSetup
 				// connect to mongodb
 				$m = new MongoClient();
 				// select a database
 				$db = $m->TheOrangeAllianceTest;
-				$collectionName = "Y" . $_POST['matchDate'] . 1;
+				$collectionName = "T" . TimeTime($_POST['matchDate']) . PlaceID($_POST['matchPlace'], $_POST['dataValidation']);
 				$collection = $db->$collectionName;
 			$document = array(
 				"MetaData" => array(
@@ -168,7 +174,9 @@
 					)
 				)
 			);
-			$collection->insert($document);
+			if($_POST['matchNumber'] != ''){
+				$collection->insert($document);
+			}
 		?>
 		
 		<script> 

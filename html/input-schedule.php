@@ -37,11 +37,12 @@
 				</div>
 				<div class = "collapse navbar-collapse navHeaderCollapse">
 					<ul class = "nav navbar-nav navbar-right">
-						<li ><a href = "http://theorangealliance.tk:8080/">Home</a></li>
+						<li><a href = "http://theorangealliance.tk:8080/">Home</a></li>
+						<li><a href = "http://theorangealliance.tk:8080/euclid.php">Euclid</a></li>
+						<li><a href = "http://theorangealliance.tk:8080/turing.php">Turing</a></li>
 						<li><a href = "http://theorangealliance.tk:8080/input-data.php">Input Data</a></li>
 						<li><a href = "http://theorangealliance.tk:8080/input-results.php">Input Results</a></li>
 						<li class = "active"><a href = "http://theorangealliance.tk:8080/input-schedule.php">Input Schedule</a></li>
-						
 					</ul>
 				</div>
 			</div>
@@ -57,15 +58,19 @@
 			</tr>
 			<tr>
 				<td>Event Date</td>
-				<td><select class="form-control" id="inputID" name="matchDate">
-					<option>20170121</option>
+				<td><select class="form-control" id="inputID" name="matchDate" required>
+						<option></option>
+						<option>02/04/17</option>
+						<option>02/05/17</option>
 					</select>
-					</td>
+				</td>
 				
 			</tr>
 				<td>Event Location</td>
-					<td><select class="form-control" id="inputID" name="matchLocation">
-					<option>Boys and Girls: Club 2230 E Jewett St, San Diego, CA 92111</option>
+					<td><select class="form-control" id="inputID" name="matchPlace" required>
+						<option></option>
+						<option>2230 E Jewett St, San Diego, CA 92111</option>
+						<option>1615 Mater Dei Dr, Chula Vista, CA 91913</option>
 					</select>
 					</td>
 				<tr>
@@ -311,12 +316,13 @@
 			</div>
 		</div>
 		<?php
+			require 'input.php';
 			//MongoDBSetup
 				// connect to mongodb
 				$m = new MongoClient();
 				// select a database
 				$db = $m->TheOrangeAllianceTest;
-				$collectionName = "Y" . $_POST['matchDate'] . 1;
+				$collectionName = "T" . TimeTime($_POST['matchDate']) . PlaceID($_POST['matchPlace'], $_POST['dataValidation']);
 				$collection = $db->$collectionName;
 
 			//Generates the Match array for documentation
@@ -326,16 +332,7 @@
 				$maxRows = $row;
 			};
 			$colNames = array("red1", "red2", "blue1", "blue2");
-			/*
-			$matchArray = array();
-			for($row = 1; $row <= $maxRows; $row++){
-				foreach($colNames as $colName){
-					$matchArray['Match' . $row] .= array(
-					 	$_POST[$row . $colName]
-					 );
-				};
-			};
-			*/
+			
 			$matchArray = array();
 			for($row = 1; $row <= $maxRows; $row++){
 				$matchArray['Match' . $row] = array(
@@ -345,11 +342,7 @@
 						"Blue2" => intval($_POST[$row . "blue2"])
 					);
 			};
-			/*
-			$Match array should look like this: 
-			Match1 => [$_POST[1red1], $_POST[1red2], $_POST[1blue1], $_POST[1blue2]],
-			Match2 => [$_POST[2red1], $_POST[2red2], $_POST[2blue1], $_POST[2blue2]]
-			*/
+			
 
 			//Creates the document to submit
 			$document = array(
