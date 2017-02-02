@@ -48,7 +48,7 @@ class AverageScoresOutput(Foundation):
 		teamNumbers = []
 		client = MongoClient()
 		db = client.TheOrangeAllianceTest
-		collection = db.test
+		collection = db.T000000000
 		self.cursor = collection.find({'MetaData.MetaData': 'MatchInput'})
 		for document in self.cursor:
 			if document["MatchInformation"]["TeamNumber"] not in data:
