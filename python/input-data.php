@@ -188,13 +188,13 @@
 			$m = new MongoClient();
 				// select a database
 				$db = $m->TheOrangeAllianceTest;
-				$collectionName = "Y" . TimeTime($_POST['matchDate']) . PlaceID($_POST['matchPlace'], $_POST['dataValidation']);
+				$collectionName = "T" . TimeTime($_POST['matchDate']) . PlaceID($_POST['matchPlace'], $_POST['dataValidation']);
 				$collection = $db->$collectionName;
 
 			$document = array(
 				"MetaData" => array(
 					"MetaData" => "MatchInput",
-					"TimeStamp" => date('YmdHis'),
+					"TimeStamp" => "MEOW",
 					"InputID" => $_POST['dataValidation']
 				),
 				

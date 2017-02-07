@@ -14,23 +14,23 @@ class HelpfulMethods(object):
 	def GenerateUniqueList(self, ununiqueList):
 		"Generates a unique list based off the not unique list"
 		uniqueList = []
-		for indexUnuniqueList in range(len(ununiqueList)):
-			if not ununiqueList[indexUnuniqueList] in uniqueList:
-				uniqueList.append(ununiqueList[indexUnuniqueList])
+		for thing in ununiqueList:
+			if not thing in uniqueList:
+				uniqueList.append(thing)
 		return uniqueList
 
 class Foundation(object):
 	'I am a CLASSSSSS!'
 
-	def __init__(self, dataValidation, datePlace, debug = False):
+	def __init__(self, collectionName, dataValidation, debug = False):
 		#MongoStuff
 		client = MongoClient()
 		db = client.TheOrangeAllianceTest
-		collection = db.test
+		collection = eval("db."+collectionName)
 		self.cursor = collection.find({'MetaData.MetaData' : 'ScheduleInput'})
 
 		#Varibles
-		self.datePlace = datePlace
+		self.collectionName = collectionName
 		self.dataValidation = dataValidation
 		self.debug = debug
 
@@ -39,6 +39,7 @@ class Foundation(object):
 		"Enables debugging, prints statment if true"
 		if self.debug == True:
 			print(statment)
+			
 	def GenerateUniqueList(self, ununiqueList):
 		"Generates a unique list based off the not unique list"
 		uniqueList = []
@@ -50,13 +51,11 @@ class Foundation(object):
 	def UniqueTeamList(self):
 		"Produces the unique list of teams from schedule"
 		ununiqueTeamList = []
-		uniqueTeamList = []
 		for document in self.cursor:
 			for match in document['Match'].values():
-				for teams in match.values():
-					ununiqueTeamList.append(teams)
-		uniqueTeamList = self.GenerateUniqueList(ununiqueTeamList)
-		return uniqueTeamList
+				for team in match.values():
+					ununiqueTeamList.append(team)
+		return self.GenerateUniqueList(ununiqueTeamList)
 
 	def TotalMatches(self):
 		"Returns the amount of matches in schedule int"

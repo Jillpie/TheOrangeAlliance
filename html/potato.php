@@ -34,16 +34,16 @@
 	}
 	function RankingsTable($datePlace, $dataValidation){
 		$m = new MongoClient();
-		$c = $m->selectDB('TheOrangeAllianceTest')->selectCollection('T000000000');
+		$c = $m->selectDB('TheOrangeAllianceTest')->selectCollection($datePlace);
 		$cursor = $c->find(['MetaData.MetaData' => 'RankingsOutput' ,'MetaData.InputID' => $dataValidation]);
 
 		foreach($cursor as $document){
-			PrintTable($document['AverageScores']);
+			PrintTable($document['Rankings']);
 		}
 	}
 	function MatchHistoryTable($datePlace, $dataValidation){
 		$m = new MongoClient();
-		$c = $m->selectDB('TheOrangeAllianceTest')->selectCollection('T000000000');
+		$c = $m->selectDB('TheOrangeAllianceTest')->selectCollection($datePlace);
 		$cursor = $c->find(['MetaData.MetaData' => 'MatchOutput' ,'MetaData.InputID' => $dataValidation]);
 
 		foreach($cursor as $document){
@@ -52,7 +52,7 @@
 	}
 	function AverageScoresTable($datePlace, $dataValidation){
 		$m = new MongoClient();
-		$c = $m->selectDB('TheOrangeAllianceTest')->selectCollection('T000000000');
+		$c = $m->selectDB('TheOrangeAllianceTest')->selectCollection($datePlace);
 		$cursor = $c->find(['MetaData.MetaData' => 'AverageScoresOutput' ,'MetaData.InputID' => $dataValidation]);
 
 		foreach($cursor as $document){

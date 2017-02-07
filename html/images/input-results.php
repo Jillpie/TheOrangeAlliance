@@ -149,12 +149,12 @@
 				$m = new MongoClient();
 				// select a database
 				$db = $m->TheOrangeAllianceTest;
-				$collectionName = "Y" . TimeTime($_POST['matchDate']) . PlaceID($_POST['matchPlace'], $_POST['dataValidation']);
+				$collectionName = "T" . TimeTime($_POST['matchDate']) . PlaceID($_POST['matchPlace'], $_POST['dataValidation']) . "WOO1319999999313t";
 				$collection = $db->$collectionName;
 			$document = array(
 				"MetaData" => array(
 					"MetaData" => "ResultsInput",
-					"TimeStamp" => date('YmdHis'),
+					"TimeStamp" => "MUAHHAHAHHA",
 					"InputID" => $_POST['dataValidation']
 				),
 				"MatchNumber" => intval($_POST['matchNumber']),
@@ -177,14 +177,6 @@
 			if($_POST['matchNumber'] != ''){
 				$collection->insert($document);
 			}
-			CreateDBLog(
-				TimeTime($_POST['matchDate']) . PlaceID($_POST['matchPlace'], $_POST['dataValidation']),
-				"ResultsInput",
-				date('YmdHis'),
-				$_POST['dataValidation'],
-				"Testing",
-				$_POST['dataValidation']
-			);
 		?>
 		
 		<script> 

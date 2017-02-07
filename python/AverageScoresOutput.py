@@ -6,55 +6,38 @@ from Foundation import Foundation
 
 class AverageScoresOutput(Foundation):
 
-	def getPercentParking(self, teamNumber, parkingType):
-		total = 0;
-		parking = 0;
-		for document in data[teamNumber]:
-			total = total+1
-			if document["GameInformation"]["AUTO"]["RobotParking"] == parkingType:
-				parking = parking+1
-		return (parking/float(total))*100
+	def formatNumber(self, number):
+		return format(number, '.2f').rstrip('0').rstrip('.')
 
-	def getPercentCapBallAuto(self, teamNumber):
+	def getPercentCondition(self, teamNumber, section, value, condition):
 		total = 0;
-		capBall = 0;
-		for document in data[teamNumber]:
+		conditionCount = 0;
+		for document in self.data[teamNumber]:
 			total = total+1
-			if document["GameInformation"]["AUTO"]["CapBall"] == "Yes":
-				capBall = capBall+1
-		return (capBall/float(total))*100
+			if document["GameInformation"][section][value] == condition:
+				conditionCount = conditionCount+1
+		return self.formatNumber((conditionCount/float(total))*100) + "%"
 
 	def getAverageNum(self, teamNumber, section, value):
 		total = 0;
 		num = 0;
-		for document in data[teamNumber]:
+		for document in self.data[teamNumber]:
 			total = total+1
 			num = num + document["GameInformation"][section][value]
-		return num/float(total)
-
-	def getPercentCapBallEnd(self, teamNumber, capBallType):
-		total = 0;
-		capBall = 0;
-		for document in data[teamNumber]:
-			total = total+1
-			if document["GameInformation"]["END"]["CapBall"] == capBallType:
-				capBall = capBall+1
-		return (capBall/float(total))*100
+		return self.formatNumber(num/float(total))
 				
-	def __init__(self):
-		global data
-		global teamNumbers
-		data = {}
-		teamNumbers = []
+	def __init__(self, collectionName):
+		self.data = {}
 		client = MongoClient()
 		db = client.TheOrangeAllianceTest
-		collection = db.T000000000
-		self.cursor = collection.find({'MetaData.MetaData': 'MatchInput'})
+		collection = eval("db."+collectionName)
+		self.cursor = collection.find({'MetaData.MetaData': 'ScheduleInput', 'MetaData.InputID': "rainbow"})
+		teamNumbers = self.UniqueTeamList()
+		self.cursor = collection.find({'MetaData.MetaData': 'MatchInput', 'MetaData.InputID': "rainbow"})
 		for document in self.cursor:
-			if document["MatchInformation"]["TeamNumber"] not in data:
-				teamNumbers.append(document["MatchInformation"]["TeamNumber"])
-				data[document["MatchInformation"]["TeamNumber"]] = []
-			data[document["MatchInformation"]["TeamNumber"]].append(document)
+			if int(document["MatchInformation"]["TeamNumber"]) not in self.data:
+				self.data[int(document["MatchInformation"]["TeamNumber"])] = []
+			self.data[int(document["MatchInformation"]["TeamNumber"])].append(document)
 		finalDictionary = {}
 		finalDictionary["MetaData"] = {}
 		finalDictionary["MetaData"]["MetaData"] = "AverageScoresOutput"
@@ -65,27 +48,33 @@ class AverageScoresOutput(Foundation):
 			thisArray = []
 			thisArray.append(teamNumber) # 0
 			thisArray.append(self.TeamName(teamNumber)) # 1
-			thisArray.append(self.getPercentParking(teamNumber, "Did Not Park")) # 2
-			thisArray.append(self.getPercentParking(teamNumber, "Partially On Center Vortex")) # 3
-			thisArray.append(self.getPercentParking(teamNumber, "Partially On Corner Vortex")) # 4
-			thisArray.append(self.getPercentParking(teamNumber, "Fully On Center Vortex")) # 5 TODO verify string
-			thisArray.append(self.getPercentParking(teamNumber, "Fully On Corner Vortex")) # 6 TODO verify string
+			if int(teamNumber) not in self.data:
+				for i in range(16):
+					thisArray.append(None)
+				finalDictionary["AverageScores"].append(thisArray)
+				continue
+			thisArray.append(self.getPercentCondition(teamNumber, "AUTO", "RobotParking", "Did Not Park")) # 2
+			thisArray.append(self.getPercentCondition(teamNumber, "AUTO", "RobotParking", "Partially On Center Vortex")) # 3
+			thisArray.append(self.getPercentCondition(teamNumber, "AUTO", "RobotParking", "Partially On Corner Vortex")) # 4
+			thisArray.append(self.getPercentCondition(teamNumber, "AUTO", "RobotParking", "Fully On Center Vortex")) # 5 TODO verify string
+			thisArray.append(self.getPercentCondition(teamNumber, "AUTO", "RobotParking", "Fully On Corner Vortex")) # 6 TODO verify string
 			thisArray.append(self.getAverageNum(teamNumber, "AUTO", "ParticlesCenter")) # 7
 			thisArray.append(self.getAverageNum(teamNumber, "AUTO", "ParticlesCorner"))  # 8
-			thisArray.append(self.getPercentCapBallAuto(teamNumber)) # 9
+			thisArray.append(self.getPercentCondition(teamNumber, "AUTO", "CapBall", "Yes")) # 9
 			thisArray.append(self.getAverageNum(teamNumber, "AUTO", "ClaimedBeacons")) # 10
 			thisArray.append(self.getAverageNum(teamNumber, "DRIVER", "ParticlesCenter")) # 11
 			thisArray.append(self.getAverageNum(teamNumber, "DRIVER", "ParticlesCorner")) # 12
 			thisArray.append(self.getAverageNum(teamNumber, "END", "AllianceClaimedBeacons")) # 13
-			thisArray.append(self.getPercentCapBallEnd(teamNumber, "On The Ground")) # 14
-			thisArray.append(self.getPercentCapBallEnd(teamNumber, "Raised Off The Floor")) # 15
-			thisArray.append(self.getPercentCapBallEnd(teamNumber, "Raised Above Center")) # 16 TODO verify string
-			thisArray.append(self.getPercentCapBallEnd(teamNumber, "Scored In Center Vortex")) # 17
+			thisArray.append(self.getPercentCondition(teamNumber, "END", "CapBall", "On The Ground")) # 14
+			thisArray.append(self.getPercentCondition(teamNumber, "END", "CapBall", "Raised Off The Floor")) # 15
+			thisArray.append(self.getPercentCondition(teamNumber, "END", "CapBall", "Raised Above Center")) # 16 TODO verify string
+			thisArray.append(self.getPercentCondition(teamNumber, "END", "CapBall", "Scored In Center Vortex")) # 17
 			finalDictionary["AverageScores"].append(thisArray)
 		collection.delete_many({'MetaData.MetaData': 'AverageScoresOutput'})
 		collection.insert_one(finalDictionary)
-		self.cursor = collection.find({'MetaData.MetaData': 'AverageScoresOutput'})
+		self.cursor = collection.find({'MetaData.MetaData': 'AverageScoresOutput', 'MetaData.InputID' : "rainbow"})
 		for document in self.cursor:
 			pprint(document)
-				
-test = AverageScoresOutput()
+
+if __name__ == '__main__': #prevents unnecessarily running if imported in another script				
+	test = AverageScoresOutput("Y201702052")

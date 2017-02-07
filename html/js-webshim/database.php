@@ -27,7 +27,7 @@
 					<a class="nav-brand" href="http://theorangealliance.tk:8080/"> 
 					<img style="max-width:50px" src="images/logo.png"> Juicy Data!
 					<?php
-
+						/*
 						function Juicy($juicyAddBool){
 							$m = new MongoClient();
 							$db = $m->TheOrangeAllianceTest;
@@ -51,6 +51,7 @@
 							);
 							$collection->update($inserting);
 						}
+						*/
 					?>
 					</a>
 					<a class="nav-brand" href="http://theorangealliance.tk:8080/"></a>
@@ -81,13 +82,54 @@
 				<button type="submit" class="btn btn-primary btn-block raised">Submit</button>
 				</form>
 				<?php
-
+					/*
 					$m = new MongoClient();
 					$db = $m->TheOrangeAllianceTest;
 					$subCollection = "Y201701211";
 					$collection = $db->$subCollection;
 					$document = $collection->find();
+					*/
+					function InsertPlaces(){
+						$m = new MongoClient();
+						$db = $m->TheOrangeAllianceTest;
+						$subCollection = "Places";
+						$collection = $db->$subCollection;
+						$document = $collection->find();
 
+						$placeAddressAndIDArray = array(
+							"placeComplex1" => array(
+								"placeID" => 1,
+								"placeAddress" => "2230 E Jewett St, San Diego, CA 92111"
+							),
+							"placeComplex2" => array(
+								"placeID" => 2,
+								"placeAddress" => "1615 Mater Dei Dr, Chula Vista, CA 91913"
+							),
+						);
+						foreach($placeAddressAndIDArray as $placeComplex){
+							$document = array(
+								"MetaData" => array(
+									"MetaData" => "Places",
+									"TimeStamp" => 80977777,
+									"InputID" => 'rainbow'
+								),
+								"PlaceInformation" => array(
+									"PlaceFullAddress" => $placeComplex['placeAddress'],
+									"PlaceID" => $placeComplex['placeID']
+									"PlaceLocation" => array(
+										"Address" => 'lol',
+										"City" => 'lol',
+										"State" => 'lol',
+										"Code" => 101
+									)
+								)
+							);
+							$collection->insert($document);
+						}
+					}
+
+					InsertPlaces();
+					/*
 					function AggregateTesting(){
 						$m = new MongoClient();
 						$c = $m->selectDB('DatabaseTesting')->selectCollection('DatabaseTesting');
@@ -111,7 +153,7 @@
 						      'foo' => 5,
 						    ),
 						);
-						$d = $c->insert($data);
+						//$d = $c->insert($data);
 						$ops = array(
 						    array(
 						        '$project' => array(
@@ -333,7 +375,7 @@
 							),
 							"TeamInformation" => $TeamInformationArray
 						);
-						$collection->insert($document);
+						//$collection->insert($document);
 					}
 					function FunctionRun($functionCommand){
 						echo "This is the function help line; how may I help you?<br/>";
@@ -353,6 +395,7 @@
 						}
 					}
 					//FunctionRun($_POST['databaseInput']);
+					*/
 				?>
 			</div>
 		</div>

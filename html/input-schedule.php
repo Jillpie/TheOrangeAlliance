@@ -322,7 +322,7 @@
 				$m = new MongoClient();
 				// select a database
 				$db = $m->TheOrangeAllianceTest;
-				$collectionName = "T" . TimeTime($_POST['matchDate']) . PlaceID($_POST['matchPlace'], $_POST['dataValidation']);
+				$collectionName = "Y" . TimeTime($_POST['matchDate']) . PlaceID($_POST['matchPlace'], $_POST['dataValidation']);
 				$collection = $db->$collectionName;
 
 			//Generates the Match array for documentation
@@ -348,7 +348,7 @@
 			$document = array(
 				"MetaData" => array(
 					"MetaData" => "ScheduleInput",
-					"TimeStamp" => "MEOW!!!!",
+					"TimeStamp" => date('YmdHis'),
 					"InputID" => $_POST['dataValidation']
 				),
 				"Match" => $matchArray

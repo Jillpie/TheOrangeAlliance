@@ -84,14 +84,13 @@
 									<th>Record W-L-T</th>
 									<th>QP</th>
 									<th>RP</th>
-									<th>OPR*</th>
+									<th>OPR</th>
 								</tr>
 							</thead>
 							<tbody>
 							<?php
 								require 'potato.php';
-								RankingsTable('Y201702041', 'rainbow');
-								//Y201702041
+								RankingsTable('datePlace');
 							?>
 							</tbody>
 						</table>
@@ -109,9 +108,9 @@
 									<th>Alliance</th>
 									<th>Team Number</th>
 									<th>Team Name</th>
-									<th>OPR*</th>
+									<th>OPR</th>
 									<th>Result R-B</th>
-									<th>Score</th>
+									<th>RP</th>
 									<th class="red">Parking</th>
 									<th class="red">Center Particles</th>
 									<th class="red">Corner Particles</th>
@@ -125,7 +124,7 @@
 							</thead>
 							<tbody>
 							<?php
-								MatchHistoryTable('Y201702041','rainbow');
+								MatchHistoryTable('datePlace','rainbow');
 							?>
 							</tbody>
 						</table>
@@ -160,13 +159,12 @@
 							</thead>
 							<tbody>
 								<?php
-									AverageScoresTable('Y201702041', 'rainbow');
+									AverageScoresTable('datePlace');
 								?>
 							</tbody>
 						</table>
 					</div>
 				</div>
-				<p>*Offensive Power Rating. An estimate of the number of points the team scores overall, on average. This number represents the offensive utility of a team. It is not always accurate.</p>
 			</div>
 			</div>
 		<div class="footer">

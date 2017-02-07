@@ -1,8 +1,114 @@
 <?php
-	
+	//Matrix Functions
+	function identity_matrix($n){
+		$I = array();
+		for ($i = 0; $i < $n; ++ $i) {
+			for ($j = 0; $j < $n; ++ $j) {
+				$I[$i][$j] = ($i == $j) ? 1 : 0;
+			}
+		}
+		return $I;
+	}
+	function invert($A, $debug = FALSE){
+		$n = count($A);
+		// get and append identity matrix
+		$I = identity_matrix($n);
+		for ($i = 0; $i < $n; ++ $i) {
+			$A[$i] = array_merge($A[$i], $I[$i]);
+		}
+		if ($debug) {
+			echo "\nStarting matrix: ";
+			print_matrix($A);
+		}
+		// forward run
+		for ($j = 0; $j < $n-1; ++ $j) {
+			// for all remaining rows (diagonally)
+			for ($i = $j+1; $i < $n; ++ $i) {
+				// if the value is not already 0
+				if ($A[$i][$j] !== 0) {
+					// adjust scale to pivot row
+					// subtract pivot row from current
+					$scalar = $A[$j][$j] / $A[$i][$j];
+					for ($jj = $j; $jj < $n*2; ++ $jj) {
+						$A[$i][$jj] *= $scalar;
+						$A[$i][$jj] -= $A[$j][$jj];
+					}
+				}
+			}
+			if ($debug) {
+				echo "\nForward iteration $j: ";
+				print_matrix($A);
+			}
+		}
+		// reverse run
+		for ($j = $n-1; $j > 0; -- $j) {
+			for ($i = $j-1; $i >= 0; -- $i) {
+				if ($A[$i][$j] !== 0) {
+					$scalar = $A[$j][$j] / $A[$i][$j];
+					for ($jj = $i; $jj < $n*2; ++ $jj) {
+						$A[$i][$jj] *= $scalar;
+						$A[$i][$jj] -= $A[$j][$jj];
+					}
+				}
+			}
+			if ($debug) {
+				echo "\nReverse iteration $j: ";
+				print_matrix($A);
+			}
+		}
+		// last run to make all diagonal 1s
+		for ($j = 0; $j < $n; ++ $j) {
+			if ($A[$j][$j] !== 1) {
+				$scalar = 1 / $A[$j][$j];
+				for ($jj = $j; $jj < $n*2; ++ $jj) {
+					$A[$j][$jj] *= $scalar;
+				}
+			}
+			if ($debug) {
+				echo "\n1-out iteration $j: ";
+				print_matrix($A);
+			}
+		}
+		// take out the matrix inverse to return
+		$Inv = array();
+		for ($i = 0; $i < $n; ++ $i) {
+			$Inv[$i] = array_slice($A[$i], $n);
+		}
+		return $Inv;
+	}
+	function print_matrix($A, $decimals = 6){
+			foreach ($A as $row) {
+				echo "\n\t[";
+				foreach ($row as $i) {
+					echo "\t" . sprintf("%01.{$decimals}f", round($i, $decimals));
+				}
+				echo "\t]";
+			}
+	}	
 	//SOLID Puts Stuff In A <Td> <Td>
 	function PutItInATD($stuffToPutIn){
+		$HIGHLIGHTLIST = array(
+			8097,
+			9261,
+			10809,
+			'Crow Force 5',
+			'Level Up',
+			'Botcats'
+		);
+		$isItListed = false;
+		foreach($HIGHLIGHTLIST as $highlight){
+			if($highlight == $stuffToPutIn and gettype($stuffToPutIn) == gettype($highlight)){
+				$isItListed = true;
+			}
+			if($highlight ){
+
+			}
+		}
+		if($isItListed == true){
+			echo "<td class='purple'>" . $stuffToPutIn . "</td>";
+		}else{
 		echo "<td>" . $stuffToPutIn . "</td>";
+		}
 	}
 	//Transforms a liniar model into its division of 4 peridodicaly ex: 4 = 1, 5 = 1... 8 = 2
 	function TrueMatchNumberTransformer($trueMatchNumber){
@@ -189,6 +295,9 @@
 					case 'Blue':
 						$matchHistoryResultsFormated .= 'class="blue">';
 						break;
+					case 'Tie':
+						$matchHistoryResultsFormated .= 'class="green">';
+						break;
 					default:
 						$matchHistoryResultsFormated .= 'class="pink">';
 						break;
@@ -199,6 +308,36 @@
 				$matchHistoryResultsFormated = "<td class='pink'> NOT POSTED </td>";
 			}
 		echo $matchHistoryResultsFormated;
+	}
+	function MatchHistoryGameScoreTranslator($toTranslate){
+		$translation = $toTranslate;
+		$translationArray = array(
+			'Untranslated' => array(
+				'Partially On Corner Vortex',
+				'Partially On Center Vortex',
+				'Fully On Center Vortex',
+				'Fully on Corner Vortex',
+				'On The Ground',
+				'Raised Off The Floor',
+				'Scored In Center Vortex'
+			),
+			'Translated' => array(
+				'Partially Corner',
+				'Partially Center',
+				'Fully Center',
+				'Fully Corner',
+				'Floor',
+				'Raised',
+				'Center'
+			)
+		);
+		for($translationUnit = 0; $translationUnit <= count($translationArray['Untranslated']); $translationUnit++){
+			if($toTranslate == $translationArray['Untranslated'][$translationUnit]){
+				$translation = $translationArray['Translated'][$translationUnit];
+				break;
+			}
+		}
+		return $translation;
 	}
 	// Does The RP and all the game speificic stuff from input Data
 	function MatchHistoryGameScore($dataValidation,$matchNumberInFour){
@@ -217,7 +356,7 @@
 		PutItInATD(CalculatesRPFromData($dataValidation, $matchNumberInFour));
 		foreach($cursor as $document){
 			$checkIfItWorked++;
-			PutItInATD($document["GameInformation"]["AUTO"]["RobotParking"]);
+			PutItInATD(MatchHistoryGameScoreTranslator($document["GameInformation"]["AUTO"]["RobotParking"]));
 			PutItInATD($document["GameInformation"]["AUTO"]["ParticlesCenter"]);
 			PutItInATD($document["GameInformation"]["AUTO"]["ParticlesCorner"]);
 			PutItInATD($document["GameInformation"]["AUTO"]["CapBall"]);
@@ -225,7 +364,7 @@
 			PutItInATD($document["GameInformation"]["DRIVER"]["ParticlesCenter"]);
 			PutItInATD($document["GameInformation"]["DRIVER"]["ParticlesCorner"]);
 			PutItInATD($document["GameInformation"]["END"]["AllianceClaimedBeacons"]);
-			PutItInATD($document["GameInformation"]["END"]["CapBall"]);
+			PutItInATD(MatchHistoryGameScoreTranslator($document["GameInformation"]["END"]["CapBall"]));
 		}
 		if($checkIfItWorked == 0 ){
 			for($i=1; $i <= 9 ; $i++) { 
@@ -249,7 +388,7 @@
 	//Puts Together all the Functions to make up all of Match History
 	function MatchHistoryTable(){
 		$DATAVALIDATION = 'rainbow';
-		/*
+		
 		for($currentMatchNumberInFour = 1; $currentMatchNumberInFour <= CountMatchesScheduleInputTimesFour($DATAVALIDATION); $currentMatchNumberInFour++){
 			echo "<tr>";
 			MatchHistoryMatchAllianceTeam($DATAVALIDATION,$currentMatchNumberInFour);
@@ -257,7 +396,6 @@
 			MatchHistoryGameScore($DATAVALIDATION,$currentMatchNumberInFour);
 			echo "</tr>";
 		}	
-		*/
 	}
 	//Puts Together all the Functions to make up all of Match History ALTERNATE FOR ADMIN
 	function MatchHistoryTableAdmin($removeValue){
@@ -288,6 +426,7 @@
 		}
 		return $uniqueList;
 	}
+	//Generates a unique list of teams from data Validation
 	function UniqueTeamList($dataValidation){
 		$m = new MongoClient();
 		$c = $m->selectDB('TheOrangeAllianceTest')->selectCollection('Y201701211');
@@ -305,10 +444,7 @@
 		$m = new MongoClient();
 		$c = $m->selectDB('TheOrangeAllianceTest')->selectCollection('Y201701211');
 		$cursor = $c->find(['MetaData.MetaData' => 'ScheduleInput' ,'MetaData.InputID' => $dataValidation]);
-		$matchesPlayedByThatTeamAndAlliance = array(
-			'Red' => array(),
-			'Blue' => array()
-			);
+		$matchesPlayedByThatTeamAndAlliance = array();
 		$redRedCombination = array(
 			'Red1',
 			'Red2'
@@ -322,40 +458,19 @@
 				foreach($redRedCombination as $currentColorRed){
 					if($document['Match']['Match' . $matchNumber][$currentColorRed] == $teamToSearchFor){
 						$matchesPlayedByThatTeamAndAlliance['Red'][count($matchesPlayedByThatTeamAndAlliance['Red'])] = $matchNumber;
-						echo $document['Match']['Match' . $matchNumber][$currentColorRed] . ": " . $teamToSearchFor;
 					}
-					for ($i=0; $i <= 10; $i++) { 
-						echo 'dang: ' .$i . ": ". $matchesPlayedByThatTeamAndAlliance['Red'][$i] . '<br />';
-					}
-					/*
-					echo 'CCC$matchesPlayedByThatTeamAndAlliance' .  $matchNumber .': ' . $matchesPlayedByThatTeamAndAlliance['Red'][$matchNumber]  .'<br />';
-					
-					echo 'BBB$matchNumber: ' . $matchNumber   .'<br />';
-					echo 'AAAcount' . count($matchesPlayedByThatTeamAndAlliance['Red'])   .'<br />';
-
-
-					var_dump($matchesPlayedByThatTeamAndAlliance['Red'][count($matchesPlayedByThatTeamAndAlliance['Red'])]);
-					*/
 				}
 				foreach($blueBlueCombination as $currentColorBlue){
 					if($document['Match']['Match' . $matchNumber][$currentColorBlue] == $teamToSearchFor){
 						$matchesPlayedByThatTeamAndAlliance['Blue'][count($matchesPlayedByThatTeamAndAlliance['Blue'])] = $matchNumber;
 					}
 				}
-				echo 'MatchNumber: ' . $matchNumber .'<br />';
 			}
-		}
-		echo '<br />';
-		echo '$matchesPlayedByThatTeamAndAlliance';
-		echo 'team: ' . $teamToSearchFor;
-		foreach($matchesPlayedByThatTeamAndAlliance as $test2){
-			var_dump($test2);
-			echo '<br />';
 		}
 		return $matchesPlayedByThatTeamAndAlliance;
 	}
 	//Will Count and Complie whic teams ahd waht record they have
-	function CompileTeamRecords($dataValidation){
+	function RankingsTableRecord($dataValidation){
 		$m = new MongoClient();
 		$c = $m->selectDB('TheOrangeAllianceTest')->selectCollection('Y201701211');
 		$cursor = $c->find(['MetaData.MetaData' => 'ResultsInput' ,'MetaData.InputID' => $dataValidation]);
@@ -372,18 +487,16 @@
 			$teamToRankTie = 0;
 			$matchesThatTeamPlayedWithAlliance = WhichMatchesDidThatTeamPlayAndWhatAlliance($dataValidation, $teamToRank);
 			foreach($allianceColors as $allianceColor){
-				foreach($matchesThatTeamPlayedWithAlliance[$allianceColor] as $matchesThatTeamPlayed){ //PROBLEM
-					foreach($matchesThatTeamPlayed as $matchThatTeamPlayed){
-						foreach($cursor as $document){
-							if($document['MatchNumber'] == $matchThatTeamPlayed and $document['Winner'] == $allianceColor){
-								$teamToRankWins++;
-							}
-							if($document['MatchNumber'] == $matchThatTeamPlayed and $document['Winner'] != $allianceColor){
-								$teamToRankLoss++;
-							}
-							if($document['MatchNumber'] == $matchThatTeamPlayed and $document['Winner'] == 'Tie'){
-								$teamToRankTie++;
-							}
+				foreach($matchesThatTeamPlayedWithAlliance[$allianceColor] as $matchThatTeamPlayed){
+					foreach($cursor as $document){
+						if($document['MatchNumber'] == $matchThatTeamPlayed and $document['Winner'] == $allianceColor){
+							$teamToRankWins++;
+						}
+						if($document['MatchNumber'] == $matchThatTeamPlayed and $document['Winner'] != $allianceColor and $document['Winner'] != 'Tie'){
+							$teamToRankLoss++;
+						}
+						if($document['MatchNumber'] == $matchThatTeamPlayed and $document['Winner'] == 'Tie'){
+							$teamToRankTie++;
 						}
 					}
 				}
@@ -394,14 +507,9 @@
 				'Loss' => $teamToRankLoss,
 				'Tie' => $teamToRankTie,
 				'GamesPlayed' => $teamToRankWins + $teamToRankLoss + $teamToRankTie,
-				'Present' => $teamToRankWins . '-' . $teamToRankLoss . '-' . $teamToRankTie
+				'Present' => $teamToRankWins . '-' . $teamToRankLoss . '-' . $teamToRankTie,
+				'QP' => ($teamToRankWins * 2) + ($teamToRankTie)
 			);
-		}
-		echo 'listOfTeamsRecords:';
-		foreach($listOfTeamsRecords as $teamAndNumber){
-			echo '<br/>';
-			echo $teamAndNumber['TeamNumber'] . ': ';
-			echo $teamAndNumber['Present'];
 		}
 		return $listOfTeamsRecords;
 
@@ -468,8 +576,36 @@
 						//var_dump($results);
 		*/
 	}
-	function RankingsTableRecord(){
+	function MatchNumberAndRP($dataValidation){
+		$m = new MongoClient();
+		$c = $m->selectDB('TheOrangeAllianceTest')->selectCollection('Y201701211');
+		$cursor = $c->find(['MetaData.MetaData' => 'ResultsInput' ,'MetaData.InputID' => $dataValidation]);
+		$matchNumberAndRP = array();
+		foreach($cursor as $document){
+			if('Red' == $document['Winner']){
+				$matchNumberAndRP['MatchNumber' . $document['MatchNumber']] = $document['Score']['Total']['Blue'];
+			}
+			if('Blue' == $document['Winner']){
+				$matchNumberAndRP['MatchNumber' . $document['MatchNumber']] = $document['Score']['Total']['Red'];
+			}
+			if('Tie' == $document['Winner']){
+				$matchNumberAndRP['MatchNumber' . $document['MatchNumber']] = $document['Score']['Total']['Red'];
+			}
+		}
+		return $matchNumberAndRP;
 	}
+	function RankingsTableRP($dataValidation, $teamToSearchFor){
+		$matchesTeamPlayedInWithAlliance = WhichMatchesDidThatTeamPlayAndWhatAlliance($dataValidation, $teamToSearchFor);
+		$matchNumberAndRP = MatchNumberAndRP($dataValidation);
+		$teamRP = 0;
+		foreach($matchesTeamPlayedInWithAlliance as $matchTeamPlayed){
+			foreach($matchTeamPlayed as $matchTeam){
+				$teamRP += $matchNumberAndRP['MatchNumber' . $matchTeam];
+			}
+		}
+		return $teamRP;
+	}
+	//Enters Example data into the mongodb if no example data is detected
 	function EnsureExampleData(){
 		$DATAVALIDATION = 'rainbow';
 		$m = new MongoClient();
@@ -568,6 +704,7 @@
 			}
 		}
 	}
+	//Will remove non validated datapoints atuomatically
 	function PurgeOfTheNonValidations($DATAVALIDATION){
 		$m = new MongoClient();
 		$c = $m->selectDB('TheOrangeAllianceTest')->selectCollection('Y201701211');
@@ -589,40 +726,244 @@
 			}
 		}
 	}
+	//Determines the rank of a certain team returns as array of teams and their rank
+	function RankingsRank($dataValidation){
+		$uniqueTeamList = UniqueTeamList($dataValidation);
+		$rankingsTableRecordInstance = RankingsTableRecord($dataValidation);
+		$teamRanksScore = array();
+		$teamRanks = array();
+		$teamRank = 0;
+		foreach($uniqueTeamList as $uniqueTeam){
+			$teamRanksScore['Team' . $uniqueTeam] = $rankingsTableRecordInstance['TeamNumber' . $uniqueTeam]['QP'] * 1000 + RankingsTableRP($dataValidation, $uniqueTeam);
+		}
+		foreach($uniqueTeamList as $uniqueTeam){
+			$teamRank = 1;
+			foreach($uniqueTeamList as $uniqueTeam1){
+				if($teamRanksScore['Team' . $uniqueTeam] < $teamRanksScore['Team' . $uniqueTeam1]){
+					$teamRank++;
+				}
+			}
+			$teamRanks['Team' . $uniqueTeam] = $teamRank;
+		}
+		return $teamRanks;
+	}
+	function OPRTestingInput(){
+
+		$THEMATRIX = array(
+			array(1,2,2),
+			array(1,4,3),
+			array(7,2,5)
+		);
+
+		echo "<tr>";
+			PutItInATD('hi');
+			PutItInATD('hi');
+			PutItInATD('hi');
+			PutItInATD('hi');
+			PutItInATD('hi');
+			PutItInATD('hi');
+			PutItInATD('hi');
+		echo "</tr>";
+
+		return $THEMATRIX;
+	}
+	function MatrixMultiplication($a, $b){
+		$a = Array( Array(1,2),Array(4,5));
+		$b = Array( Array(7,5), Array(3,2));
+
+		$r=count($a);
+		$c=count($b[0]);
+		$p=count($b);
+		if(count($a[0]) != $p){
+		    echo "Incompatible matrices";
+		    exit(0);
+		}
+		$result=array();
+		for ($i=0; $i < $r; $i++){
+		    for($j=0; $j < $c; $j++){
+		        $result[$i][$j] = 0;
+		        for($k=0; $k < $p; $k++){
+		            $result[$i][$j] += $a[$i][$k] * $b[$k][$j];
+		        }
+		    }
+		}
+		return $result;
+	}
+	function OPRTestingInverse(){
+		
+		$a = Array( Array(1,2),Array(4,5));
+		$b = Array( Array(7,5), Array(3,2));
+
+		$r=count($a);
+		$c=count($b[0]);
+		$p=count($b);
+		if(count($a[0]) != $p){
+		    echo "Incompatible matrices";
+		    exit(0);
+		}
+		$result=array();
+		for ($i=0; $i < $r; $i++){
+		    for($j=0; $j < $c; $j++){
+		        $result[$i][$j] = 0;
+		        for($k=0; $k < $p; $k++){
+		            $result[$i][$j] += $a[$i][$k] * $b[$k][$j];
+		        }
+		    }
+		}
+		print_r($result);
+
+
+
+		$A = array(
+			array(1,2,2),
+			array(1,4,3),
+			array(7,2,5)
+		);
+		echo "\nMatrix:";
+		print_matrix($A);
+		echo "\n";
+		$B = invert($A);
+		echo "\nInversion result:";
+		print_matrix($B);
+		echo "\n\n";
+
+		$THEMATRIX = array(
+			array(1,2,2),
+			array(1,4,3),
+			array(7,2,5)
+		);
+
+		echo "<tr>";
+			PutItInATD('hi');
+			PutItInATD('hi');
+			PutItInATD('hi');
+			PutItInATD('hi');
+			PutItInATD('hi');
+			PutItInATD('hi');
+			PutItInATD('hi');
+		echo "</tr>";
+	}
+	function TeamMatchups($dataValidation, $allianceSet){
+		$teamMatchupsList = array();
+		$m = new MongoClient();
+		$c = $m->selectDB('TheOrangeAllianceTest')->selectCollection('Y201701211');
+		$cursor = $c->find(['MetaData.MetaData' => 'ScheduleInput' ,'MetaData.InputID' => $dataValidation]);
+		$allianceColors = array(
+				'Red',
+				'Blue'
+		);
+		foreach($cursor as $document){
+			foreach($document['Match'] as $match){
+				foreach($allianceColors as $allianceColor){
+					$teamMatchupsList[count($teamMatchupsList)] = $match[$allianceColor . $allianceSet];
+				}
+			}	
+		}
+		return $teamMatchupsList;
+	}
+	function RankingsOPRMatchesMatrix($dataValidation){
+		$rankingsOPRMatchesMatrix = array();
+		$uniqueTeamList = UniqueTeamList($dataValidation);
+		$teamMatchups1 = TeamMatchups($dataValidation, 1);
+		$teamMatchups2 = TeamMatchups($dataValidation, 2);
+		for($columns = 0; $columns < count($uniqueTeamList) ; $columns++){
+			for($rows = 0; $rows < count($uniqueTeamList); $rows++){
+				$rankingsOPRMatchesMatrix[$rows][$columns] = 0;
+				if($columns == $rows){
+					foreach($teamMatchups1 as $teamMatch1){
+						if($uniqueTeamList[$rows] == $teamMatch1){
+							$rankingsOPRMatchesMatrix[$rows][$columns]++;
+						}
+					}
+					foreach($teamMatchups2 as $teamMatch2){
+						if($uniqueTeamList[$columns] == $teamMatch2){
+							$rankingsOPRMatchesMatrix[$rows][$columns]++;
+						}
+					}
+				}else{
+					for($teamIndex = 0; $teamIndex <= count($teamMatchups1) ; $teamIndex++){
+						if($uniqueTeamList[$columns] == $teamMatchups1[$teamIndex] and $teamMatchups2[$teamIndex] == $uniqueTeamList[$rows] ){
+							$rankingsOPRMatchesMatrix[$rows][$columns]++;
+						}
+					}
+					for($teamIndex = 0; $teamIndex <= count($teamMatchups1) ; $teamIndex++){
+						if($uniqueTeamList[$columns] == $teamMatchups2[$teamIndex] and $teamMatchups1[$teamIndex] == $uniqueTeamList[$rows] ){
+							$rankingsOPRMatchesMatrix[$rows][$columns]++;
+						}
+					}
+				}
+			}
+		}
+		return $rankingsOPRMatchesMatrix;
+	}
+	function MatrixPrint($matrix){
+		for($rows = 0; $rows <= 20; $rows++){
+			for($columns = 0; $columns <= 20; $columns++){
+				echo  ' ' . $matrix[$rows][$columns] . ' ';
+			}
+			echo '<br />';
+		}
+	}
+	//Dose all the OPR for rankings table
+	function MatrixRankingsOPR($dataValidation){
+		$listOfUniqueTeams = UniqueTeamList($dataValidation);
+		$teamRPList = array();
+		for($uniqueTeamIndex = 0; $uniqueTeamIndex <= count($listOfUniqueTeams); $uniqueTeamIndex++){
+			$teamRPList[$uniqueTeamIndex] = RankingsTableRP($dataValidation, $listOfUniqueTeams[$uniqueTeamIndex]);
+		}
+		return $teamRPList;
+	}
+	function RankingsMatrixOPR($dataValidation){
+		$listOfTeamsRPInOrder = MatrixRankingsOPR($dataValidation);
+		$matrixOfMatchesAndTeams = RankingsOPRMatchesMatrix($dataValidation);
+		$invertMatrixOfMatches = invert($matrixOfMatchesAndTeams);
+		$resultingMatrix = $MatrixMultiplication($invertMatrixOfMatches, $listOfTeamsRPInOrder);
+		$matrixOPR = array();
+		for($matrixIndex = 0; $matrixIndex <= count($listOfTeamsRPInOrder); $matrixIndex++){
+			$matrixOPR[$listOfTeamsRPInOrder[$matrixIndex]] = $resultingMatrix[$matrixIndex];
+		}
+		return $matrixOPR;
+	}
 	//The Table Ranking For all of Rankings
 	function RankingsTable(){
 		$DATAVALIDATION = 'rainbow';
 		$uniqueTeamListInstance = UniqueTeamList($DATAVALIDATION);
-		$CompileTeamRecordsInstance = CompileTeamRecords($DATAVALIDATION);
+		$rankingsTableRecordInstance = RankingsTableRecord($DATAVALIDATION);
+		$rankingsRank = RankingsRank($DATAVALIDATION);
 
 		foreach($uniqueTeamListInstance as $uniqueTeam){		
 			echo "<tr>";
+			PutItInATD($rankingsRank['Team' . $uniqueTeam]);
 			PutItInATD($uniqueTeam);
 			PutItInATD(TeamNumberName($uniqueTeam));
-			PutItInATD('ITS HAPPENING');
-			PutItInATD($CompileTeamRecordsInstance['TeamNumber' . $uniqueTeam]['Present']);
-			PutItInATD('testing');
-			PutItInATD('testing');
+			PutItInATD($rankingsTableRecordInstance['TeamNumber' . $uniqueTeam]['Present']);
+			PutItInATD($rankingsTableRecordInstance['TeamNumber' . $uniqueTeam]['QP']);
+			PutItInATD(RankingsTableRP($DATAVALIDATION, $uniqueTeam));
 			PutItInATD('testing');
 			echo "</tr>";
 		}
 		//EnsureExampleData();
-		
 	}
-	function Debug($show){
-		/*
-		$debugEchoArray = array(
-			'Hi',
-			'Two',
-			'Three'
-			);
-		for ($i=0; $i <= count($debugEchoArray); $i++) { 
-			echo "<br/>";
-			echo $debugEchoArray[$i];
+	function RankingsTable1(){
+		$DATAVALIDATION = 'rainbow';
+		$uniqueTeamListInstance = UniqueTeamList($DATAVALIDATION);
+		$rankingsTableRecordInstance = RankingsTableRecord($DATAVALIDATION);
+		$rankingsRank = RankingsRank($DATAVALIDATION);
+		//$OPRMatrix = RankingsOPRMatchesMatrix($DATAVALIDATION);
+		//MatrixPrint($OPRMatrix);
+		$matrixOPR = $RankingsMatrixOPR($DATAVALIDATION);
+		MatrixPrint($matrixOPR);
+		foreach($uniqueTeamListInstance as $uniqueTeam){
+			echo "<tr>";
+			//PutItInATD($rankingsRank['Team' . $uniqueTeam]);
+			//PutItInATD($uniqueTeam);
+			//PutItInATD(TeamNumberName($uniqueTeam));
+			//PutItInATD($rankingsTableRecordInstance['TeamNumber' . $uniqueTeam]['Present']);
+			//PutItInATD($rankingsTableRecordInstance['TeamNumber' . $uniqueTeam]['QP']);
+			//PutItInATD(RankingsTableRP($DATAVALIDATION, $uniqueTeam));
+			PutItInATD('testing');
+			echo "</tr>";
 		}
-		$projection =  array("_id" => false, "FactoryCapacity" => true);
-		echo "<br/>";
-		var_dump($projection);
-		*/
+		//EnsureExampleData();
 	}
 ?>

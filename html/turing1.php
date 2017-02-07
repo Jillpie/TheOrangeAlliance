@@ -34,6 +34,7 @@
 			}); 
 			});
 		</script>
+		<meta http-equiv="refresh" content="15">
 	</head>	
 	<body>
 		<div class="navbar navbar-default navbar-fixed-top">
@@ -41,7 +42,7 @@
 				<div class="navbar-header">
 					<a class="nav-brand" href="http://theorangealliance.tk:8080/"> 
 					<img style="max-width:50px" src="/images/logo.png"> 
-					<span class="logo hidden-xs">The <span class="lightorange"> Orange </span>Alliance</span>
+					<span class="logo hidden-xs">The Orange Alliance</span>
 					</a>
 					<a class="nav-brand" href="http://theorangealliance.tk:8080/"></a>
 					<button class = "navbar-toggle" data-toggle = "collapse" data-target = ".navHeaderCollapse">
@@ -53,8 +54,8 @@
 				<div class = "collapse navbar-collapse navHeaderCollapse">
 					<ul class = "nav navbar-nav navbar-right">
 						<li><a href = "http://theorangealliance.tk:8080/">Home</a></li>
-						<li class = "active"><a href = "http://theorangealliance.tk:8080/euclid.php">Euclid</a></li>
-						<li><a href = "http://theorangealliance.tk:8080/turing.php">Turing</a></li>
+						<li><a href = "http://theorangealliance.tk:8080/euclid.php">Euclid</a></li>
+						<li class = "active"><a href = "http://theorangealliance.tk:8080/turing.php">Turing</a></li>
 						<li><a href = "http://theorangealliance.tk:8080/input-data.php">Input Data</a></li>
 						<li><a href = "http://theorangealliance.tk:8080/input-results.php">Input Results</a></li>
 						<li><a href = "http://theorangealliance.tk:8080/input-schedule.php">Input Schedule</a></li>
@@ -64,7 +65,7 @@
 		</div>
 		<div class="content">
 			<div class="container">
-				<h1>Euclid League Championship</h1><h1></h1>
+				<h1>Turing League Championship</h1><h1></h1>
 				<hr></hr>
 			
 				<ul class="nav nav-tabs">
@@ -90,19 +91,17 @@
 							<tbody>
 							<?php
 								require 'potato.php';
-								RankingsTable('Y201702041', 'rainbow');
-								//Y201702041
+								RankingsTable('Y201702052', 'rainbow');
 							?>
 							</tbody>
 						</table>
 					</div>
 					
 					<div style="padding-top: 10px;" id="match-history" class="tab-pane fade table-responsive">
-					<div class="redcircle"></div><span class="key">= Autonomous Period</span><br>
+						<table class="table table-striped table-bordered" id="inputTable2">
+						<div class="redcircle"></div><span class="key">= Autonomous Period</span><br>
 					<div class="bluecircle"></div><span class="key">= Teleop Period</span><br>
 					<div class="greencircle"></div><span class="key">= End Game Period</span>
-					
-						<table class="table table-striped table-bordered" id="inputTable2">
 							<thead>
 								<tr>
 									<th>#</th>
@@ -125,17 +124,16 @@
 							</thead>
 							<tbody>
 							<?php
-								MatchHistoryTable('Y201702041','rainbow');
+								MatchHistoryTable('Y201702052', 'rainbow');
 							?>
 							</tbody>
 						</table>
 					</div>
 					<div style="padding-top: 10px;" id="average-scores"  class="tab-pane fade table-responsive">
-					<div class="redcircle"></div><span class="key">= Autonomous Period</span><br>
+						<table class="table table-striped table-bordered" id="inputTable3">
+						<div class="redcircle"></div><span class="key">= Autonomous Period</span><br>
 					<div class="bluecircle"></div><span class="key">= Teleop Period</span><br>
 					<div class="greencircle"></div><span class="key">= End Game Period</span>
-					
-						<table class="table table-striped table-bordered" id="inputTable3">
 							<thead>
 								<tr>
 									<th>Team Number</th>
@@ -159,9 +157,9 @@
 								</tr>
 							</thead>
 							<tbody>
-								<?php
-									AverageScoresTable('Y201702041', 'rainbow');
-								?>
+							<?php
+								AverageScoresTable('Y201702052', 'rainbow');
+							?>
 							</tbody>
 						</table>
 					</div>

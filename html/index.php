@@ -36,123 +36,39 @@
 		</script>
 	</head>	
 	<body>
-			<div class="navbar navbar-default navbar-fixed-top" role="navigation">
-				<div class="container">
-					<div class="navbar-header">
-						<a class="nav-brand" href="http://theorangealliance.tk:8080/"> 
-							<img style="max-width:50px" src="/images/logo.png"> 
-							<span class="logo hidden-xs">The Orange Alliance</span>
-						</a>
-						<button class = "navbar-toggle" data-toggle = "collapse" data-target = ".navHeaderCollapse">
-							<span class = "icon-bar"></span>
-							<span class = "icon-bar"></span>
-							<span class = "icon-bar"></span>
-						</button>
-					</div>
-					<div class = "collapse navbar-collapse navHeaderCollapse">
-						<ul class = "nav navbar-nav navbar-right">
-							<li class = "active"><a href = "http://theorangealliance.tk:8080/">Home</a></li>
-							<li><a href = "http://theorangealliance.tk:8080/input-data.php">Input Data</a></li>
-							<li><a href = "http://theorangealliance.tk:8080/input-results.php">Input Results</a></li>
-							<li ><a href = "http://theorangealliance.tk:8080/input-schedule.php">Input Schedule</a></li>
-						</ul>
-					</div>
+		<div class="navbar navbar-default navbar-fixed-top">
+			<div class="container">
+				<div class="navbar-header">
+					<a class="nav-brand" href="http://theorangealliance.tk:8080/"> 
+					<img style="max-width:50px" src="/images/logo.png"> 
+					<span class="logo hidden-xs">The Orange Alliance</span>
+					</a>
+					<a class="nav-brand" href="http://theorangealliance.tk:8080/"></a>
+					<button class = "navbar-toggle" data-toggle = "collapse" data-target = ".navHeaderCollapse">
+						<span class = "icon-bar"></span>
+						<span class = "icon-bar"></span>
+						<span class = "icon-bar"></span>
+					</button>
+				</div>
+				<div class = "collapse navbar-collapse navHeaderCollapse">
+					<ul class = "nav navbar-nav navbar-right">
+						<li class = "active"><a href = "http://theorangealliance.tk:8080/">Home</a></li>
+						<li><a href = "http://theorangealliance.tk:8080/euclid.php">Euclid</a></li>
+						<li><a href = "http://theorangealliance.tk:8080/turing.php">Turing</a></li>
+						<li><a href = "http://theorangealliance.tk:8080/input-data.php">Input Data</a></li>
+						<li><a href = "http://theorangealliance.tk:8080/input-results.php">Input Results</a></li>
+						<li><a href = "http://theorangealliance.tk:8080/input-schedule.php">Input Schedule</a></li>
+					</ul>
 				</div>
 			</div>
-		
+		</div>
 		<div class="content">
 			<div class="container">
-				<h1>Week 3: Boys and Girls Club Meet </h1><h1></h1>
-				<hr></hr>
-			
-				<ul class="nav nav-tabs">
-					<li role="presentation" class="active small"><a data-toggle="tab" href="#rankings">Rankings</a></li>
-					<li role="presentation" class="small"><a data-toggle="tab" href="#match-history">Match History</a></li>
-					<li role="presentation" class="small"><a data-toggle="tab" href="#average-scores">Average Scores</a></li>
-				</ul>
-			
-				<div class="tab-content">
-					<div style="padding-top: 10px;" id="rankings" class="tab-pane fade in active table-responsive">
-						<table class="table table-striped table-bordered" id="inputTable1">
-							<thead>
-								<tr>
-									<th>Rank</th>
-									<th>Team Number</th>
-									<th>Team Name</th>
-									<th>W-L-T</th>
-									<th>QP</th>
-									<th>RP</th>
-									<th>OPR</th>
-								</tr>
-							</thead>
-							<tbody>
-							<?php
-								require 'mikal.php';
-								RankingsTable();
-							?>
-							</tbody>
-						</table>
-					</div>
-					
-					<div style="padding-top: 10px;" id="match-history" class="tab-pane fade table-responsive">
-						<table class="table table-striped table-bordered" id="inputTable2">
-							<thead>
-								<tr>
-									<th>#</th>
-									<th>Alliance</th>
-									<th>Team Number</th>
-									<th>Team Name</th>
-									<th>Result R-B</th>
-									<th>RP</th>
-									<th class="red">Robot Parking</th>
-									<th class="red">Center Particles</th>
-									<th class="red">Corner Particles</th>
-									<th class="red">Cap Ball</th>
-									<th class="red">Beacons</th>
-									<th class="blue">Center Particles</th>
-									<th class="blue">Corner Particles</th>
-									<th class="green">Beacons</th>
-									<th class="green">Cap Ball</th>
-								</tr>
-							</thead>
-							<tbody>
-							<?php
-								MatchHistoryTable();
-							?>
-							</tbody>
-						</table>
-					</div>
-					<div style="padding-top: 10px;" id="average-scores"  class="tab-pane fade table-responsive">
-						<table class="table table-striped table-bordered" id="inputTable3">
-							<thead>
-								<tr>
-									<th>Team Number</th>
-									<th>Team Name</th>
-									<th class="red">Partially on Center</th>
-									<th class="red">Partially on Corner</th>
-									<th class="red">Fully on Center</th>
-									<th class="red">Fully on Corner</th>
-									<th class="red">Particles in Center Vortex</th>
-									<th class="red">Particles in Corner Vortex</th>
-									<th class="red">Cap Balla</th>
-									<th class="red">Claimed Beacons</th>
-									<th class="blue">Particles in Center Vortex</th>
-									<th class="blue">Particles in Corner Vortex</th>
-									<th class="green">Claimed Beacons</th>
-									<th class="green">Cap Ball on Ground</th>
-									<th class="green">Cap Ball Raised</th>
-									<th class="green">Cap Ball Above Center</th>
-									<th class="green">Cap Ball in Center</th>
-								</tr>
-							</thead>
-							<tbody>
-							</tbody>
-						</table>
-						
-					</div>
+				<div class="frontpage">
+				<center><img class="img-responsive" src="/images/logotext.png" style="padding-top:120px;"></center>
 				</div>
 			</div>
-			</div>
+		</div>
 		<div class="footer">
 			<div class="container">
 				<div class="col-md-6" style="padding-bottom: 10px;">

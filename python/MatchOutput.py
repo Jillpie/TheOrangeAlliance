@@ -3,6 +3,7 @@
 from pymongo import MongoClient
 from pprint import pprint
 from Foundation import Foundation
+from OPR import Opr
 
 class MatchOutput(Foundation):
 		
@@ -55,8 +56,14 @@ class MatchOutput(Foundation):
 			matchHistoryTable[i][3] = self.TeamName(matchHistoryTable[i][2])
 		return matchHistoryTable
 		
-	def opr(self):
+	def opr(self, rows, matchHistoryTable, oprScore):
 		print("test")
+		print(oprScore)
+		teamNumbers = self.UniqueTeamList()
+		for i in range(0, rows):
+			matchHistoryTable[i][4] = oprScore[teamNumbers.index(matchHistoryTable[i][2])]
+		return matchHistoryTable
+		
 
 	def result(self, rows, matchHistoryTable):
 		for document in self.cursor:
@@ -79,6 +86,22 @@ class MatchOutput(Foundation):
 					matchHistoryTable[i][13] = str(document["GameInformation"]["DRIVER"]["ParticlesCorner"])
 					matchHistoryTable[i][14] = str(document["GameInformation"]["END"]["AllianceClaimedBeacons"])
 					matchHistoryTable[i][15] = str(document["GameInformation"]["END"]["CapBall"])
+		return matchHistoryTable
+		
+	def translate(self, rows, matchHistoryTable):
+		for i in range(0, rows):
+			if matchHistoryTable[i][7] == "Partially On Center Vortex":
+				matchHistoryTable[i][7] = "Partially Center"
+			if matchHistoryTable[i][7] == "Partially On Corner Vortex":
+				matchHistoryTable[i][7] = "Partially Corner"
+			if matchHistoryTable[i][7] == "Fully On Center Vortex":
+				matchHistoryTable[i][7] = "Fully Center"
+			if matchHistoryTable[i][7] == "Fully On Corner Vortex":
+				 matchHistoryTable[i][7] = "Fully Corner"
+			if matchHistoryTable[i][15] == "Raised Off The Floor":
+				matchHistoryTable[i][15] = "Raised Off Floor"
+			if matchHistoryTable[i][15] == "Scored In Center Vortex":
+				matchHistoryTable[i][15] = "In Center Vortex"
 		return matchHistoryTable
 		
 	def rp(self, rows, matchHistoryTable):
@@ -112,15 +135,18 @@ class MatchOutput(Foundation):
 				print(matchHistoryTable[i][k])
 				
 		
-	def __init__(self):
+	def __init__(self, collectionName):
 	
 		client = MongoClient()
 		db = client.TheOrangeAllianceTest
-		collection = db.test
+		collection = eval("db."+collectionName)
 
-		foundation = Foundation('rainbow', 1)
+		foundation = Foundation(collectionName, "rainbow")
 		
 		totalMatchNumbers = foundation.TotalMatches()
+		
+		oprInstance = Opr(collectionName)
+		oprScore = oprInstance.getOprArray()
 		
 		rows = totalMatchNumbers * 4
 		columns = 16
@@ -132,13 +158,15 @@ class MatchOutput(Foundation):
 		self.cursor = collection.find({'MetaData.MetaData' : 'ScheduleInput', "MetaData.InputID" : "rainbow"})
 		self.teamNumber(rows, matchHistoryTable)
 		self.teamName(rows, matchHistoryTable)
-		self.opr()
+		self.cursor = collection.find({'MetaData.MetaData' : 'ScheduleInput', "MetaData.InputID" : "rainbow"})
+		self.opr(rows, matchHistoryTable, oprScore)
 		self.cursor = collection.find({'MetaData.MetaData' : 'ResultsInput', "MetaData.InputID" : "rainbow"})
 		self.result(rows, matchHistoryTable)
 		self.cursor = collection.find({'MetaData.MetaData' : 'MatchInput', "MetaData.InputID" : "rainbow"})
 		self.rpData(rows, matchHistoryTable)
 		self.rp(rows, matchHistoryTable)
-		#self.insertMatchHistory(rows, columns, matchHistoryTable)
+		self.translate(rows, matchHistoryTable)
+		#self.printMatchHistory(rows, columns, matchHistoryTable)
 		
 		collection.delete_many({"MetaData.MetaData": "MatchOutput"})
 		
@@ -152,4 +180,4 @@ class MatchOutput(Foundation):
 		
 		
 				
-test = MatchOutput()
+#test = MatchOutput("Y201702052")
