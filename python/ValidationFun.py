@@ -141,40 +141,6 @@ class Validation(Foundation):
 					'CapBall' : []
 				}
 			}
-			maxFrequencyInput = {
-				'AUTO' : {
-					'RobotParking' : [],
-					'ParticlesCenter' : [],
-					'ParticlesCorner' : [],
-					'CapBall' : [],
-					'ClaimedBeacons' : []
-				},
-				'DRIVER' : {
-					'ParticlesCenter' : [],
-					'ParticlesCorner' : []
-				},
-				'END' : {
-					'AllianceClaimedBeacons' : [],
-					'CapBall' : []
-				}
-			}
-			majorityInput = {
-				'AUTO' : {
-					'RobotParking' : [],
-					'ParticlesCenter' : [],
-					'ParticlesCorner' : [],
-					'CapBall' : [],
-					'ClaimedBeacons' : []
-				},
-				'DRIVER' : {
-					'ParticlesCenter' : [],
-					'ParticlesCorner' : []
-				},
-				'END' : {
-					'AllianceClaimedBeacons' : [],
-					'CapBall' : []
-				}
-			}
 			#Real stuff (if there are any keys present)
 			for document in inputDataDocuments:
 				if(cmp(document['MatchInformation'],matchInformation) == 0 and document['DataValidation']['ValidationKey'] in finalKeyPool):
@@ -187,30 +153,20 @@ class Validation(Foundation):
 			for document in inputDataDocuments:
 				if(cmp(document['MatchInformation'],matchInformation) == 0 and document['DataValidation']['ValidationKey'] in finalKeyPool):
 					pass
+
 			for gamePeriods in allInputFields:
 				for gameFields in allInputFields[gamePeriods]:
 					for gameValue in allInputs[gamePeriods][gameFields]:
-						if({'GameValue' : gameValue, 'Frequency' : None} not in countedInputs[gamePeriods][gameFields]):
-							countedInputs[gamePeriods][gameFields].append(
-								{
-										'GameValue' : gameValue,
-										'Frequency' : None
+						countedInputs[gamePeriods][gameFields].append(
+							{
+								'GameValue' + str(gameValue) :{
+									'GameValue' : gameValue
 								}
-							)
-			for gamePeriods in allInputFields:
-				for gameFields in allInputFields[gamePeriods]:
-					for gameValue in allInputs[gamePeriods][gameFields]:
-						for gameValueInformationIndex in range(0,len(countedInputs[gamePeriods][gameFields])):
-							if(gameValue == countedInputs[gamePeriods][gameFields][gameValueInformationIndex]['GameValue']):
-								if(countedInputs[gamePeriods][gameFields][gameValueInformationIndex]['Frequency'] == None):
-									countedInputs[gamePeriods][gameFields][gameValueInformationIndex]['Frequency'] = 0
-								countedInputs[gamePeriods][gameFields][gameValueInformationIndex]['Frequency'] += 1
-			for gamePeriods in allInputFields:
-				for gameFields in allInputFields[gamePeriods]:
-					tempFrequency = []
-					for gameValueInformation in countedInputs[gamePeriods][gameFields]:
-						tempFrequency.append(gameValueInformation['Frequency'])
-						maxFrequencyInput[gamePeriods][gameFields] = max(tempFrequency)
+							}
+						)
+						print '--------------------countedInputs-----------------------------'
+						pprint(countedInputs)
+
 
 			#if no real keys are present
 			#if(finalKeyPool == []){
@@ -233,8 +189,6 @@ class Validation(Foundation):
 			pprint(finalKeyPool)
 			print 'countedInputs'
 			pprint(countedInputs)
-			print 'majorityInput'
-			pprint(majorityInput)
 
 		#collection.delete_many({"MetaData.MetaData": "MatchData"})
 		#collection.insert_one(finalDictionary)
