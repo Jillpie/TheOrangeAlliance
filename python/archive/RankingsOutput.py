@@ -173,5 +173,5 @@ class RankingsOutput(Foundation):
 		finalDictionary["Rankings"] = rankingsTable;
 		collection.insert_one(finalDictionary)
 				
-				
-test = RankingsOutput("Y201702052")
+if __name__ == '__main__': #prevents unnecessarily running if imported in another script
+	test = RankingsOutput("anything")

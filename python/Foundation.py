@@ -22,19 +22,38 @@ class HelpfulMethods(object):
 class Foundation(object):
 	'I am a CLASSSSSS!'
 
-	def __init__(self, collectionName, dataValidation, debug = False):
+	def __init__(self, collectionName, debug = False):
 		#MongoStuff
 		client = MongoClient()
-		db = client.TheOrangeAllianceTest
+		db = client.TheOrangeAlliance
 		collection = eval("db."+collectionName)
 		self.cursor = collection.find({'MetaData.MetaData' : 'ScheduleInput'})
 
 		#Varibles
 		self.collectionName = collectionName
-		self.dataValidation = dataValidation
 		self.debug = debug
 
 	#Functions
+	def WhichMatchesDidThatTeamPlayAndWhatAllaince(self, teamList):
+		print(teamList)
+		matchesThatTeamPlayedAndAlliance = {}
+		print(self.collectionName)
+		for document in self.cursor:
+			print(document)
+			for team in teamList:
+				matchListRed = []
+				matchListBlue = []
+				for matchNumber in range(1, len(document['Match'].values()) + 1):
+					for alliance, teamOnThatAlliance in document['Match']['Match' + str(matchNumber)].items():
+						if alliance == 'Red1' or alliance == 'Red2':
+							if teamOnThatAlliance == team:
+								matchListRed.append(matchNumber)
+						if alliance == 'Blue1' or alliance == 'Blue2':
+							if teamOnThatAlliance == team:
+								matchListBlue.append(matchNumber)
+				matchesThatTeamPlayedAndAlliance.update({team : {'Red' : matchListRed , 'Blue' : matchListBlue}})
+		return matchesThatTeamPlayedAndAlliance
+		
 	def Debuger(self, statment):
 		"Enables debugging, prints statment if true"
 		if self.debug == True:
@@ -54,7 +73,7 @@ class Foundation(object):
 		for document in self.cursor:
 			for match in document['Match'].values():
 				for team in match.values():
-					ununiqueTeamList.append(team)
+					ununiqueTeamList.append(int(team))
 		return self.GenerateUniqueList(ununiqueTeamList)
 
 	def TotalMatches(self):
@@ -69,7 +88,7 @@ class Foundation(object):
 	def TeamName(self, teamNumber):
 		#MongoStuff
 		client = MongoClient()
-		db = client.TheOrangeAllianceTest
+		db = client.TheOrangeAlliance
 		collection = db.Teams
 		nameCursor = collection.find({'MetaData.MetaData' : 'TeamList'})
 		teamName = 'NO NAME FOUND'

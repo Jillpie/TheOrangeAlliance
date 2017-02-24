@@ -37,9 +37,8 @@
 				</div>
 				<div class = "collapse navbar-collapse navHeaderCollapse">
 					<ul class = "nav navbar-nav navbar-right">
-						<li><a href = "http://theorangealliance.tk:8080/">Home</a></li>
-						<li><a href = "http://theorangealliance.tk:8080/euclid.php">Euclid</a></li>
-						<li><a href = "http://theorangealliance.tk:8080/turing.php">Turing</a></li>
+						<li ><a href = "http://theorangealliance.tk:8080/">Home</a></li>
+						<li><a href = "http://theorangealliance.tk:8080/events/velocity-vortex.php">Events</a></li>
 						<li><a href = "http://theorangealliance.tk:8080/input-data.php">Input Data</a></li>
 						<li><a href = "http://theorangealliance.tk:8080/input-results.php">Input Results</a></li>
 						<li class = "active"><a href = "http://theorangealliance.tk:8080/input-schedule.php">Input Schedule</a></li>
@@ -47,6 +46,7 @@
 				</div>
 			</div>
 		</div>
+		
 		<form action="input-schedule.php" method="post">
 		<div class="content">
 		<div class="container">
@@ -59,18 +59,14 @@
 			<tr>
 				<td>Event Date</td>
 				<td><select class="form-control" id="inputID" name="matchDate" required>
-						<option></option>
-						<option>02/04/17</option>
-						<option>02/05/17</option>
+						<option>02/25/17</option>
 					</select>
 				</td>
 				
 			</tr>
 				<td>Event Location</td>
 					<td><select class="form-control" id="inputID" name="matchPlace" required>
-						<option></option>
-						<option>2230 E Jewett St, San Diego, CA 92111</option>
-						<option>1615 Mater Dei Dr, Chula Vista, CA 91913</option>
+						<option>6501 Linda Vista Rd, San Diego, CA 92111</option>
 					</select>
 					</td>
 				<tr>
@@ -321,8 +317,8 @@
 				// connect to mongodb
 				$m = new MongoClient();
 				// select a database
-				$db = $m->TheOrangeAllianceTest;
-				$collectionName = "Y" . TimeTime($_POST['matchDate']) . PlaceID($_POST['matchPlace'], $_POST['dataValidation']);
+				$db = $m->TheOrangeAlliance;
+				$collectionName = "Y" . TimeTime($_POST['matchDate']) . PlaceID($_POST['matchPlace'], 'rainbow') . 'Raw';
 				$collection = $db->$collectionName;
 
 			//Generates the Match array for documentation
@@ -347,13 +343,29 @@
 			//Creates the document to submit
 			$document = array(
 				"MetaData" => array(
-					"MetaData" => "ScheduleInput",
+					"MetaData" => "ScheduleInputRaw",
 					"TimeStamp" => date('YmdHis'),
+					"DatePlace" => $collectionName,
+					"ScreenStatus" => "Unscreened",
 					"InputID" => $_POST['dataValidation']
 				),
+
+				"DataValidation" => array(
+					"ValidationKey" => $_POST['dataValidation'],
+					"ValidationValue" => ValidationValue($_POST['dataValidation'])
+				),
+
 				"Match" => $matchArray
 			);
 			$collection->insert($document);
+			CreateDBLog(
+				$collectionName,
+				"ScheduleInput",
+				date('YmdHis'),
+				$_POST['dataValidation'],
+				"Testing",
+				$_POST['dataValidation']
+			);
 
 		?>
 		

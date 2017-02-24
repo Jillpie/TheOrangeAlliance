@@ -82,35 +82,140 @@
 				<button type="submit" class="btn btn-primary btn-block raised">Submit</button>
 				</form>
 				<?php
-					/*
+					
 					$m = new MongoClient();
-					$db = $m->TheOrangeAllianceTest;
-					$subCollection = "Y201701211";
+					$db = $m->TheOrangeAlliance;
+					$subCollection = "DataValidation";
 					$collection = $db->$subCollection;
-					$document = $collection->find();
-					*/
+					//$document = $collection->find();
+					
+					$keys = array(
+						/*
+						array(
+							"Type" => "",
+							"Key" => "",
+							"FirstName" => null,
+							"LastName" => null,
+							"TeamType" => "FTC",
+							"TeamNumber" => "",
+							"KeyType" => "",
+							"KeyRank" => 50.0
+						)
+						*/
+						array(
+							"Type" => "Person",
+							"Key" => "pi",
+							"FirstName" => "Ryan",
+							"LastName" => "N",
+							"TeamType" => null,
+							"TeamNumber" => null,
+							"KeyType" => "Default",
+							"KeyRank" => 50.0
+						),
+						array(
+							"Type" => "Person",
+							"Key" => "bagel7",
+							"FirstName" => "Cameron",
+							"LastName" => "D",
+							"TeamType" => null,
+							"TeamNumber" => null,
+							"KeyType" => "Admin",
+							"KeyRank" => 50.0
+						),
+						array(
+							"Type" => "Person",
+							"Key" => "kat",
+							"FirstName" => "Mitha",
+							"LastName" => "S",
+							"TeamType" => null,
+							"TeamNumber" => null,
+							"KeyType" => "Default",
+							"KeyRank" => 50.0
+						),
+						array(
+							"Type" => "Team",
+							"Key" => "level",
+							"FirstName" => null,
+							"LastName" => null,
+							"TeamType" => "FTC",
+							"TeamNumber" => 9261,
+							"KeyType" => "Default",
+							"KeyRank" => 50.0
+						)
+					);
+					
+					if($_POST["databaseInput"] == "yes"){
+						foreach($keys as $key){
+							$document = array(
+								"MetaData" => array(
+									"MetaData" => "ValidationKey",
+									"TimeStamp" => date("YmdHis"),
+									"InputID" => "rainbow"
+								),	
+								"ValidationKey" => array(
+									"KeyIdentity" => array(
+										"KeyVersion" => 1,
+										"Key" => $key["Key"],
+										"Association" => array(
+											"Type" => $key["Type"],
+											"TeamType" => $key['TeamType'],
+											"TeamNumber" => $key['TeamNumber'],
+											"Person" => array(
+												"FirstName" => $key["FirstName"],
+												"MiddleInitial" => null,
+												"LastName" => $key["LastName"],
+												"Email" => null
+											),
+											"Group" => array(
+												"GroupName" => null,
+												"GroupEmail" => null
+											)
+										)
+									),
+									"KeyInformation" => array(
+										"KeyType" => $key["KeyType"],
+										"KeyStatus" => "Default",
+										"KeyRank" => $key["KeyRank"]
+									)
+								)
+								
+							);
+							$collection->insert($document);
+						}
+					}
+					
+
+					/*
 					function InsertPlaces(){
 						$m = new MongoClient();
 						$db = $m->TheOrangeAllianceTest;
 						$subCollection = "Places";
 						$collection = $db->$subCollection;
-						$document = $collection->find();
+						//$document = $collection->find();
 
 						$placeAddressAndIDArray = array(
-							"placeComplex1" => array(
-								"placeID" => 1,
-								"placeAddress" => "2230 E Jewett St, San Diego, CA 92111"
-							),
+							//"placeComplex1" => array(
+							//	"placeID" => 1,
+							//	"placeAddress" => "2230 E Jewett St, San Diego, CA 92111"
+							//),
 							"placeComplex2" => array(
 								"placeID" => 2,
 								"placeAddress" => "1615 Mater Dei Dr, Chula Vista, CA 91913"
 							),
+							//"placeComplex2" => array(
+							//	"placeID" => 3,
+							//	"placeAddress" => "302 Emerald Dr, Vista, CA 92083"
+							//),
+							//"placeComplex2" => array(
+							//	"placeID" => 4,
+							//	"placeAddress" => "1500 S El Camino Real, Encinitas, CA 92024"
+							//),
 						);
 						foreach($placeAddressAndIDArray as $placeComplex){
 							$document = array(
 								"MetaData" => array(
 									"MetaData" => "Places",
-									"TimeStamp" => 80977777,
+									"TimeStamp" => date('YmdHis'),
 									"InputID" => 'rainbow'
 								),
 								"PlaceInformation" => array(
@@ -129,6 +234,7 @@
 					}
 
 					InsertPlaces();
+					*/
 					/*
 					function AggregateTesting(){
 						$m = new MongoClient();

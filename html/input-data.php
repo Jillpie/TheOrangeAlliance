@@ -19,6 +19,37 @@
 		<script src = "http://ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js"></script>
 		<script src="js-webshim/minified/polyfiller.js"></script>
 		<meta http-equiv="Content-Type" content="text/html;charset=utf-8" />
+		<script type="text/javascript">
+		$(document).ready(function() { 
+			$('.quantity-right-plus').click(function(e){
+				e.preventDefault();
+				var quantity = parseInt($('#quantity').val());
+				$('#quantity').val(quantity + 1);
+			});
+
+			$('.quantity-left-minus').click(function(e){
+				e.preventDefault();
+				var quantity = parseInt($('#quantity').val());
+				if(quantity>0){
+				$('#quantity').val(quantity - 1);
+				}
+			});
+			
+			$('.quantity-right-plus1').click(function(e){
+				e.preventDefault();
+				var quantity1 = parseInt($('#quantity1').val());
+				$('#quantity1').val(quantity1 + 1);
+			});
+
+			$('.quantity-left-minus1').click(function(e){
+				e.preventDefault();
+				var quantity1 = parseInt($('#quantity1').val());
+				if(quantity1>0){
+				$('#quantity1').val(quantity1 - 1);
+				}
+			});
+		});
+		</script>
 	</head>
 	<body>
 		<div class="navbar navbar-default navbar-fixed-top">
@@ -37,149 +68,270 @@
 				</div>
 				<div class = "collapse navbar-collapse navHeaderCollapse">
 					<ul class = "nav navbar-nav navbar-right">
-						<li><a href = "http://theorangealliance.tk:8080/">Home</a></li>
-						<li><a href = "http://theorangealliance.tk:8080/euclid.php">Euclid</a></li>
-						<li><a href = "http://theorangealliance.tk:8080/turing.php">Turing</a></li>
-						<li class = "active"><a href = "http://theorangealliance.tk:8080/input-data.php">Input Data</a></li>
-						<li><a href = "http://theorangealliance.tk:8080/input-results.php">Input Results</a></li>
-						<li><a href = "http://theorangealliance.tk:8080/input-schedule.php">Input Schedule</a></li>
-						
+						<li ><a href = "http://theorangealliance.tk:8080/">Home</a></li>
+						<li><a href = "http://theorangealliance.tk:8080/events/velocity-vortex.php">Events</a></li>
+						<li class = "active"><a href = "http://theorangealliance.tk:8080/input-data.php">Input Match Results</a></li>
 					</ul>
 				</div>
 			</div>
 		</div>
 		
 		<div class="content">
-		<div class="container">
 			<form action="input-data.php" method="post">
-			<h1>Input Data</h1>
+			<h1>Input Match Results</h1>
 			<hr></hr>
-			<table class="table table-striped table-bordered">
-			<tr>
-				<th colspan="2">Match Information</th>
-			</tr>
-			<tr>
-				<td>Match Date</td>
-					<td><select class="form-control" id="inputID" name="matchDate" required>
-						<option></option>
-						<option>02/04/17</option>
-						<option>02/05/17</option>
+			
+			<div class="container-fluid pinkbox">
+			<div class="container-fluid darkpinkbox">
+			<h4>Match Information</h4>
+			</div>
+			<div class="col-md-6" style="padding-right: 7px;">
+			<h3>Match Date <span class="glyphicon glyphicon-calendar"></span></h3>
+					<select class="form-control" id="inputID" name="matchDate" required>
+						<option>02/25/17</option>
 					</select>
-					</td>
-			</tr>
-			<tr>
-				<td>Match Location</td>
-					<td ><select class="form-control" id="inputID" name="matchPlace" required>
-						<option></option>
-						<option>2230 E Jewett St, San Diego, CA 92111</option>
-						<option>1615 Mater Dei Dr, Chula Vista, CA 91913</option>
+	
+			<h3>Match Location<span class="glyphicon glyphicon-map-marker"></span></h3>
+					<select class="form-control" id="inputID" name="matchPlace" required>
+						<option>6501 Linda Vista Rd, San Diego, CA 92111</option>
 					</select>
-					</td>
-			</tr>
-			<tr>
-				<td>Match Number</td>
-				<td><input type="number" class="form-control" id="inputID" name="matchNumber" required></td>
-			</tr>
-			<tr>
-				<td>Robot Alliance</td>
-				<td><select class="form-control" id="inputID" name="robotAlliance" required>
-					<option></option>
-					<option>Blue</option>
-					<option>Red</option>
-				</select>
-				</td>
-			</tr>
-			<tr>
-				<td>Team Number</td>
-				<td><input type="number" class="form-control" id="inputID" name="teamNumber" required></td>
-			</tr>
-			<tr>
-			<td>Validation Code</td>
-				<td ><input type="text" class="form-control" id="inputID" name="dataValidation" required></td>
-			</tr>
-			</table>
-			
-			<table class="table table-striped table-bordered">
-			<tr>
-				<th colspan="2">Autonomous Period Scoring</th>
-			</tr>
-			<tr>
-				<td><img src="/images/centervortex.png"><img src="/images/cornervortex.png">Robot Parking</td>
-				<td><select class="form-control" id="inputID" name="autoRobotParking" required>
-					<option></option>
-					<option>Did Not Park</option>
-					<option>Partially On Center Vortex</option>
-					<option>Partially On Corner Vortex</option>
-					<option>Fully On Center Vortex</option>
-					<option>Fully On Corner Vortex</option>
-				</select>
-				</td>
-			</tr>
-			<tr>
-				<td><img src="/images/particles.png"><img src="/images/centervortex.png">Particles scored in Center Vortex</td>
-				<td><input type="number" class="form-control" id="inputID" name="autoParticlesCenter" required></td>
-			</tr>
-			<tr>
-				<td><img src="/images/particles.png"><img src="/images/cornervortex.png">Particles scored in Corner Vortex</td>
-				<td><input type="number" class="form-control" id="inputID" name="autoParticlesCorner" required></td>
-			</tr>
-			<tr>
-				<td><img src="/images/capballs.png">Cap Ball in Contact with the Floor (Only One Robot on Each Alliance Can Achieve This)</td>
-				<td><select class="form-control" id="inputID" name="autoCapBall" required>
-					<option></option>
-					<option>No</option>
-					<option>Yes</option>
-				</select>
-				</td>
-			</tr>
-			<tr>
-				<td>
-				<img src="/images/beacon.png">Claimed Beacons
-				</td>
-				<td><input type="number" class="form-control" id="inputID" name="autoClaimedBeacons" required></td>
-			</tr>
-			</table>
-			
-			<table class="table table-striped table-bordered">
-			<tr>
-				<th colspan="2">Driver-Controlled Period Scoring</th>
-			</tr>
-			<tr>
-				<td><img src="/images/particles.png"><img src="/images/centervortex.png">Particles scored in Center Vortex</td>
-				<td><input type="number" class="form-control" id="inputID" name="driverParticlesCenter" required ></td>
-			</tr>
-			<tr>
-				<td><img src="/images/particles.png"><img src="/images/cornervortex.png">Particles scored in Corner Vortex</td>
-				<td><input type="number" class="form-control" id="inputID" name="driverParticlesCorner" required></td>
-			</tr>
-			</table>
-			
-			
-			
-			<table class="table table-striped table-bordered">
-			<tr>
-				<th colspan="2">End Game Period Scoring</th>
-			</tr>
-			<tr>
-				<td><img src="/images/beacon.png">Alliance Claimed Beacons (Both Alliance Robots Will Share the Same Score)</td>
-				<td><input type="number" class="form-control" id="inputID" name="endAllianceClaimedBeacons" required></td>
-			</tr>
-			<tr>
-				<td><img src="/images/capballs.png">Cap Ball</td>
-				<td><select class="form-control" id="inputID" name="endCapBall" required>
-				<option></option>
-				<option>On The Ground</option>
-				<option>Raised Off The Floor</option>
-				<option>Raised Above Vortex</option>
-				<option>Scored In Center Vortex</option>
-				</select>
-				</td>
-			</tr>
 
-			</table>
+				<h3>Match Number <span class="glyphicon glyphicon-list"></span></h3>
+				<input type="number" class="form-control" id="inputID" name="matchNumber" required>
+			</div>
+			<div class="col-md-6" style="padding-left: 7px;">
+				<h3>Robot Alliance <span class="glyphicon glyphicon-flag"></span></h3>
+					<div class="btn-group btn-group-justified" data-toggle="buttons">
+						<div class="btn-group" role="group">
+							<label class="btn btn-default redtext bluealliancebutton">
+								<input type="radio" name="robotAlliance" id="option1" autocomplete="off" value="Blue" required>Blue
+							</label>
+						</div>
+						<div class="btn-group" role="group">
+							<label class="btn btn-default redtext redalliancebutton">
+								<input type="radio" name="robotAlliance" id="option1" autocomplete="off" value="Red">Red
+							</label>
+						</div>
+					</div>
+			<h3>Team Number <span class="glyphicon glyphicon-star"></span></h3>
+				<input type="number" class="form-control" id="inputID" name="teamNumber" required>
+
+			<h3>Validation Code <span class="glyphicon glyphicon-wrench"></span></h3>
+				<input type="text" class="form-control" id="inputID" name="dataValidation" required>
+			</div>
+			</div>
 			
+			<div class="col-md-6">
+			<div class="container-fluid redbox">
+			<div class="container-fluid darkredbox">
+			<h4>Autonomous Period Scoring</h4>
+			</div>
 			
-		<center><button type="submit" class="btn btn-primary btn-block raised">Submit</button></center>
+			<h3><img style="max-width:50px" src="/images/centervortex.png"><img style="max-width:50px" src="/images/cornervortex.png">
+			Robot Parking</h3>
+					<div class="btn-group btn-group-justified" data-toggle="buttons">
+						<div class="btn-group" role="group">
+							<label class="btn btn-default redtext redbutton">
+								<input type="radio" name="autoRobotParking" id="option1" autocomplete="off" value="Did Not Park" required>No<br>Parking
+							</label>
+						</div>
+						<div class="btn-group" role="group">
+							<label class="btn btn-default redtext redbutton">
+								<input type="radio" name="autoRobotParking" id="option1" autocomplete="off" value="Partially On Center Vortex">Partially<br>Center
+							</label>
+						</div>
+						<div class="btn-group" role="group">
+							<label class="btn btn-default redtext redbutton">
+								<input type="radio" name="autoRobotParking" id="option1" autocomplete="off" value="Partially On Corner Vortex">Partially<br>Corner
+							</label>
+						</div>
+						<div class="btn-group" role="group">
+							<label class="btn btn-default redtext redbutton">
+								<input type="radio" name="autoRobotParking" id="option1" autocomplete="off" value="Fully On Center Vortex">Fully<br> Center
+							</label>
+						</div>
+						<div class="btn-group" role="group">
+							<label class="btn btn-default redtext redbutton">
+								<input type="radio" name="autoRobotParking" id="option1" autocomplete="off" value="Fully On Corner Vortex">Fully<br> Corner
+							</label>
+						</div>
+					</div>
+				<h3><img style="max-width:50px" src="/images/particles.png"><img style="max-width:50px" src="/images/centervortex.png">
+				Robot Particles Scored in Center Vortex</h3>
+					<div class="btn-group btn-group-justified" data-toggle="buttons">
+						<div class="btn-group" role="group">
+							<label class="btn btn-default redtext redbutton">
+								<input type="radio" name="autoClaimedBeacons" id="option1" autocomplete="off" value="0" required>0
+							</label>
+						</div>
+						<div class="btn-group" role="group">
+							<label class="btn btn-default redtext redbutton">
+								<input type="radio" name="autoClaimedBeacons" id="option1" autocomplete="off" value="1">1
+							</label>
+						</div>
+						<div class="btn-group" role="group">
+							<label class="btn btn-default redtext redbutton">
+								<input type="radio" name="autoClaimedBeacons" id="option1" autocomplete="off" value="2">2
+							</label>
+						</div>
+						<div class="btn-group" role="group">
+							<label class="btn btn-default redtext redbutton">
+								<input type="radio" name="autoClaimedBeacons" id="option1" autocomplete="off" value="3">3
+							</label>
+						</div>
+					</div>
+				<h3><img style="max-width:50px" src="/images/particles.png"><img style="max-width:50px" src="/images/cornervortex.png">
+				Robot Particles scored in Corner Vortex</h3>
+					<div class="btn-group btn-group-justified" data-toggle="buttons">
+						<div class="btn-group" role="group">
+							<label class="btn btn-default redtext redbutton">
+								<input type="radio" name="autoParticlesCorner" id="option1" autocomplete="off" value="0" required>0
+							</label>
+						</div>
+						<div class="btn-group" role="group">
+							<label class="btn btn-default redtext redbutton">
+								<input type="radio" name="autoParticlesCorner" id="option1" autocomplete="off" value="1">1
+							</label>
+						</div>
+						<div class="btn-group" role="group">
+							<label class="btn btn-default redtext redbutton">
+								<input type="radio" name="autoParticlesCorner" id="option1" autocomplete="off" value="2">2
+							</label>
+						</div>
+						<div class="btn-group" role="group">
+							<label class="btn btn-default redtext redbutton">
+								<input type="radio" name="autoParticlesCorner" id="option1" autocomplete="off" value="3">3
+							</label>
+						</div>
+					</div>
+				<h3><img style="max-width:50px" src="/images/capballs.png">
+				Robot Cap Ball in Contact with the Floor</h3>
+					<div class="btn-group btn-group-justified" data-toggle="buttons">
+						<div class="btn-group" role="group">
+							<label class="btn btn-default redtext redbutton">
+								<input type="radio" name="autoCapBall" id="option1" autocomplete="off" value="Yes" required>Yes
+							</label>
+						</div>
+						<div class="btn-group" role="group">
+							<label class="btn btn-default redtext redbutton">
+								<input type="radio" name="autoCapBall" id="option1" autocomplete="off" value="No">No
+							</label>
+						</div>
+					</div>
+				<h3><img style="max-width:50px" src="/images/beacon.png">
+				Robot Claimed Beacons</h3>
+					<div class="btn-group btn-group-justified" data-toggle="buttons">
+						<div class="btn-group" role="group">
+							<label class="btn btn-default redtext redbutton">
+								<input type="radio" name="autoParticlesCorner" id="option1" autocomplete="off" value="0" required>0
+							</label>
+						</div>
+						<div class="btn-group" role="group">
+							<label class="btn btn-default redtext redbutton">
+								<input type="radio" name="autoParticlesCorner" id="option1" autocomplete="off" value="1">1
+							</label>
+						</div>
+						<div class="btn-group" role="group">
+							<label class="btn btn-default redtext redbutton">
+								<input type="radio" name="autoParticlesCorner" id="option1" autocomplete="off" value="2">2
+							</label>
+						</div>
+					</div>
+			</div>
+			</div>
+			
+		<div class="col-md-6">
+			<div class="container-fluid bluebox">
+			<div class="container-fluid darkbluebox">
+			<h4>Driver-Controlled Period Scoring</h4>
+			</div>
+			
+				<h3><img style="max-width:50px" src="/images/particles.png"><img style="max-width:50px" src="/images/centervortex.png">
+				Robot Particles Scored in Center Vortex</h3>
+					<div class="input-group">
+						<div class="input-group-btn">
+						<button type="button" class="btn btn-default bluetext quantity-left-minus" data-type="minus"><span class="glyphicon glyphicon-minus" aria-hidden="true"></span></button>
+						</div>
+						<input type="number" id="quantity" class="form-control" name="driverParticlesCenter" required value="0">
+						<div class="input-group-btn">
+						<button type="button" class="btn btn-default bluetext quantity-right-plus" data-type="plus"><span class="glyphicon glyphicon-plus" aria-hidden="true"></span></button>
+						</div>
+					</div>
+				<h3><img style="max-width:50px" src="/images/particles.png"><img style="max-width:50px" src="/images/cornervortex.png">
+				Robot Particles Scored in Corner Vortex</h3>
+					<div class="input-group">
+						<div class="input-group-btn">
+						<button type="button" class="btn btn-default bluetext quantity-left-minus1" data-type="minus1"><span class="glyphicon glyphicon-minus" aria-hidden="true"></span></button>
+						</div>
+						<input type="number" id="quantity1" class="form-control" name="driverParticlesCorner" required value="0">
+						<div class="input-group-btn">
+						<button type="button" class="btn btn-default bluetext quantity-right-plus1" data-type="plus1"><span class="glyphicon glyphicon-plus" aria-hidden="true"></span></button>
+						</div>
+					</div>
+			</div>
+			
+			<div class="container-fluid greenbox">
+				<div class="container-fluid darkgreenbox">
+					<h4>End Game Period Scoring</h4>
+				</div>
+			
+				<h3><img style="max-width:50px" src="/images/beacon.png">
+				Alliance Claimed Beacons</h3>
+					<div class="btn-group btn-group-justified" data-toggle="buttons">
+						<div class="btn-group" role="group">
+							<label class="btn btn-default greentext greenbutton">
+								<input type="radio" name="endAllianceClaimedBeacons" id="option1" autocomplete="off" value="0" required>0
+							</label>
+						</div>
+						<div class="btn-group" role="group">
+							<label class="btn btn-default greentext greenbutton">
+								<input type="radio" name="endAllianceClaimedBeacons" id="option1" autocomplete="off" value="1">1
+							</label>
+						</div>
+						<div class="btn-group" role="group">
+							<label class="btn btn-default greentext greenbutton">
+								<input type="radio" name="endAllianceClaimedBeacons" id="option1" autocomplete="off" value="2">2
+							</label>
+						</div>
+						<div class="btn-group" role="group">
+							<label class="btn btn-default greentext greenbutton">
+								<input type="radio" name="endAllianceClaimedBeacons" id="option1" autocomplete="off" value="3">3
+							</label>
+						</div>
+						<div class="btn-group" role="group">
+							<label class="btn btn-default greentext greenbutton">
+								<input type="radio" name="endAllianceClaimedBeacons" id="option1" autocomplete="off" value="4">4
+							</label>
+						</div>
+					</div>
+				<h3><img style="max-width:50px" src="/images/capballs.png">
+				Robot Cap Ball</h3>
+					<div class="btn-group btn-group-justified" data-toggle="buttons">
+						<div class="btn-group" role="group">
+							<label class="btn btn-default greentext greenbutton">
+								<input type="radio" name="endCapBall" id="option1" autocomplete="off" value="On The Ground" required>On The <br>Ground
+							</label>
+						</div>
+						<div class="btn-group" role="group">
+							<label class="btn btn-default greentext greenbutton">
+								<input type="radio" name="endCapBall" id="option1" autocomplete="off" value="Raised Off The Floor">Raised Off <br>The Floor
+							</label>
+						</div>
+						<div class="btn-group" role="group">
+							<label class="btn btn-default greentext greenbutton">
+								<input type="radio" name="endCapBall" id="option1" autocomplete="off" value="Raised Above Vortex">Raised <br>Above Vortex
+							</label>
+						</div>
+						<div class="btn-group" role="group">
+							<label class="btn btn-default greentext greenbutton">
+								<input type="radio" name="endCapBall" id="option1" autocomplete="off" value="Scored In Center Vortex">Scored In <br>Center Vortex
+							</label>
+						</div>
+					</div>
+			</div>
+		</div>
+			
+			<center><button type="submit" class="btn btn-primary btn-block raised">Submit</button></center>
 		</form>
 		<?php
 			require 'input.php';
@@ -187,17 +339,24 @@
 			//Loading and setting up the mongodb PHP
 			$m = new MongoClient();
 				// select a database
-				$db = $m->TheOrangeAllianceTest;
-				$collectionName = "Y" . TimeTime($_POST['matchDate']) . PlaceID($_POST['matchPlace'], $_POST['dataValidation']);
+				$db = $m->TheOrangeAlliance;
+				$collectionName = "Y" . TimeTime($_POST['matchDate']) . PlaceID($_POST['matchPlace'], 'rainbow')  . "Raw";
 				$collection = $db->$collectionName;
 
 			$document = array(
 				"MetaData" => array(
-					"MetaData" => "MatchInput",
+					"MetaData" => "MatchInputRaw",
 					"TimeStamp" => date('YmdHis'),
+					"DatePlace" => $collectionName,
+					"ScreenStatus" => "Unscreened",
 					"InputID" => $_POST['dataValidation']
 				),
-				
+
+				"DataValidation" => array(
+					"ValidationKey" => $_POST['dataValidation'],
+					"ValidationValue" => ValidationValue($_POST['dataValidation'])
+				),
+
 				"MatchInformation" => array(
 					"MatchNumber" => intval($_POST['matchNumber']),
 					"RobotAlliance" => $_POST['robotAlliance'],
@@ -206,10 +365,10 @@
 
 				"GameInformation" => array(
 					"AUTO" => array(
-						"RobotParking" => $_POST['autoRobotParking'],
+						"RobotParking" => InputTranslator($_POST['autoRobotParking']),
 						"ParticlesCenter" => intval($_POST['autoParticlesCenter']),
 						"ParticlesCorner" => intval($_POST['autoParticlesCorner']),
-						"CapBall" => $_POST['autoCapBall'],
+						"CapBall" => InputTranslator($_POST['autoCapBall']),
 						"ClaimedBeacons" => intval($_POST['autoClaimedBeacons'])
 					),
 					"DRIVER" => array(
@@ -218,15 +377,22 @@
 					),
 					"END" => array(
 						"AllianceClaimedBeacons" => intval($_POST['endAllianceClaimedBeacons']),
-						"CapBall" => $_POST['endCapBall']
+						"CapBall" => InputTranslator($_POST['endCapBall'])
 					)
 				)
 			);
 			$collection->insert($document);
+			CreateDBLog(
+				$collectionName,
+				"MatchInput",
+				date('YmdHis'),
+				$_POST['dataValidation'],
+				"Testing",
+				$_POST['dataValidation']
+			);
 			}
 			AllOfIt();
 		?>
-		</div>
 		</div>
 				<div class="footer">
 			<div class="container">
